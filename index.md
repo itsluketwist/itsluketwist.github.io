@@ -19,7 +19,7 @@ Reach out via [email](mailto:lukas.twist@kcl.ac.uk) if you're interested in coll
 
 - **Software Engineering**
 - **Responsible AI**
-- **AI for Code Generation**
+- **LLMs for Code Generation (LLM4Code)**
 
 <!-- enable later
 

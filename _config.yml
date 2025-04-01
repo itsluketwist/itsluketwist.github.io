@@ -1,4 +1,4 @@
-# Basic Information 
+# Basic Information
 title: Lukas Twist
 position: Ph.D. Student
 affiliation: King's College London
@@ -6,12 +6,13 @@ email: lukas.twist@kcl.ac.uk
 
 # Search Engine Optimization (SEO)
 # The following information is used to improve the website traffic from search engines, e.g., Google.
-keywords: minimal light
-description: The Minimal Light is a simple and elegant jekyll theme for academic personal homepage.
-canonical: https://minimal-light-theme.yliu.me/
+keywords: lukas twist, kcl, king's college london, artificial intelligence, software engineering, research, academic
+description: Academic homepage for Lukas Twist, a PhD student conducting research at the intersection of responsible artificial intelligence and software engineering.
+canonical: https://www.lukastwist.com/
 
-# Links 
+# Links
 # If you don't need one of them, you may delete the corresponding line.
+affiliation_link: https://www.kcl.ac.uk/
 google_scholar: https://scholar.google.com/citations?user=fi0fxjuaaaaj/
 github_link: https://github.com/itsluketwist/
 linkedin: https://www.linkedin.com/in/lukastwist/

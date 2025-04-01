@@ -49,55 +49,67 @@
         {% endif %}
 
         {% if site.affiliation %}
-        <a href="{{ site.affiliation_link }}" rel="noopener"><autocolor>{{ site.affiliation }}</autocolor></a>
+        <a href="{{ site.affiliation_link }}"  target="_blank" rel="noopener noreferrer">
+          <autocolor>{{ site.affiliation }}</autocolor>
+        </a>
         <br>
         {% endif %}
 
         {% if site.email %}
-        <email>{{ site.email }}</email>
+        <email>
+          <span id="email">{{ site.email }}</span>
+          <i class="fas fa-copy" id="copy-btn" style="cursor: pointer;" title="Copy email"></i>
+        </email>
+        <script>
+          document.getElementById('copy-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').textContent;
+            navigator.clipboard.writeText(email)
+          });
+        </script>
         {% endif %}
 
         <br>
         <br>
         <div class="social-icons">
+
         {% if site.google_scholar %}
-        <a style="margin: 0 0 0 0" href="{{ site.google_scholar }}">
+        <a style="margin: 0 0 0 0" href="{{ site.google_scholar }}" target="_blank" rel="noopener noreferrer">
           <i class="ai ai-google-scholar" style="font-size:1.2rem"></i>
         </a>  
         {% endif %}
 
         {% if site.cv_link %}
-        <a style="margin: 0 0 0 0" href="{{ site.cv_link }}">
+        <a style="margin: 0 0 0 0" href="{{ site.cv_link }}" target="_blank" rel="noopener noreferrer">
           <i class="ai ai-cv" style="font-size:1.3rem;"></i>
         </a>
         {% endif %}
 
         {% if site.github_link %}
-        <a style="margin: 0 0 0 0" href="{{ site.github_link }}">
+        <a style="margin: 0 0 0 0" href="{{ site.github_link }}" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-github"></i>
         </a>
         {% endif %}
 
         {% if site.linkedin %}
-        <a style="margin: 0 0 0 0" href="{{ site.linkedin }}">
+        <a style="margin: 0 0 0 0" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-linkedin"></i>
         </a>
         {% endif %}
 
         {% if site.orcid %}
-        <a style="margin: 0 0 0 0" href="{{ site.orcid }}">
+        <a style="margin: 0 0 0 0" href="{{ site.orcid }}" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-orcid"></i>
         </a>
         {% endif %}
 
         {% if site.bluesky %}
-        <a style="margin: 0 0 0 0" href="{{ site.bluesky }}">
+        <a style="margin: 0 0 0 0" href="{{ site.bluesky }}" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-bluesky"></i>
         </a>
         {% endif %}
 
         {% if site.twitter %}
-        <a style="margin: 0 0 0 0" href="{{ site.twitter }}">
+        <a style="margin: 0 0 0 0" href="{{ site.twitter }}" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-x-twitter"></i>
         </a>
         {% endif %}
@@ -113,7 +125,7 @@
       <br>
 
       {% if site.enable_footnote %}
-      <p><small>Powered by Jekyll and <a href="https://github.com/yaoyao-liu/minimal-light" target="_blank" rel="noopener">Minimal Light</a> theme.</small></p>
+      <p><small>Powered by Jekyll and <a href="https://github.com/yaoyao-liu/minimal-light" target="_blank" rel="noopener noreferrer">Minimal Light</a> theme.</small></p>
       {% endif %}
 
       </section>
