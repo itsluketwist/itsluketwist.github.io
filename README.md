@@ -2,7 +2,7 @@
 
 My personal academic profile website... which will hopefully get more content soon!
 
-View online at [lukasjtwist.com](https://lukasjtwist.com/)!
+View online at [lukastwist.com](https://lukastwist.com/)!
 
 <div>
     <!-- badges from : https://shields.io/ -->
@@ -44,3 +44,10 @@ Then go to: http://127.0.0.1:4000/
 ## *credit*
 
 Site built from [minimal-light](https://github.com/yaoyao-liu/minimal-light/).
+
+
+# todo
+
+- some list/page for blogs?
+- some list/page for publications?
+
