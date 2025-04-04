@@ -1,0 +1,7 @@
+@misc{twistLLMsLovePython2025,
+  title = {{{LLMs Love Python}}: {{A Study}} of {{LLMs}}' {{Bias}} for {{Programming Languages}} and {{Libraries}}},
+  author = {Twist, Lukas and Zhang, Jie M. and Harman, Mark and Syme, Don and Noppen, Joost and Nauck, Detlef},
+  year = {2025},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2503.17181},
+}

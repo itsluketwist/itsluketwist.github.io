@@ -21,8 +21,4 @@ Reach out via [email](mailto:lukas.twist@kcl.ac.uk) if you're interested in coll
 - **Responsible AI**
 - **LLMs for Code Generation (LLM4Code)**
 
-<!-- enable later
-
 {% include_relative _includes/publications.md %}
-
-{% include_relative _includes/services.md %}
