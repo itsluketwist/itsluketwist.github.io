@@ -8,17 +8,16 @@ Hey 👋 I'm Luke, a PhD student at [King's College London](https://www.kcl.ac.u
 studying in the CDT for [Safe & Trusted AI](https://safeandtrustedai.org/), 
 under the supervision of [Dr Jie M. Zhang](https://sites.google.com/view/jie-zhang/home).
 
-With over 8 years of industry experience in software engineering and technical leadership
-roles, I’m passionate about bridging industry knowledge with cutting-edge research to 
-contribute to the creation of robust and innovative AI systems.
-I really want to do research that makes a difference, and has real-world impact.
+With over **8** years of industry experience in software engineering and technical leadership roles,
+I’m passionate about harnessing artificial intelligence to transform software engineering - 
+bridging real‑world expertise with cutting‑edge research to build systems that are safe, 
+robust, innovative, and genuinely useful.
 
 I’m actively looking for opportunities to make connections and gain research experience.
 Reach out via [email 📨](mailto:lukas.twist@kcl.ac.uk) if you're interested in collaborating!
 
 ## Research Interests
 
-- **Software Engineering**
 - **AI for Software Engineering (AI4SE)**
 - **LLMs for Code Generation (LLM4Code)**
 - **LLM Code Hallucinations**
