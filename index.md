@@ -2,7 +2,7 @@
 layout: homepage
 ---
 
-## About Me
+## About Me <img src="assets/img/favicon.png" alt="Icon" style="display: inline; width: 20px; height: 20px;">
 
 Hey 👋 I'm Luke, a PhD student at [King's College London](https://www.kcl.ac.uk/), 
 studying in the CDT for [Safe & Trusted AI](https://safeandtrustedai.org/), 
@@ -18,8 +18,9 @@ Reach out via [email 📨](mailto:lukas.twist@kcl.ac.uk) if you're interested in
 
 ## Research Interests
 
-- **AI for Software Engineering (AI4SE)**
+- **AI for Software Engineering (AI for SE)**
 - **LLMs for Code Generation (LLM4Code)**
 - **LLM Code Hallucinations**
+- **Responsible AI**
 
 {% include_relative _includes/publications.md %}
