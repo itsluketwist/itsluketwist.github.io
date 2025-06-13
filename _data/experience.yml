@@ -1,0 +1,19 @@
+main:
+
+  - title: PhD Student
+    organisation: "King’s College London"
+    start: October 2025
+    end: Present
+    website: "https://www.kcl.ac.uk/"
+
+  - title: Visiting PhD Student
+    organisation: "Imperial College London"
+    start: October 2025
+    end: Present
+    website: "https://www.imperial.ac.uk/"
+
+  - title: Affiliate
+    organisation: "King’s Institute for Artificial Intelligence"
+    start: June 2025
+    end: Present
+    website: "https://www.kcl.ac.uk/ai"
