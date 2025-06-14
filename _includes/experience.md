@@ -9,6 +9,11 @@
       <div class="role">
         <b>{{ role.title }}</b>, <a href="{{ role.website }}">{{ role.organisation }}</a>
       </div>
+      {% if role.extra %} 
+      <div class="extra">
+        {{ role.extra }}
+      </div>
+      {% endif %}
       <div class="dates">
         <em>{{ role.start }} - {{ role.end }}</em>
       </div>

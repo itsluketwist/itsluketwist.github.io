@@ -44,10 +44,3 @@ Then go to: http://127.0.0.1:4000/
 ## *credit*
 
 Site built from [minimal-light](https://github.com/yaoyao-liu/minimal-light/).
-
-
-# todo
-
-- some list/page for blogs?
-- some list/page for publications?
-
