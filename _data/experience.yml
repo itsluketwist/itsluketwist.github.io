@@ -9,6 +9,7 @@ main:
 
   - title: Visiting PhD Student
     organisation: "Imperial College London"
+    extra: "Department of Computing"
     start: October 2025
     end: Present
     website: "https://www.imperial.ac.uk/"
