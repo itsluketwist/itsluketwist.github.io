@@ -1,8 +1,8 @@
 main:
 
-  - title: "⭐️ LLMs Love Python: A Study of LLMs' Bias for Programming Languages and Libraries"
-    authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Detlef Nauck
+  - title: "⭐️ A Study of LLMs' Preferences for Libraries and Programming Languages"
+    authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis & Detlef Nauck
     venue: arXiv preprint, March 2025.
     pdf: https://arxiv.org/abs/2503.17181/
-    code: https://github.com/itsluketwist/llms-love-python/
-    bibtex: ./assets/bibtex/arxiv-llms-love-python.txt
+    code: https://github.com/itsluketwist/llm-code-bias/
+    bibtex: ./assets/bibtex/arxiv-llm-code-bias.txt
