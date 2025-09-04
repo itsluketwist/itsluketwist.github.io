@@ -6,3 +6,4 @@ main:
     pdf: https://arxiv.org/abs/2503.17181/
     code: https://github.com/itsluketwist/llm-code-bias/
     bibtex: ./assets/bibtex/arxiv-llm-code-bias.txt
+    poster: ./assets/posters/kcl-llm-code-bias.pdf
