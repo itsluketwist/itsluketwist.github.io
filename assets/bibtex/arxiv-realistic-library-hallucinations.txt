@@ -1,0 +1,9 @@
+@misc{twistLibraryHallucinationsLLMs2025,
+  title = {Library {{Hallucinations}} in {{LLMs}}: {{Risk Analysis Grounded}} in {{Developer Queries}}},
+  author = {Twist, Lukas and Zhang, Jie M. and Harman, Mark and Yannakoudakis, Helen},
+  year = {2025},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2509.22202/},
+  doi = {10.48550/arXiv.2509.22202},
+}
+

@@ -3,5 +3,6 @@
   author = {Twist, Lukas and Zhang, Jie M. and Harman, Mark and Syme, Don and Noppen, Joost and Yannakoudakis, Helen and Nauck, Detlef},
   year = {2025},
   publisher = {arXiv},
-  url = {http://arxiv.org/abs/2503.17181},
+  url = {http://arxiv.org/abs/2503.17181/},
+  doi = {10.48550/arXiv.2503.17181},
 }

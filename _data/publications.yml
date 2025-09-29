@@ -1,6 +1,13 @@
 main:
 
-  - title: "⭐️ A Study of LLMs' Preferences for Libraries and Programming Languages"
+  - title: "Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries"
+    authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman & Helen Yannakoudakis
+    venue: arXiv preprint, September 2025.
+    pdf: https://arxiv.org/abs/2509.22202/
+    code: https://github.com/itsluketwist/realistic-library-hallucinations/
+    bibtex: ./assets/bibtex/arxiv-realistic-library-hallucinations.txt
+
+  - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
     authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis & Detlef Nauck
     venue: arXiv preprint, March 2025.
     pdf: https://arxiv.org/abs/2503.17181/
