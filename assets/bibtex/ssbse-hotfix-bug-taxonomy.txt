@@ -2,5 +2,6 @@
   title = {{{HotCat}}: {{Green}} and {{Effective Feature Selection}} for {{HotFix Bug Taxonomy}}},
   author = {de la Cal, Luis and Cao, Yazhuo and Ercevik, Ayse Irmak and Pinna, Giovanni and Twist, Lukas and Williams, David and Even-Mendoza, Karine and Langdon, William and Menendez, Hector and Sarro, Federica},
   year = {2025},
+  maintitle = {{{International Conference}} on {{Automated Software Engineering}} ({{ASE}} 2025)},
   booktitle = {Proceedings of the {{International Symposium}} on {{Search Based Software Engineering}} ({{SSBSE}} 2025)},
 }

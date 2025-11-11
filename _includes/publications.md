@@ -8,8 +8,12 @@
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
       <div class="title"><a href="{{ link.pdf }}"  target="_blank">{{ link.title }}</a></div>
       <div class="author">{{ link.authors }}</div>
-      <div class="periodical"><em>{{ link.venue }}</em>
-      </div>
+      {% if link.workshop %} 
+      <div class="periodical"><em>{{ link.workshop }}, at the {{link.main }}.</em></div>
+      {% else %}
+      <div class="periodical"><em>{{ link.main }}.</em></div>
+      {% endif %}
+      
     <div class="links">
       {% if link.url %} 
       <a href="{{ link.url }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Online</a>
