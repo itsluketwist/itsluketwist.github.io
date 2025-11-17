@@ -17,11 +17,11 @@ main:
     bibtex: ./assets/bibtex/arxiv-llm-code-bias.txt
     poster: ./assets/posters/kcl-llm-code-bias.pdf
 
+other:
+
   - title: "HotCat: Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
-    authors: Luis de la Cal, Yazhuo Cao, Ayse Irmak Ercevik, Giovanni Pinna, <b>Lukas Twist</b>, David Williams, Karine Even-Mendoza, William Langdon, Hector Menendez, Federica Sarro
-    main: International Conference on Automated Software Engineering (ASE 2025)
-    workshop: Symposium on Search-Based Software Engineering (SSBSE 2025)
+    where: SSBSE25
     url: https://conf.researchr.org/details/ssbse-2025/ssbse-2025-challenge/2/HotCat-Green-and-Effective-Feature-Selection-for-HotFix-Bug-Taxonomy
-    pdf: http://www0.cs.ucl.ac.uk/staff/w.langdon/ftp/papers/de-la-Cal_2025_SSBSE.pdf
+    pdf: https://kclpure.kcl.ac.uk/ws/portalfiles/portal/354194190/SSBSE_25_Challenge_Bug_Taxonomy_Clustering_Camera_Ready_7_.pdf
     code: https://zenodo.org/records/17170205
     bibtex: ./assets/bibtex/ssbse-hotfix-bug-taxonomy.txt
