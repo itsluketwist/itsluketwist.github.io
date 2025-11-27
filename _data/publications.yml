@@ -17,7 +17,14 @@ main:
     bibtex: ./assets/bibtex/arxiv-llm-code-bias.txt
     poster: ./assets/posters/kcl-llm-code-bias.pdf
 
-other:
+side:
+
+  - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
+    where: arXiv
+    url: https://arxiv.org/abs/2511.18782
+    pdf: https://arxiv.org/pdf/2511.18782
+    code: https://github.com/itsluketwist/summary-mediated-repair
+    bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
   - title: "HotCat: Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
     where: SSBSE25

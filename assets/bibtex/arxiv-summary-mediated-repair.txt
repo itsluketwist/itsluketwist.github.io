@@ -1,0 +1,9 @@
+@misc{twistSummaryMediatedRepair2025,
+  title = {Summary-{{Mediated Repair}}: {{Can LLMs}} Use Code Summarisation as a Tool for Program Repair?},
+  shorttitle = {Summary-{{Mediated Repair}}},
+  author = {Twist, Lukas},
+  year = {2025},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2511.18782},
+  doi = {10.48550/arXiv.2511.18782},
+}
