@@ -43,7 +43,7 @@
 
 {% endfor %}
 
-<b><i>Side projects:</i></b>
+<b><i>Short papers and side projects:</i></b>
 
 <br>
 
@@ -83,7 +83,7 @@
 
 <br>
 
-<b><i>Blog posts:</i></b>
+<!-- <b><i>Blog posts:</i></b>
 
 <br>
 
@@ -98,6 +98,6 @@
 
 {% endfor %}
 
-<br>
+<br> -->
 
 </div>

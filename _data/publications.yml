@@ -20,14 +20,14 @@ main:
 side:
 
   - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
-    where: arXiv
+    where: arXiv '25
     url: https://arxiv.org/abs/2511.18782
     pdf: https://arxiv.org/pdf/2511.18782
     code: https://github.com/itsluketwist/summary-mediated-repair
     bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
-  - title: "HotCat: Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
-    where: SSBSE25
+  - title: "Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
+    where: SSBSE '25
     url: https://conf.researchr.org/details/ssbse-2025/ssbse-2025-challenge/2/HotCat-Green-and-Effective-Feature-Selection-for-HotFix-Bug-Taxonomy
     pdf: https://kclpure.kcl.ac.uk/ws/portalfiles/portal/354194190/SSBSE_25_Challenge_Bug_Taxonomy_Clustering_Camera_Ready_7_.pdf
     code: https://zenodo.org/records/17170205
