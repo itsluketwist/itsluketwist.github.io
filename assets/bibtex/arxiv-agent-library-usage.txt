@@ -1,0 +1,8 @@
+@misc{twistAgentLibraryUsage,
+  title = {A {{Study}} of {{Library Usage}} in {{Agent-Authored Pull Requests}}},
+  author = {Twist, Lukas},
+  year = {2025},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2512.11589},
+  doi = {10.48550/arXiv.2512.11589},
+}

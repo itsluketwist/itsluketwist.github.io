@@ -19,6 +19,13 @@ main:
 
 side:
 
+  - title: "A Study of Library Usage in Agent-Authored Pull Requests"
+    where: arXiv '25
+    url: https://arxiv.org/abs/2512.11589
+    pdf: https://arxiv.org/pdf/2512.11589
+    code: https://github.com/itsluketwist/agent-library-usage
+    bibtex: ./assets/bibtex/arxiv-agent-library-usage.txt
+
   - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
     where: arXiv '25
     url: https://arxiv.org/abs/2511.18782
