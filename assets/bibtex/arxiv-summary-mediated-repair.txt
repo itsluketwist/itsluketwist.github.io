@@ -3,7 +3,9 @@
   shorttitle = {Summary-{{Mediated Repair}}},
   author = {Twist, Lukas},
   year = {2025},
-  publisher = {arXiv},
+  month = {November},
+  publisher = {{{arXiv}}},
+  journal = {{{arXiv}} preprint {{arXiv}}:2511.18782}
   url = {http://arxiv.org/abs/2511.18782},
-  doi = {10.48550/arXiv.2511.18782},
 }
+

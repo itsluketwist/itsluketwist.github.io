@@ -1,8 +1,9 @@
-@misc{twistLLMCodeBias2025,
+@article{twistLLMCodeBias2025,
   title = {{{A Study}} of {{LLMs}}' {{Preferences}} for {{Libraries}} and {{Programming Languages}}},
   author = {Twist, Lukas and Zhang, Jie M. and Harman, Mark and Syme, Don and Noppen, Joost and Yannakoudakis, Helen and Nauck, Detlef},
   year = {2025},
-  publisher = {arXiv},
+  month = {July},
+  publisher = {{{arXiv}}},
+  journal = {{{arXiv}} preprint {{arXiv}}:2503.17181},
   url = {http://arxiv.org/abs/2503.17181},
-  doi = {10.48550/arXiv.2503.17181},
 }
