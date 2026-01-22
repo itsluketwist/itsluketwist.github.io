@@ -1,0 +1,11 @@
+@inproceedings{twist2026AgentLibraryUsage,
+  title = {{A Study of Library Usage in Agent-Authored Pull Requests}},
+  author = {Twist, Lukas and Zhang, Jie M.},
+  booktitle = {Proceedings of the 23rd International Conference on Mining Software Repositories},
+  series = {MSR '26},
+  location = {Rio de Janeiro, Brazil},
+  year = {2026},
+  month = {April},
+  publisher = {ACM},
+  doi = {10.1145/3793302.3793562}
+}

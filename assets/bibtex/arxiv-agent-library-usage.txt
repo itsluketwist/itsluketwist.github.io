@@ -1,9 +1,0 @@
-@article{twistAgentLibraryUsage,
-  title = {A {{Study}} of {{Library Usage}} in {{Agent-Authored Pull Requests}}},
-  author = {Twist, Lukas},
-  year = {2025},
-  month = {December},
-  publisher = {{{arXiv}}},
-  journal = {{{arXiv}} preprint {{arXiv}}:2512.11589},
-  url = {http://arxiv.org/abs/2512.11589},
-}
