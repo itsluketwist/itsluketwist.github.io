@@ -6,7 +6,7 @@ main:
     url: https://arxiv.org/abs/2509.22202
     pdf: https://arxiv.org/pdf/2509.22202
     code: https://github.com/itsluketwist/realistic-library-hallucinations
-    bibtex: ./assets/bibtex/arxiv-realistic-library-hallucinations.txt
+    bibtex: ./assets/bibtex/arxiv-realistic-library-hallucinations.bib
 
   - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
     authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis & Detlef Nauck
@@ -14,7 +14,7 @@ main:
     url: https://arxiv.org/abs/2503.17181
     pdf: https://arxiv.org/pdf/2503.17181
     code: https://github.com/itsluketwist/llm-code-bias
-    bibtex: ./assets/bibtex/arxiv-llm-code-bias.txt
+    bibtex: ./assets/bibtex/arxiv-llm-code-bias.bib
     poster: ./assets/posters/kcl-llm-code-bias.pdf
 
 side:
@@ -24,18 +24,18 @@ side:
     arxiv: https://arxiv.org/abs/2512.11589
     pdf: https://arxiv.org/pdf/2512.11589
     code: https://github.com/itsluketwist/agent-library-usage
-    bibtex: ./assets/bibtex/arxiv-agent-library-usage.txt
+    bibtex: ./assets/bibtex/msr-agent-library-usage.bib
 
   - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
     where: arXiv '25
     arxiv: https://arxiv.org/abs/2511.18782
     pdf: https://arxiv.org/pdf/2511.18782
     code: https://github.com/itsluketwist/summary-mediated-repair
-    bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
+    bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.bib
 
   - title: "Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
     where: SSBSE '25
     url: https://conf.researchr.org/details/ssbse-2025/ssbse-2025-challenge/2/HotCat-Green-and-Effective-Feature-Selection-for-HotFix-Bug-Taxonomy
     pdf: https://kclpure.kcl.ac.uk/ws/portalfiles/portal/354194190/SSBSE_25_Challenge_Bug_Taxonomy_Clustering_Camera_Ready_7_.pdf
     code: https://zenodo.org/records/17170205
-    bibtex: ./assets/bibtex/ssbse-hotfix-bug-taxonomy.txt
+    bibtex: ./assets/bibtex/ssbse-hotfix-bug-taxonomy.bib
