@@ -21,6 +21,7 @@ side:
 
   - title: "A Study of Library Usage in Agent-Authored Pull Requests"
     where: MSR '26
+    url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
     arxiv: https://arxiv.org/abs/2512.11589
     pdf: https://arxiv.org/pdf/2512.11589
     code: https://github.com/itsluketwist/agent-library-usage
