@@ -1,9 +1,17 @@
 main:
 
+  - title: "Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning"
+    authors: <b>Lukas Twist</b>, Shu Yang, Hanqi Yan, Jingzhi Gong, Di Wang, Helen Yannakoudakis & Jie M. Zhang
+    main: arXiv preprint, January 2026
+    arxiv: https://arxiv.org/abs/2601.21894
+    pdf: https://arxiv.org/pdf/2601.21894
+    data: https://huggingface.co/datasets/itsluketwist/NotAllCodeIsEqual
+    bibtex: ./assets/bibtex/arxiv-code-complexity-reasoning.bib
+
   - title: "Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries"
     authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman & Helen Yannakoudakis
     main: arXiv preprint, September 2025
-    url: https://arxiv.org/abs/2509.22202
+    arxiv: https://arxiv.org/abs/2509.22202
     pdf: https://arxiv.org/pdf/2509.22202
     code: https://github.com/itsluketwist/realistic-library-hallucinations
     bibtex: ./assets/bibtex/arxiv-realistic-library-hallucinations.bib
@@ -11,7 +19,7 @@ main:
   - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
     authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis & Detlef Nauck
     main: arXiv preprint, March 2025
-    url: https://arxiv.org/abs/2503.17181
+    arxiv: https://arxiv.org/abs/2503.17181
     pdf: https://arxiv.org/pdf/2503.17181
     code: https://github.com/itsluketwist/llm-code-bias
     bibtex: ./assets/bibtex/arxiv-llm-code-bias.bib

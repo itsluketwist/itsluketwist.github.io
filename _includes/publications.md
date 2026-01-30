@@ -6,7 +6,12 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
-      <div class="title"><a href="{{ link.url }}"  target="_blank">{{ link.title }}</a></div>
+      {% assign title_url = link.url | default: link.arxiv %}
+      {% if title_url %}
+      <div class="title"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a></div>
+      {% else %}
+      <div class="title">{{ link.title }}</div>
+      {% endif %}
       <div class="author">{{ link.authors }}</div>
       {% if link.workshop %} 
       <div class="periodical"><em>{{ link.workshop }}, at the {{link.main }}.</em></div>
@@ -18,11 +23,17 @@
       {% if link.url %} 
       <a href="{{ link.url }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Online</a>
       {% endif %}
+      {% if link.arxiv %} 
+      <a href="{{ link.arxiv }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
+      {% endif %}
       {% if link.pdf %} 
       <a href="{{ link.pdf }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">PDF</a>
       {% endif %}
       {% if link.code %} 
       <a href="{{ link.code }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Code</a>
+      {% endif %}
+      {% if link.data %} 
+      <a href="{{ link.data }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Dataset</a>
       {% endif %}
       {% if link.bibtex %} 
       <a href="{{ link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
@@ -31,7 +42,7 @@
       <a href="{{ link.poster }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
       {% endif %}
       {% if link.notes %} 
-      <strong> <i style="color:#e74d3c">{{ link.notes }}</i></strong>
+      <strong><i style="color:#e74d3c">{{ link.notes }}</i></strong>
       {% endif %}
       {% if link.others %} 
       {{ link.others }}
@@ -51,7 +62,12 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
-      <div class="sidetitle"><a href="{{ link.url }}"  target="_blank">{{ link.title }}</a> - <i>{{ link.where }}</i></div>
+      {% assign title_url = link.url | default: link.arxiv %}
+      {% if title_url %}
+      <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a> - <i>{{ link.where }}</i></div>
+      {% else %}
+      <div class="sidetitle">{{ link.title }} - <i>{{ link.where }}</i></div>
+      {% endif %}
       
     <div class="links">
       {% if link.url %} 
@@ -65,6 +81,9 @@
       {% endif %}
       {% if link.code %} 
       <a href="{{ link.code }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Code</a>
+      {% endif %}
+      {% if link.data %} 
+      <a href="{{ link.data }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Dataset</a>
       {% endif %}
       {% if link.bibtex %} 
       <a href="{{ link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTex</a>
