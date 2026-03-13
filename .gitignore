@@ -6,3 +6,5 @@ Gemfile.lock
 .jekyll-cache
 git-update.sh
 .bundle/
+.vscode/
+.claude/

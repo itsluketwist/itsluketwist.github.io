@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="./assets/css/publications-no-dark-mode.css">
     {% endif %}
 
+    <script src="./assets/js/clipboard.js"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -58,14 +59,9 @@
         {% if site.email %}
         <email>
           <span id="email">{{ site.email }}</span>
-          <i class="fas fa-copy" id="copy-btn" style="cursor: pointer;" title="Copy email"></i>
+          <i class="fas fa-copy" id="copy-btn" style="cursor: pointer;" title="Copy email"
+           onclick="copyToClipboard(document.getElementById('email').textContent, this)"></i>
         </email>
-        <script>
-          document.getElementById('copy-btn').addEventListener('click', function() {
-            const email = document.getElementById('email').textContent;
-            navigator.clipboard.writeText(email)
-          });
-        </script>
         {% endif %}
 
         <br>
