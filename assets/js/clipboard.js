@@ -1,9 +1,21 @@
-// shared clipboard utility - copies text and shows a "Copied!" tooltip near the clicked element
+// email clipboard utility - copies the email address and shows a "Copied!" tooltip
+
+const EMAIL = "lukas.twist@kcl.ac.uk";
 
 // inject tooltip styles once when the script loads
 (function () {
   const style = document.createElement("style");
   style.textContent = `
+    .copy-email {
+      color: var(--global-theme-color);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      font-style: italic;
+    }
+    .copy-email:hover {
+      color: var(--global-hover-color);
+    }
     .copy-tooltip {
       position: fixed;
       background: #333;
@@ -23,8 +35,8 @@
   document.head.appendChild(style);
 })();
 
-function copyToClipboard(text, element) {
-  navigator.clipboard.writeText(text).then(function () {
+function copyEmail(element) {
+  navigator.clipboard.writeText(EMAIL).then(function () {
     // create and position the tooltip near the clicked element
     const tooltip = document.createElement("div");
     tooltip.className = "copy-tooltip";
@@ -45,3 +57,12 @@ function copyToClipboard(text, element) {
     }, 1400);
   });
 }
+
+// attach click handlers to all elements with the "copy-email" class
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".copy-email").forEach(function (el) {
+    el.addEventListener("click", function () {
+      copyEmail(el);
+    });
+  });
+});

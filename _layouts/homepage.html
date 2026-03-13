@@ -58,9 +58,7 @@
 
         {% if site.email %}
         <email>
-          <span id="email">{{ site.email }}</span>
-          <i class="fas fa-copy" id="copy-btn" style="cursor: pointer;" title="Copy email"
-           onclick="copyToClipboard(document.getElementById('email').textContent, this)"></i>
+          <span class="copy-email">{{ site.email }} <i class="fas fa-copy" title="Copy email"></i></span>
         </email>
         {% endif %}
 

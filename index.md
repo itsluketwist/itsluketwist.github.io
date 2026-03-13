@@ -13,7 +13,7 @@ I’m passionate about harnessing artificial intelligence to transform software 
 bridging real‑world expertise with cutting‑edge research to build systems that are safe, 
 robust, innovative, and genuinely useful.
 
-If you’re a researcher or practitioner working in these areas and are interested in collaborating, I’d love to connect — reach out via <a href="#" onclick="copyToClipboard(‘lukas.twist@kcl.ac.uk’, this); return false;">email 📨</a>.
+If you’re a researcher or practitioner working in these areas and are interested in collaborating, I’d love to connect — reach out via <span class="copy-email">email 📨</span>.
 
 ## Research Interests
 
