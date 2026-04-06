@@ -34,6 +34,7 @@ side:
     pdf: https://arxiv.org/pdf/2512.11589
     code: https://github.com/itsluketwist/agent-library-usage
     bibtex: ./assets/bibtex/msr-agent-library-usage.txt
+    poster: ./assets/posters/msr-agent-library-usage.pdf
 
   - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
     where: arXiv '25
