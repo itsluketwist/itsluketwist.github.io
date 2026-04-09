@@ -1,0 +1,8 @@
+@inproceedings{twistLLMCodeBias2026,
+  title = {A Study of LLMs' Preferences for Libraries and Programming Languages},
+  author = {Twist, Lukas and Zhang, Jie M. and Harman, Mark and Syme, Don and Noppen, Joost and Yannakoudakis, Helen and Nauck, Detlef},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2026},
+  year = {2026},
+  month = {July},
+  url = {https://arxiv.org/abs/2503.17181}
+}
