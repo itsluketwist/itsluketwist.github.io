@@ -14,11 +14,11 @@ main:
     end: Present
     website: "https://www.imperial.ac.uk/"
 
-  - title: Affiliate
-    organisation: "King’s Institute for Artificial Intelligence"
-    start: June 2025
-    end: Present
-    website: "https://www.kcl.ac.uk/ai"
+  # - title: Affiliate
+  #   organisation: "King’s Institute for Artificial Intelligence"
+  #   start: June 2025
+  #   end: Present
+  #   website: "https://www.kcl.ac.uk/ai"
 
   - title: Graduate Teaching Assistant
     organisation: "King’s College London"

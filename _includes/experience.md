@@ -7,21 +7,27 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
       <div class="role">
-        <b>{{ role.title }}</b>, <a href="{{ role.website }}">{{ role.organisation }}</a>
+        {% if role.organisation %}
+          <b>{{ role.title }}</b>, <a href="{{ role.website }}">{{ role.organisation }}</a>
+        {% else %}
+          <b>{{ role.title }}</b>
+        {% endif %}
       </div>
       {% if role.extra %} 
       <div class="extra">
         {{ role.extra }}
       </div>
       {% endif %}
-      <div class="dates">
-        <em>{{ role.start }} - {{ role.end }}</em>
-      </div>
+      {% if role.start %} 
+        <div class="dates">
+          <em>{{ role.start }} - {{ role.end }}</em>
+        </div>
+      {% endif %}
   </div>
 </div>
 
-<br>
-
 {% endfor %}
+
+<br>
 
 </div>

@@ -1,0 +1,35 @@
+main:
+
+  - date: April 2026
+    text: "Paper accepted to <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    url: https://arxiv.org/abs/2503.17181
+
+  - date: April 2026
+    text: "Attended <b>ICSE 2026</b> as a student volunteer."
+
+  - date: April 2026
+    text: "Presented a poster at <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
+    url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
+
+  - date: January 2026
+    text: "Paper accepted to <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
+    url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
+
+  - date: January 2026
+    text: "New preprint on arXiv: <i>Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning</i>."
+    url: https://arxiv.org/abs/2601.21894
+
+  - date: September 2025
+    text: "New preprint on arXiv: <i>Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries</i>."
+    url: https://arxiv.org/abs/2509.22202
+
+  - date: June 2025
+    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>."
+
+  - date: June 2025
+    text: "Became an affiliate of the <b>King's Institute for Artificial Intelligence</b>."
+    url: https://www.kcl.ac.uk/ai
+
+  - date: March 2025
+    text: "New preprint on arXiv: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    url: https://arxiv.org/abs/2503.17181

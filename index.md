@@ -21,6 +21,8 @@ If you’re a researcher or practitioner working in these areas and are interest
 - **LLM Code Hallucinations**
 - **LLM Reasoning & Coding Intelligence**
 
+{% include_relative _includes/news.md %}
+
 {% include_relative _includes/publications.md %}
 
 {% include_relative _includes/experience.md %}
