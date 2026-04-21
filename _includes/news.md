@@ -5,15 +5,15 @@
   if (extra.style.display === 'none') {
     extra.style.display = 'block';
     if (ellipsis) ellipsis.style.display = 'none';
-    toggle.textContent = '−';
+    toggle.innerHTML = '<i class=\'fas fa-circle-minus\'></i>';
     toggle.title = 'Show less';
   } else {
     extra.style.display = 'none';
     if (ellipsis) ellipsis.style.display = 'block';
-    toggle.textContent = '+';
+    toggle.innerHTML = '<i class=\'fas fa-circle-plus\'></i>';
     toggle.title = 'Show more';
   }
-" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;">+</a>{% endif %}</h2>
+" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>{% endif %}</h2>
 
 <div class="publications">
 
@@ -24,7 +24,7 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
     <div class="role">
-      <em>{{ item.date }}</em> &mdash; {{ item.text }}
+      <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}
         <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
       {% elsif item.url %}
@@ -43,7 +43,7 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
     <div class="role">
-      <em>{{ item.date }}</em> &mdash; {{ item.text }}
+      <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}
         <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
       {% elsif item.url %}

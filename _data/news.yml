@@ -33,3 +33,7 @@ main:
   - date: March 2025
     text: "New preprint on arXiv: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
     url: https://arxiv.org/abs/2503.17181
+
+  - date: October 2024
+    text: "Started my PhD at <b>King's College London</b> and <b>Imperial College London</b>, CDT in Safe & Trusted AI."
+    url: https://safeandtrustedai.org/
