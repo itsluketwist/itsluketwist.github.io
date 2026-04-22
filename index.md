@@ -6,7 +6,7 @@ layout: homepage
 
 Hey 👋 I'm Luke, a PhD student at [King's College London](https://www.kcl.ac.uk/), 
 studying in the CDT for [Safe & Trusted AI](https://safeandtrustedai.org/), 
-under the supervision of [Dr Jie M. Zhang](https://sites.google.com/view/jie-zhang/home).
+under the supervision of [Dr Jie M. Zhang](https://sites.google.com/view/jie-zhang/home) and [Dr Helen Yannakoudakis](https://www.kcl.ac.uk/people/helen-yannakoudakis).
 
 With over **8** years of industry experience in software engineering and technical leadership roles,
 I’m passionate about harnessing artificial intelligence to transform software engineering - 

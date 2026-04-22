@@ -43,9 +43,17 @@ side:
     code: https://github.com/itsluketwist/summary-mediated-repair
     bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
+  - title: "SkillMOO: Multi-Objective Optimization of Agent Skills for Software Engineering"
+    where: arXiv '26
+    arxiv: https://arxiv.org/abs/2604.09297
+    pdf: https://arxiv.org/pdf/2604.09297
+    bibtex: ./assets/bibtex/arxiv-skillmoo.txt
+    not_first_author: true
+
   - title: "Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
     where: SSBSE '25
     url: https://conf.researchr.org/details/ssbse-2025/ssbse-2025-challenge/2/HotCat-Green-and-Effective-Feature-Selection-for-HotFix-Bug-Taxonomy
     pdf: https://kclpure.kcl.ac.uk/ws/portalfiles/portal/354194190/SSBSE_25_Challenge_Bug_Taxonomy_Clustering_Camera_Ready_7_.pdf
     code: https://zenodo.org/records/17170205
     bibtex: ./assets/bibtex/ssbse-hotfix-bug-taxonomy.txt
+    not_first_author: true

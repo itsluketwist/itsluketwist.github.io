@@ -1,0 +1,10 @@
+@article{gongSkillMOO2026,
+  title = {{SkillMOO: Multi-Objective Optimization of Agent Skills for Software Engineering}},
+  shorttitle = {{SkillMOO}},
+  author = {Gong, Jingzhi and Gu, Ruizhen and Fei, Zhiwei and Cao, Yazhuo and Twist, Lukas and Geiger, Alina and Han, Shuo and Sobania, Dominik and Sarro, Federica and Zhang, Jie M.},
+  journal = {{arXiv preprint arXiv:2604.09297}},
+  year = {2026},
+  month = {April},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2604.09297},
+}

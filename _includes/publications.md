@@ -81,9 +81,9 @@
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
       {% assign title_url = link.url | default: link.arxiv %}
       {% if title_url %}
-      <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a> - <i>{{ link.where }}</i></div>
+      <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a>{% if link.not_first_author %}<span style="color:#ffb81c;">*</span>{% endif %} - <i>{{ link.where }}</i></div>
       {% else %}
-      <div class="sidetitle">{{ link.title }} - <i>{{ link.where }}</i></div>
+      <div class="sidetitle">{{ link.title }}{% if link.not_first_author %}<span style="color:#ffb81c;">*</span>{% endif %} - <i>{{ link.where }}</i></div>
       {% endif %}
       
     <div class="links">
@@ -119,6 +119,8 @@
 </div>
 
 {% endfor %}
+
+<div style="padding-left:20px;"><small><span style="color:#ffb81c;">*</span> not first author</small></div>
 
 </div>
 
