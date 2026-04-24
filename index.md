@@ -17,9 +17,13 @@ If you’re a researcher or practitioner working in these areas and are interest
 
 ## Research Interests
 
-- **LLM Code Generation (LLM4Code)**
-- **LLM Code Hallucinations**
-- **LLM Reasoning & Coding Intelligence**
+<div style="padding-left: 15px;">
+  <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#ffb81c;"></i><b>LLM Code Generation (LLM4Code)</b></div>
+  <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#ffb81c;"></i><b>LLM Code Hallucinations</b></div>
+  <div><i class="fas fa-angle-right" style="margin-right: 8px;color:#ffb81c;"></i><b>LLM Reasoning & Coding Intelligence</b></div>
+</div>
+
+<br>
 
 {% include_relative _includes/news.md %}
 
