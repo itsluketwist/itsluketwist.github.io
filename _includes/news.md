@@ -22,7 +22,7 @@
 
 {% for item in news_items limit: news_limit %}
 <div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
       <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}
@@ -36,12 +36,12 @@
 {% endfor %}
 
 {% if news_items.size > news_limit %}
-<div id="news-ellipsis" style="padding-left:20px;color:#999;">...</div>
+<div id="news-ellipsis" style="padding-left:15px;color:#999;">...</div>
 
 <div id="news-extra" style="display:none;">
 {% for item in news_items offset: news_limit %}
 <div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
       <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}

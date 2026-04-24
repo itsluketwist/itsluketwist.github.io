@@ -43,7 +43,7 @@ side:
     code: https://github.com/itsluketwist/summary-mediated-repair
     bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
-  - title: "SkillMOO: Multi-Objective Optimization of Agent Skills for Software Engineering"
+  - title: "Multi-Objective Optimization of Agent Skills for Software Engineering"
     where: arXiv '26
     arxiv: https://arxiv.org/abs/2604.09297
     pdf: https://arxiv.org/pdf/2604.09297

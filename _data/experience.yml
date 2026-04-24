@@ -26,3 +26,13 @@ main:
     start: September 2025
     end: Present
     website: "https://www.kcl.ac.uk/informatics"
+
+education:
+
+  - title: MS Computer Science
+    organisation: "University of Bath"
+    website: "https://www.bath.ac.uk/"
+
+  - title: "BA / MA Mathematics"
+    organisation: "University of Oxford"
+    website: "https://www.ox.ac.uk/"

@@ -5,7 +5,7 @@
 {% for link in site.data.publications.main %}
 
 <div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
       {% assign title_url = link.url | default: link.arxiv %}
       {% if title_url %}
       <div class="title"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a></div>
@@ -54,7 +54,9 @@
 
 {% endfor %}
 
-<b><i>Short papers and side projects</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="
+<div class="pub-row">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
+    <b><i>Short papers and side projects</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="
   var extra = document.getElementById('side-pubs');
   var toggle = document.getElementById('side-toggle');
   var ellipsis = document.getElementById('side-ellipsis');
@@ -70,15 +72,17 @@
     toggle.title = 'Show';
   }
 " style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
+  </div>
+</div>
 
-<div id="side-ellipsis" style="padding-left:20px;color:#999;">...</div>
+<div id="side-ellipsis" style="padding-left:15px;color:#999;">...</div>
 
-<div id="side-pubs" style="display:none;">
+<div id="side-pubs" style="display:none;padding-left:15px;">
 
 {% for link in site.data.publications.side %}
 
 <div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
       {% assign title_url = link.url | default: link.arxiv %}
       {% if title_url %}
       <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a>{% if link.not_first_author %}<span style="color:#ffb81c;">*</span>{% endif %} - <i>{{ link.where }}</i></div>
@@ -120,7 +124,7 @@
 
 {% endfor %}
 
-<div style="padding-left:20px;"><small><span style="color:#ffb81c;">*</span> not first author</small></div>
+<div style="padding-left:15px;"><small><span style="color:#ffb81c;">*</span> not first author</small></div>
 
 </div>
 
@@ -134,7 +138,7 @@
 {% for link in site.data.publications.blog %}
 
 <div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
       <div class="sidetitle"><a href="{{ link.url }}"  target="_blank">{{ link.title }}</a></div>
       <i>{{ link.where }}, {{ link.date }}</i>
   </div>
