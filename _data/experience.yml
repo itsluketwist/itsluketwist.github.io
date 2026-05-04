@@ -14,18 +14,29 @@ main:
     end: Present
     website: "https://www.imperial.ac.uk/"
 
-  # - title: Affiliate
-  #   organisation: "King’s Institute for Artificial Intelligence"
-  #   start: June 2025
-  #   end: Present
-  #   website: "https://www.kcl.ac.uk/ai"
-
   - title: Graduate Teaching Assistant
     organisation: "King’s College London"
     extra: "Department of Informatics.<br>Modules: Natural Language Processing, Software Engineering."
     start: September 2025
     end: Present
     website: "https://www.kcl.ac.uk/informatics"
+
+  - title: Journal Reviewer
+    extra: "IEEE Software, IJHCI"
+
+industry:
+
+  - title: Senior Technical Lead
+    organisation: "Lantern.ai Limited"
+    extra: "Led a 10+ engineer team delivering an AI-powered document intelligence platform."
+
+  - title: Senior Software Engineer
+    organisation: "Quine Technologies"
+    extra: "Large-scale ingestion and analysis of open-source repositories for software ecosystem intelligence."
+
+  - title: Senior Software Engineer
+    organisation: "Mustard Systems"
+    extra: "High-throughput asynchronous data pipelines for real-time trading infrastructure."
 
 education:
 
