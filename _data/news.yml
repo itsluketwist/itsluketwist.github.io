@@ -1,11 +1,14 @@
 main:
 
+  - date: May 2026
+    text: "Attended <b>Google PhD Summit 2026</b> (Warsaw, Poland) by invitation."
+
   - date: April 2026
     text: "Paper accepted to <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
     url: https://arxiv.org/abs/2503.17181
 
   - date: April 2026
-    text: "Attended <b>ICSE 2026</b> as a student volunteer."
+    text: "Attended <b>ICSE 2026</b> (Rio de Janeiro, Brazil) as a student volunteer."
 
   - date: April 2026
     text: "Presented a poster at <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
