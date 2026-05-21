@@ -32,11 +32,11 @@ industry:
 
   - title: Senior Software Engineer
     organisation: "Quine Technologies"
-    extra: "Large-scale ingestion and analysis of open-source repositories for software ecosystem intelligence."
+    extra: "Built scalable scraping and analysis systems for large open-source software datasets."
 
   - title: Senior Software Engineer
     organisation: "Mustard Systems"
-    extra: "High-throughput asynchronous data pipelines for real-time trading infrastructure."
+    extra: "Developed high-throughput asynchronous data pipelines for real-time trading infrastructure."
 
 education:
 

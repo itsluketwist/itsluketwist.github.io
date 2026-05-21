@@ -8,6 +8,14 @@ main:
     code: https://github.com/itsluketwist/llm-code-bias
     bibtex: ./assets/bibtex/acl-llm-code-bias.txt
     poster: ./assets/posters/kcl-llm-code-bias.pdf
+
+  - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
+    authors: <b>Lukas Twist</b>, Helen Yannakoudakis & Jie M. Zhang
+    main: arXiv preprint, May 2026
+    arxiv: https://arxiv.org/abs/2605.21127
+    pdf: https://arxiv.org/pdf/2605.21127
+    code: https://github.com/itsluketwist/thinkpack
+    bibtex: ./assets/bibtex/arxiv-reasoning-collapse.txt
     
   - title: "Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning"
     authors: <b>Lukas Twist</b>, Shu Yang, Hanqi Yan, Jingzhi Gong, Di Wang, Helen Yannakoudakis & Jie M. Zhang
@@ -24,6 +32,7 @@ main:
     pdf: https://arxiv.org/pdf/2509.22202
     code: https://github.com/itsluketwist/realistic-library-hallucinations
     bibtex: ./assets/bibtex/arxiv-realistic-library-hallucinations.txt
+    poster: ./assets/posters/kcl-realistic-library-hallucinations.pdf
 
 side:
 

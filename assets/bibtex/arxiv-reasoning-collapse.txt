@@ -1,0 +1,9 @@
+@article{twistReasoningCollapse2026,
+  title = {{Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning}},
+  author = {Twist, Lukas and Yannakoudakis, Helen and Zhang, Jie M.},
+  journal = {{arXiv preprint arXiv:2605.21127}},
+  year = {2026},
+  month = {May},
+  publisher = {arXiv},
+  url = {http://arxiv.org/abs/2605.21127},
+}

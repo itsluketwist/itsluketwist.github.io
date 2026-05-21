@@ -1,6 +1,10 @@
 main:
 
   - date: May 2026
+    text: "New preprint on arXiv: <i>Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning</i>."
+    url: https://arxiv.org/abs/2605.21127
+
+  - date: May 2026
     text: "Attended <b>Google PhD Summit 2026</b> (Warsaw, Poland) by invitation."
 
   - date: April 2026
@@ -27,7 +31,8 @@ main:
     url: https://arxiv.org/abs/2509.22202
 
   - date: June 2025
-    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>."
+    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    url: https://www.kcl.ac.uk/events/informatics-industry-showcase-2025 
 
   - date: June 2025
     text: "Became an affiliate of the <b>King's Institute for Artificial Intelligence</b>."
