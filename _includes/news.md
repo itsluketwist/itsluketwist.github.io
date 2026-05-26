@@ -24,7 +24,7 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
-      <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
+      <em style="color:#e65100;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}
         <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
       {% elsif item.url %}
@@ -43,7 +43,7 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
-      <em style="color:#ffb81c;">{{ item.date }}</em> &mdash; {{ item.text }}
+      <em style="color:#e65100;">{{ item.date }}</em> &mdash; {{ item.text }}
       {% if item.url contains "arxiv.org" %}
         <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
       {% elsif item.url %}
