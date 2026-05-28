@@ -7,7 +7,7 @@ main:
     pdf: https://arxiv.org/pdf/2503.17181
     code: https://github.com/itsluketwist/llm-code-bias
     bibtex: ./assets/bibtex/acl-llm-code-bias.txt
-    poster: ./assets/posters/kcl-llm-code-bias.pdf
+    poster: ./assets/posters/acl-llm-code-bias.pdf
 
   - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
     authors: <b>Lukas Twist</b>, Helen Yannakoudakis & Jie M. Zhang
