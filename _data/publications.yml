@@ -25,7 +25,7 @@ main:
     data: https://huggingface.co/datasets/itsluketwist/NotAllCodeIsEqual
     bibtex: ./assets/bibtex/arxiv-code-complexity-reasoning.txt
 
-  - title: "Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries"
+  - title: "Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries"
     authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman & Helen Yannakoudakis
     main: arXiv preprint, September 2025
     arxiv: https://arxiv.org/abs/2509.22202
