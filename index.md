@@ -2,7 +2,7 @@
 layout: homepage
 ---
 
-## About Me <img src="assets/img/favicon.png" alt="Icon" style="display: inline; width: 20px; height: 20px;">
+## About Me <img src="assets/favicon.png" alt="Icon" style="display: inline; width: 20px; height: 20px;">
 
 Hey 👋 I'm Luke, a PhD student at [King's College London](https://www.kcl.ac.uk/), 
 studying in the CDT for [Safe & Trusted AI](https://safeandtrustedai.org/), 

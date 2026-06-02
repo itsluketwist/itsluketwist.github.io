@@ -20,9 +20,13 @@ linkedin: https://www.linkedin.com/in/lukastwist/
 # orcid: https://orcid.org/0009-0009-6640-2532
 # cv_link: assets/files/curriculum_vitae.pdf
 
-# Images (e.g., your profile picture and your website's favicon) 
-avatar: ./assets/img/avatar.png
-favicon: ./assets/img/favicon.png
+# Images (e.g., your profile picture and your website's favicon)
+# List multiple avatars to have one randomly selected on each page load.
+avatars:
+  - ./assets/headshots/1.png
+  - ./assets/headshots/2.png
+  - ./assets/headshots/3.png
+favicon: ./assets/favicon.png
 
 # Footnote
 # You may use the option to disable the footnote, "Powered by Jekyll and Minimal Light theme."

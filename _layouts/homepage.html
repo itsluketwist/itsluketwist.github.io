@@ -38,7 +38,17 @@
     <div class="wrapper">
       <header>
         
-        {% if site.avatar %}
+        {% if site.avatars %}
+        <a id="avatar-link" class="image avatar" href="{{ site.avatars[0] }}" target="_blank" rel="noopener noreferrer"><img id="avatar-img" src="{{ site.avatars[0] }}" alt="avatar" /></a>
+        <script>
+          (function() {
+            var avatars = [{% for a in site.avatars %}'{{ a }}'{% unless forloop.last %}, {% endunless %}{% endfor %}];
+            var src = avatars[Math.floor(Math.random() * avatars.length)];
+            document.getElementById('avatar-img').src = src;
+            document.getElementById('avatar-link').href = src;
+          })();
+        </script>
+        {% elsif site.avatar %}
         <a class="image avatar"><img src="{{ site.avatar }}" alt="avatar" /></a>
         {% endif %}
 
