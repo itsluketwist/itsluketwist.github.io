@@ -1,5 +1,9 @@
 main:
 
+  - date: June 2026
+    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>: <i>Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries</i>."
+    url: https://www.kcl.ac.uk/events/kings-informatics-industry-showcase-2026 
+
   - date: May 2026
     text: "New preprint on arXiv: <i>Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning</i>."
     url: https://arxiv.org/abs/2605.21127
