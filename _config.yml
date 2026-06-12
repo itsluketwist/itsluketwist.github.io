@@ -24,8 +24,6 @@ linkedin: https://www.linkedin.com/in/lukastwist/
 # List multiple avatars to have one randomly selected on each page load.
 avatars:
   - ./assets/headshots/1.png
-  - ./assets/headshots/2.png
-  - ./assets/headshots/3.png
 favicon: ./assets/favicon.png
 
 # Footnote
