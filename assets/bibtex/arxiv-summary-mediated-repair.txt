@@ -6,5 +6,6 @@
   year = {2025},
   month = {November},
   publisher = {arXiv},
+  doi = {10.48550/arXiv.2511.18782},
   url = {http://arxiv.org/abs/2511.18782},
 }
