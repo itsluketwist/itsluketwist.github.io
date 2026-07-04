@@ -8,4 +8,5 @@
   month = {April},
   publisher = {ACM},
   doi = {10.1145/3793302.3793562},
+  note = {Mining Challenge Track},
 }

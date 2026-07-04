@@ -54,10 +54,10 @@ side:
     bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
   - title: "Multi-Objective Optimization of Agent Skills for Software Engineering"
-    where: arXiv '26
+    where: ASE '26
     arxiv: https://arxiv.org/abs/2604.09297
     pdf: https://arxiv.org/pdf/2604.09297
-    bibtex: ./assets/bibtex/arxiv-skillmoo.txt
+    bibtex: ./assets/bibtex/ase-skill-optimisation.txt
     not_first_author: true
 
   - title: "Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
