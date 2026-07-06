@@ -1,7 +1,7 @@
 main:
 
   - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
-    authors: <b>Lukas Twist</b>, Jie M. Zhang, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis & Detlef Nauck
+    authors: <b>Lukas Twist</b>, Mark Harman, Don Syme, Joost Noppen, Helen Yannakoudakis, Detlef Nauck & Jie M. Zhang
     main: Findings of the Association for Computational Linguistics 2026 (ACL '26)
     url: https://aclanthology.org/2026.findings-acl.15
     arxiv: https://arxiv.org/abs/2503.17181

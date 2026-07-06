@@ -1,5 +1,9 @@
 main:
 
+  - date: July 2026
+    text: "Presented a poster at the <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    url: https://aclanthology.org/2026.findings-acl.15/ 
+
   - date: June 2026
     text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>: <i>Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries</i>."
     url: https://www.kcl.ac.uk/events/kings-informatics-industry-showcase-2026 
@@ -13,7 +17,7 @@ main:
 
   - date: April 2026
     text: "Paper accepted to <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
-    url: https://arxiv.org/abs/2503.17181
+    url: https://aclanthology.org/2026.findings-acl.15/
 
   - date: April 2026
     text: "Attended <b>ICSE 2026</b> (Rio de Janeiro, Brazil) as a student volunteer."
