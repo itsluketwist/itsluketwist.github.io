@@ -6,6 +6,7 @@
   year = {2026},
   month = {July},
   publisher = {Association for Computational Linguistics},
+  doi = {10.18653/v1/2026.findings-acl.15},
   url = {https://aclanthology.org/2026.findings-acl.15/},
   pages = {331--351},
   isbn = {979-8-89176-395-1},
