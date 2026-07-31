@@ -8,5 +8,8 @@
   month = {April},
   publisher = {ACM},
   doi = {10.1145/3793302.3793562},
+  url = {https://dl.acm.org/doi/10.1145/3793302.3793562},
+  pages = {722--726},
+  isbn = {979-8-4007-2474-9},
   note = {Mining Challenge Track},
 }
