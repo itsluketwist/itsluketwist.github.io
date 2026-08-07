@@ -1,0 +1,50 @@
+{% comment %} renders a single full publication row, shared by the published and preprint lists {% endcomment %}
+<div class="pub-row">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
+      {% assign title_url = include.link.url | default: include.link.arxiv %}
+      {% if title_url %}
+      <div class="title"><a href="{{ title_url }}" target="_blank">{{ include.link.title }}</a></div>
+      {% else %}
+      <div class="title">{{ include.link.title }}</div>
+      {% endif %}
+      <div class="author">{{ include.link.authors }}</div>
+      {% if include.link.workshop %}
+      <div class="periodical"><em>{{ include.link.workshop }}, at the {{ include.link.main }}.</em></div>
+      {% else %}
+      <div class="periodical"><em>{{ include.link.main }}.</em></div>
+      {% endif %}
+
+    <div class="links">
+      {% if include.link.url %}
+      <a href="{{ include.link.url }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Online</a>
+      {% endif %}
+      {% if include.link.arxiv %}
+      <a href="{{ include.link.arxiv }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
+      {% endif %}
+      {% if include.link.pdf %}
+      <a href="{{ include.link.pdf }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">PDF</a>
+      {% endif %}
+      {% if include.link.code %}
+      <a href="{{ include.link.code }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Code</a>
+      {% endif %}
+      {% if include.link.data %}
+      <a href="{{ include.link.data }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Dataset</a>
+      {% endif %}
+      {% if include.link.library %}
+      <a href="{{ include.link.library }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Library</a>
+      {% endif %}
+      {% if include.link.bibtex %}
+      <a href="{{ include.link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
+      {% endif %}
+      {% if include.link.poster %}
+      <a href="{{ include.link.poster }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
+      {% endif %}
+      {% if include.link.notes %}
+      <strong><i style="color:#e74d3c">{{ include.link.notes }}</i></strong>
+      {% endif %}
+      {% if include.link.others %}
+      {{ include.link.others }}
+      {% endif %}
+    </div>
+  </div>
+</div>

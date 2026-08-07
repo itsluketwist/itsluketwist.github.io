@@ -2,54 +2,24 @@
 
 <div class="publications">
 
+<!-- peer-reviewed publications first, then the arXiv preprints under their own subheading -->
 {% for link in site.data.publications.main %}
+
+{% include pub-row.html link=link %}
+<br>
+
+{% endfor %}
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-      {% assign title_url = link.url | default: link.arxiv %}
-      {% if title_url %}
-      <div class="title"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a></div>
-      {% else %}
-      <div class="title">{{ link.title }}</div>
-      {% endif %}
-      <div class="author">{{ link.authors }}</div>
-      {% if link.workshop %} 
-      <div class="periodical"><em>{{ link.workshop }}, at the {{link.main }}.</em></div>
-      {% else %}
-      <div class="periodical"><em>{{ link.main }}.</em></div>
-      {% endif %}
-      
-    <div class="links">
-      {% if link.url %} 
-      <a href="{{ link.url }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Online</a>
-      {% endif %}
-      {% if link.arxiv %} 
-      <a href="{{ link.arxiv }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
-      {% endif %}
-      {% if link.pdf %} 
-      <a href="{{ link.pdf }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">PDF</a>
-      {% endif %}
-      {% if link.code %} 
-      <a href="{{ link.code }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Code</a>
-      {% endif %}
-      {% if link.data %} 
-      <a href="{{ link.data }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Dataset</a>
-      {% endif %}
-      {% if link.bibtex %} 
-      <a href="{{ link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
-      {% endif %}
-      {% if link.poster %} 
-      <a href="{{ link.poster }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
-      {% endif %}
-      {% if link.notes %} 
-      <strong><i style="color:#e74d3c">{{ link.notes }}</i></strong>
-      {% endif %}
-      {% if link.others %} 
-      {{ link.others }}
-      {% endif %}
-    </div>
+    <b><i>Preprints</i></b>
   </div>
 </div>
+<br>
+
+{% for link in site.data.publications.preprint %}
+
+{% include pub-row.html link=link %}
 <br>
 
 {% endfor %}
@@ -105,6 +75,9 @@
       {% endif %}
       {% if link.data %} 
       <a href="{{ link.data }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Dataset</a>
+      {% endif %}
+      {% if link.library %} 
+      <a href="{{ link.library }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Library</a>
       {% endif %}
       {% if link.bibtex %} 
       <a href="{{ link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTex</a>

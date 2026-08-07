@@ -1,0 +1,10 @@
+@article{twistLangChoiceBench2026,
+  title = {{LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs}},
+  author = {Twist, Lukas and Stone, Twm and Yannakoudakis, Helen and Zhang, Jie M.},
+  journal = {{arXiv preprint arXiv:2608.06041}},
+  year = {2026},
+  month = {August},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2608.06041},
+  url = {http://arxiv.org/abs/2608.06041},
+}

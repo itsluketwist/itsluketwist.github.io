@@ -1,5 +1,9 @@
 main:
 
+  - date: August 2026
+    text: "New preprint on arXiv: <i>LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs</i>."
+    url: https://arxiv.org/abs/2608.06041
+
   - date: July 2026
     text: "Presented a poster at the <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
     url: https://aclanthology.org/2026.findings-acl.15/ 
