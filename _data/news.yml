@@ -1,6 +1,10 @@
 main:
 
   - date: August 2026
+    text: "Paper accepted to <b>EMNLP 2026</b>: <i>Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries</i>."
+    url: https://arxiv.org/abs/2509.22202
+
+  - date: August 2026
     text: "New preprint on arXiv: <i>LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs</i>."
     url: https://arxiv.org/abs/2608.06041
 

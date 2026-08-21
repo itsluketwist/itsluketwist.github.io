@@ -15,6 +15,26 @@ robust, innovative, and genuinely useful.
 
 If you’re a researcher or practitioner working in these areas and are interested in collaborating, I’d love to connect — reach out via <span class="copy-email">email 📨</span>.
 
+<!-- one-line list of venues with first-author publications, built from the publications data -->
+<!-- includes all main publications, plus any side publications marked with highlight: true -->
+<div>
+  <b>First-author publications at:</b>&nbsp;
+  {%- assign side_highlights = site.data.publications.side | where: "highlight", true -%}
+  {%- for link in site.data.publications.main -%}
+  {%- assign venue_short = link.main | split: "(" | last | remove: ")" -%}
+  {%- assign paper_url = link.url | default: link.arxiv -%}
+  <a href="{{ paper_url }}" target="_blank"><b>{{ venue_short }}</b></a>
+  {%- unless forloop.last and side_highlights == empty %}&nbsp;·&nbsp;{% endunless -%}
+  {%- endfor -%}
+  {%- for link in side_highlights -%}
+  {%- assign paper_url = link.url | default: link.arxiv -%}
+  <a href="{{ paper_url }}" target="_blank"><b>{{ link.where }}</b></a>
+  {%- unless forloop.last %}&nbsp;·&nbsp;{% endunless -%}
+  {%- endfor -%}
+</div>
+
+<br>
+
 ## Research Interests
 
 <div style="padding-left: 15px;">

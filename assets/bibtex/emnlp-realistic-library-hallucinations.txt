@@ -1,0 +1,10 @@
+@inproceedings{twistRealisticLibraryHallucinations2026,
+  title = {{Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries}},
+  author = {Twist, Lukas and Harman, Mark and Yannakoudakis, Helen and Zhang, Jie M.},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  location = {Budapest, Hungary},
+  year = {2026},
+  month = {October},
+  publisher = {Association for Computational Linguistics},
+  url = {https://arxiv.org/abs/2509.22202},
+}
