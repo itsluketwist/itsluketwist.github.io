@@ -73,3 +73,10 @@ blockquote { background: var(--global-bg-color); border-left: 2px solid var(--gl
 .publications ol.bibliography li div.abstract.hidden.open { border-color: var(--global-text-color); }
 
 .publications ol.bibliography li .teaser { border-radius: 8px; box-shadow: 3px 3px 6px #888; height: 123px; width: 270px; margin-top: 5px; margin-left: 5px; margin-bottom: 5px; object-fit: cover; }
+
+/* venue tooltip showing the conference's icore rank (see _includes/pub-row.html) */
+.core-tooltip { position: relative; border-bottom: 1px dotted var(--global-text-color-light); cursor: help; }
+
+.core-tooltip::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); background-color: #333333; color: #ffffff; font-size: 0.75rem; font-style: normal; line-height: 1; padding: 0.35rem 0.55rem; border-radius: 0.25rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.15s ease-in-out; z-index: 10; }
+
+.core-tooltip:hover::after { opacity: 1; visibility: visible; }

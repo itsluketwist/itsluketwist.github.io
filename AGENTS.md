@@ -73,6 +73,12 @@ Add to the top of `_data/news.yml`; venue/organisation names in `<b>`, paper tit
 - Link fields (all optional, rendered as buttons in this order):
   `url`, `arxiv`, `pdf`, `code`, `data`, `library`, `bibtex`, `poster`.
 - The paper title links to `url` if present, otherwise `arxiv`.
+- `core_rank`: the venue's ICORE rank (e.g. `"A*"`), shown as a hover tooltip on the
+  venue name. Set it when a paper is accepted, verifying the rank at
+  https://portal.core.edu.au/conf-ranks/ rather than guessing; omit for preprints and
+  unranked venues. The ranking year ("ICORE 2026") is hard-coded in
+  `_includes/pub-row.html` and `_includes/publications.md` — update it there when new
+  rankings are released.
 
 ### BibTeX files
 

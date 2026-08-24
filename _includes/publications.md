@@ -54,10 +54,16 @@
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
       {% assign title_url = link.url | default: link.arxiv %}
-      {% if title_url %}
-      <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a>{% if link.not_first_author %}<span style="color:#e65100;">*</span>{% endif %} - <i>{{ link.where }}</i></div>
+      {% comment %} the venue gets a hover tooltip showing its icore rank, when one is set {% endcomment %}
+      {% if link.core_rank %}
+      {% capture side_venue %}<span class="core-tooltip" data-tooltip="ICORE 2026 rank: {{ link.core_rank }}">{{ link.where }}</span>{% endcapture %}
       {% else %}
-      <div class="sidetitle">{{ link.title }}{% if link.not_first_author %}<span style="color:#e65100;">*</span>{% endif %} - <i>{{ link.where }}</i></div>
+      {% capture side_venue %}{{ link.where }}{% endcapture %}
+      {% endif %}
+      {% if title_url %}
+      <div class="sidetitle"><a href="{{ title_url }}" target="_blank">{{ link.title }}</a>{% if link.not_first_author %}<span style="color:#e65100;">*</span>{% endif %} - <i>{{ side_venue }}</i></div>
+      {% else %}
+      <div class="sidetitle">{{ link.title }}{% if link.not_first_author %}<span style="color:#e65100;">*</span>{% endif %} - <i>{{ side_venue }}</i></div>
       {% endif %}
       
     <div class="links">

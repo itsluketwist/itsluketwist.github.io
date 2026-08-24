@@ -29,14 +29,21 @@ industry:
   - title: Senior Technical Lead
     organisation: "Lantern.ai Limited"
     extra: "Led a 10+ engineer team delivering an AI-powered document intelligence platform."
+    years: 1
 
   - title: Senior Software Engineer
     organisation: "Quine Technologies"
     extra: "Built scalable scraping and analysis systems for large open-source software datasets."
+    years: 2
 
   - title: Senior Software Engineer
     organisation: "Mustard Systems"
     extra: "Developed high-throughput asynchronous data pipelines for real-time trading infrastructure."
+    years: 1
+
+  - title: Software Engineer
+    organisation: "Metaswitch Networks"
+    years: 4
 
 education:
 

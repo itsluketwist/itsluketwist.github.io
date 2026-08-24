@@ -8,10 +8,16 @@
       <div class="title">{{ include.link.title }}</div>
       {% endif %}
       <div class="author">{{ include.link.authors }}</div>
-      {% if include.link.workshop %}
-      <div class="periodical"><em>{{ include.link.workshop }}, at the {{ include.link.main }}.</em></div>
+      {% comment %} the venue gets a hover tooltip showing its icore rank, when one is set {% endcomment %}
+      {% if include.link.core_rank %}
+      {% capture venue %}<span class="core-tooltip" data-tooltip="ICORE 2026 rank: {{ include.link.core_rank }}">{{ include.link.main }}</span>{% endcapture %}
       {% else %}
-      <div class="periodical"><em>{{ include.link.main }}.</em></div>
+      {% capture venue %}{{ include.link.main }}{% endcapture %}
+      {% endif %}
+      {% if include.link.workshop %}
+      <div class="periodical"><em>{{ include.link.workshop }}, at the {{ venue }}.</em></div>
+      {% else %}
+      <div class="periodical"><em>{{ venue }}.</em></div>
       {% endif %}
 
     <div class="links">

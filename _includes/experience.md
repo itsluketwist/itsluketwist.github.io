@@ -65,6 +65,7 @@
         {% else %}
           <b>{{ role.title }}</b>
         {% endif %}
+        {% if role.years %}<em style="font-size:0.85em;color:#999;">({{ role.years }} year{% if role.years != 1 %}s{% endif %})</em>{% endif %}
       </div>
       {% if role.extra %}
       <div class="extra">
