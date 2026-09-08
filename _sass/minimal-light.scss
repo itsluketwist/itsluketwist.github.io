@@ -3,6 +3,23 @@
   margin-bottom: 0.5em;
   align-items: center;}
 
+/* venue list shown under the sidebar social icons, wraps over several lines */
+.pub-venues {
+  font-size:0.85rem;
+  line-height:1.6;
+  color:#595959;
+}
+
+.pub-venues > div {
+  margin-top:0.2em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pub-venues {
+    color:#dadbdf;
+  }
+}
+
 .social-icons a{
   display:inline-block;
   height:2.4rem;

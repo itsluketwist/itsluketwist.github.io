@@ -121,6 +121,27 @@
         </div>
         <br>
 
+        <!-- one-line list of venues with first-author publications, built from the publications data -->
+        <!-- includes all main publications, plus any side publications marked with highlight: true -->
+        <div class="pub-venues">
+          <b>First-author publications at:</b>
+          <div>
+          {%- assign side_highlights = site.data.publications.side | where: "highlight", true -%}
+          {%- for link in site.data.publications.main -%}
+          {%- assign venue_short = link.main | split: "(" | last | remove: ")" -%}
+          {%- assign paper_url = link.url | default: link.arxiv -%}
+          <a href="{{ paper_url }}" target="_blank"><b>{{ venue_short }}</b></a>
+          {%- unless forloop.last and side_highlights == empty %} · {% endunless -%}
+          {%- endfor -%}
+          {%- for link in side_highlights -%}
+          {%- assign paper_url = link.url | default: link.arxiv -%}
+          <a href="{{ paper_url }}" target="_blank"><b>{{ link.where }}</b></a>
+          {%- unless forloop.last %} · {% endunless -%}
+          {%- endfor -%}
+          </div>
+        </div>
+        <br>
+
       </header>
       <section>
 
