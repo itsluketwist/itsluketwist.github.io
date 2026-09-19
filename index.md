@@ -4,7 +4,7 @@ layout: homepage
 
 ## About Me <img src="assets/favicon.png" alt="Icon" style="display: inline; width: 20px; height: 20px;">
 
-Hey 👋 I'm Luke, a PhD student at [King's College London](https://www.kcl.ac.uk/), 
+Hey 👋 I'm Luke, a PhD student at <a href="https://kclpure.kcl.ac.uk/portal/en/persons/lukas-twist/" target="_blank">King's College London 👑</a>, 
 studying in the CDT for [Safe & Trusted AI](https://safeandtrustedai.org/), 
 under the supervision of [Dr Jie M. Zhang](https://sites.google.com/view/jie-zhang/home) and [Dr Helen Yannakoudakis](https://www.kcl.ac.uk/people/helen-yannakoudakis).
 

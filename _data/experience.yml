@@ -22,7 +22,10 @@ main:
     website: "https://www.kcl.ac.uk/informatics"
 
   - title: Journal Reviewer
-    extra: "IEEE Software, IJHCI, Empirical Software Engineering"
+    extra: "TOSEM, IEEE Software, IJHCI, Empirical Software Engineering"
+
+  - title: Conference Reviewer
+    extra: "NeurIPS"
 
 industry:
 
