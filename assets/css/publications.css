@@ -1,3 +1,4 @@
+/* styles publication entries and their resource buttons. */
 .badge {
     display: inline-block;
     padding: 0.25em 0.4em;
@@ -36,14 +37,23 @@ blockquote { background: var(--global-bg-color); border-left: 2px solid var(--gl
 
 .publications h2.year { color: #e8e8e8; border-top: 1px solid #e8e8e8; margin-top: 2rem; margin-bottom: 0rem; text-align: right; }
 
-.publications .links a.btn { color: #000000; border: 1px solid #000000; padding-left: 0.5rem; padding-right: 0.5rem; padding-top: 0.1rem; padding-bottom: 0.1rem; }
+.publications .links .btn { color: #000000; border: 1px solid #000000; padding-left: 0.5rem; padding-right: 0.5rem; padding-top: 0.1rem; padding-bottom: 0.1rem; }
+
+/* match native copy buttons to the adjacent resource links. */
+.publications .links button.btn {
+    background: transparent;
+    border-radius: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+}
 
 @media (prefers-color-scheme: dark) {
-.publications .links a.btn { color: #FFFFFF; border: 1px solid #FFFFFF; padding-left: 0.5rem; padding-right: 0.5rem; padding-top: 0.1rem; padding-bottom: 0.1rem; }
+.publications .links .btn { color: #FFFFFF; border: 1px solid #FFFFFF; padding-left: 0.5rem; padding-right: 0.5rem; padding-top: 0.1rem; padding-bottom: 0.1rem; }
 
   }
 
-.publications .links a.btn:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
+.publications .links .btn:hover { color: var(--global-theme-color); border-color: var(--global-theme-color); }
 
 .publications ol.bibliography { list-style: none; padding: 0; margin-top: 0; }
 

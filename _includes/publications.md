@@ -1,3 +1,4 @@
+{% comment %} renders published papers, preprints, and expandable side projects {% endcomment %}
 <h2 id="publications" style="margin: 2px 0px -15px;">Publications</h2>
 
 <div class="publications">
@@ -85,12 +86,10 @@
       {% if link.library %} 
       <a href="{{ link.library }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Library</a>
       {% endif %}
-      {% if link.bibtex %} 
-      <a href="{{ link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTex</a>
-      {% endif %}
       {% if link.poster %} 
       <a href="{{ link.poster }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
       {% endif %}
+      {% include pub-bibtex.html link=link %}
       {% if link.notes %} 
       <strong> <i style="color:#e74d3c">{{ link.notes }}</i></strong>
       {% endif %}

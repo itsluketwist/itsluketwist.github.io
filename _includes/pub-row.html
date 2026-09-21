@@ -39,12 +39,10 @@
       {% if include.link.library %}
       <a href="{{ include.link.library }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Library</a>
       {% endif %}
-      {% if include.link.bibtex %}
-      <a href="{{ include.link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
-      {% endif %}
       {% if include.link.poster %}
       <a href="{{ include.link.poster }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
       {% endif %}
+      {% include pub-bibtex.html link=include.link %}
       {% if include.link.notes %}
       <strong><i style="color:#e74d3c">{{ include.link.notes }}</i></strong>
       {% endif %}
