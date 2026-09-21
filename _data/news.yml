@@ -1,19 +1,20 @@
+# news announcements and their optional external or graphic links.
 main:
 
   - date: August 2026
     text: "Paper accepted to <b>EMNLP 2026</b>: <i>Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries</i>."
-    url: https://arxiv.org/abs/2509.22202
+    graphic: ./assets/graphics/emnlp-realistic-library-hallucinations.png
 
   - date: August 2026
     text: "New preprint on arXiv: <i>LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs</i>."
     url: https://arxiv.org/abs/2608.06041
 
   - date: July 2026
-    text: "Presented a poster at the <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    text: "Presented at <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
     url: https://aclanthology.org/2026.findings-acl.15/ 
 
   - date: June 2026
-    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>: <i>Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries</i>."
+    text: "Presented at the <b>King's College London Informatics Industry Showcase</b>: <i>Library Hallucinations in LLMs: Risk Analysis Grounded in Developer Queries</i>."
     url: https://www.kcl.ac.uk/events/kings-informatics-industry-showcase-2026 
 
   - date: May 2026
@@ -25,18 +26,18 @@ main:
 
   - date: April 2026
     text: "Paper accepted to <b>ACL 2026</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
-    url: https://aclanthology.org/2026.findings-acl.15/
+    graphic: ./assets/graphics/acl-llm-code-bias.png
 
   - date: April 2026
     text: "Attended <b>ICSE 2026</b> (Rio de Janeiro, Brazil) as a student volunteer."
 
   - date: April 2026
-    text: "Presented a poster at <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
+    text: "Presented at <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
     url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
 
   - date: January 2026
     text: "Paper accepted to <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
-    url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
+    graphic: ./assets/graphics/msr-agent-library-usage.png
 
   - date: January 2026
     text: "New preprint on arXiv: <i>Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning</i>."
@@ -47,7 +48,7 @@ main:
     url: https://arxiv.org/abs/2509.22202
 
   - date: June 2025
-    text: "Presented a poster at the <b>King's College London Informatics Industry Showcase</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
+    text: "Presented at the <b>King's College London Informatics Industry Showcase</b>: <i>A Study of LLMs' Preferences for Libraries and Programming Languages</i>."
     url: https://www.kcl.ac.uk/events/informatics-industry-showcase-2025 
 
   - date: June 2025

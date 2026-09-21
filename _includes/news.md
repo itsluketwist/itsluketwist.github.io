@@ -1,3 +1,4 @@
+{% comment %} renders recent news and an expandable list of older announcements {% endcomment %}
 <h2 id="news" style="margin: 2px 0px -15px;">News{% if site.data.news.main.size > 4 %} <a id="news-toggle" href="javascript:void(0);" title="Show more" onclick="
   var extra = document.getElementById('news-extra');
   var toggle = document.getElementById('news-toggle');
@@ -25,11 +26,7 @@
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
       <em style="color:#e65100;">{{ item.date }}</em> &mdash; {{ item.text }}
-      {% if item.url contains "arxiv.org" %}
-        <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
-      {% elsif item.url %}
-        <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="fas fa-globe" style="font-size:0.85rem;"></i></a>
-      {% endif %}
+      {% include news-link.html item=item %}
     </div>
   </div>
 </div>
@@ -44,11 +41,7 @@
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
     <div class="role">
       <em style="color:#e65100;">{{ item.date }}</em> &mdash; {{ item.text }}
-      {% if item.url contains "arxiv.org" %}
-        <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
-      {% elsif item.url %}
-        <a href="{{ item.url }}" target="_blank" style="text-decoration:none;"><i class="fas fa-globe" style="font-size:0.85rem;"></i></a>
-      {% endif %}
+      {% include news-link.html item=item %}
     </div>
   </div>
 </div>

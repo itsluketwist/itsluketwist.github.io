@@ -1,0 +1,8 @@
+{% comment %} prefers an acceptance graphic over the usual external news link {% endcomment %}
+{% if include.item.graphic %}
+  <a href="{{ include.item.graphic | escape }}" target="_blank" rel="noopener noreferrer" title="View acceptance graphic" aria-label="View acceptance graphic: {{ include.item.text | strip_html | escape }}" style="text-decoration:none;"><i class="fas fa-image" aria-hidden="true" style="font-size:0.85rem;"></i></a>
+{% elsif include.item.url contains "arxiv.org" %}
+  <a href="{{ include.item.url }}" target="_blank" style="text-decoration:none;"><i class="ai ai-arxiv" style="font-size:1rem;"></i></a>
+{% elsif include.item.url %}
+  <a href="{{ include.item.url }}" target="_blank" style="text-decoration:none;"><i class="fas fa-globe" style="font-size:0.85rem;"></i></a>
+{% endif %}
