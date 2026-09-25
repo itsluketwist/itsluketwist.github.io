@@ -19,7 +19,8 @@ If you’re a researcher or practitioner working in these areas and are interest
 
 <div style="padding-left: 15px;">
   <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>LLM Code Generation (LLM4Code)</b></div>
-  <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>LLM Code Hallucinations</b></div>
+  <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>LLM Programming Language Choices & Bias</b></div>
+  <div style="margin-bottom: 8px;"><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>Library Usage in LLM-Generated Code</b></div>
   <div><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>LLM Reasoning & Coding Intelligence</b></div>
 </div>
 

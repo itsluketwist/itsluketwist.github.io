@@ -11,13 +11,16 @@ and `assets/`, not in the HTML/Liquid templates.
   - `main`: accepted, peer-reviewed, first-author papers (newest first).
   - `preprint`: first-author arXiv preprints (newest first).
   - `side`: short papers and side projects (mark `not_first_author: true` where relevant;
-    add `highlight: true` to show the venue in the homepage badge line).
+    add `highlight: true` to show the venue in the sidebar badge line).
 - `_data/news.yml` — news items, newest first.
 - `_data/experience.yml` — positions and education.
 - `assets/bibtex/*.txt` — one BibTeX file per paper (plain text so they render in-browser).
 - `assets/posters/*.pdf` — posters, named `<venue>-<paper-slug>.pdf`.
-- `index.md` — homepage content, including the auto-generated
-  "First-author publications at:" badge line.
+- `assets/graphics/*.png` — acceptance graphics linked from news items, named
+  `<venue>-<paper-slug>.png`.
+- `index.md` — homepage main content (about, news, publications, experience).
+- `_layouts/homepage.html` — page layout, including the left-hand sidebar (photo, name,
+  social links) and the auto-generated "First-author publications at:" badge line.
 - `_includes/`, `_layouts/`, `_sass/` — templates and styling; rarely need changes.
 - `_site/` — build output, gitignored, never edit.
 
@@ -36,13 +39,16 @@ and `assets/`, not in the HTML/Liquid templates.
 1. Move the entry from `preprint` to the top of the `main` section.
 2. Change its venue line to the full proceedings name with the short name in parentheses,
    e.g. `main: Proceedings of the 2026 Conference on Empirical Methods in Natural Language
-   Processing (EMNLP '26)`. The `(VENUE 'YY)` parenthetical is required — the homepage
+   Processing (EMNLP '26)`. The `(VENUE 'YY)` parenthetical is required — the sidebar
    badge line extracts the short venue name from it.
 3. Replace `assets/bibtex/arxiv-<slug>.txt` with `<venue>-<slug>.txt` (delete the old
    file), converting the entry from `@article` to `@inproceedings`.
 4. Update the `bibtex:` path in `_data/publications.yml`.
 5. Add a news item: `"Paper accepted to <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`,
-   linking to the arXiv page (or proceedings page once it exists).
+   with `graphic: ./assets/graphics/<venue>-<paper-slug>.png` instead of a `url:` (the
+   news item then links to the acceptance graphic). Name the graphic to match the BibTeX
+   slug and list it in `assets/graphics/README.md`; if there is no graphic yet, link to
+   the arXiv page with `url:` instead.
 6. Verify the venue's location and dates (web search) rather than guessing them for the
    BibTeX `location` and `month` fields.
 
@@ -74,11 +80,12 @@ Add to the top of `_data/news.yml`; venue/organisation names in `<b>`, paper tit
   `url`, `arxiv`, `pdf`, `code`, `data`, `library`, `bibtex`, `poster`.
 - The paper title links to `url` if present, otherwise `arxiv`.
 - `core_rank`: the venue's ICORE rank (e.g. `"A*"`), shown as a hover tooltip on the
-  venue name. Set it when a paper is accepted, verifying the rank at
+  venue name in the publication list and on the venue link in the sidebar badge line.
+  Set it when a paper is accepted, verifying the rank at
   https://portal.core.edu.au/conf-ranks/ rather than guessing; omit for preprints and
   unranked venues. The ranking year ("ICORE 2026") is hard-coded in
-  `_includes/pub-row.html` and `_includes/publications.md` — update it there when new
-  rankings are released.
+  `_includes/pub-row.html`, `_includes/publications.md` and `_layouts/homepage.html` —
+  update it there when new rankings are released.
 
 ### BibTeX files
 
@@ -93,14 +100,18 @@ Follow the style of `assets/bibtex/acl-llm-code-bias.txt`:
   `publisher = {arXiv}`, and the arXiv DOI.
 - Published papers are `@inproceedings` with `booktitle`, `location`, `year`, `month`
   (the month the conference takes place), `publisher`, then `doi`/`url`/`pages`/`isbn`
-  once the proceedings exist.
+  once the proceedings exist. If the publisher isn't certain yet, leave `publisher` out
+  until the proceedings are published rather than guessing.
 - Trailing comma on every field line.
 
-### Homepage badge line
+### Sidebar badge line
 
-The "First-author publications at:" line in `index.md` is generated automatically from
-every `main` publication plus any `side` publication with `highlight: true` — do not
-hard-code venues there.
+The "First-author publications at:" line sits in the left-hand sidebar, underneath the
+photo, name and social links (`_layouts/homepage.html`, styled by `.pub-venues` in
+`_sass/`). It is generated automatically from every `main` publication plus any `side`
+publication with `highlight: true`, shown at most two venues per line (dot-separated
+within a line), and each venue link shows its `core_rank` as a hover tooltip — do not
+hard-code venues or ranks there.
 
 ## Checking changes
 

@@ -1,6 +1,10 @@
 # news announcements and their optional external or graphic links.
 main:
 
+  - date: September 2026
+    text: "Paper accepted to <b>NeurIPS 2026</b>: <i>Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning</i>."
+    graphic: ./assets/graphics/neurips-reasoning-collapse.png
+
   - date: August 2026
     text: "Paper accepted to <b>EMNLP 2026</b>: <i>Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries</i>."
     graphic: ./assets/graphics/emnlp-realistic-library-hallucinations.png

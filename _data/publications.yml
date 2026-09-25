@@ -1,5 +1,15 @@
 main:
 
+  - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
+    authors: <b>Lukas&nbsp;Twist</b>, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
+    main: Advances in Neural Information Processing Systems 39 (NeurIPS '26)
+    core_rank: "A*"
+    arxiv: https://arxiv.org/abs/2605.21127
+    pdf: https://arxiv.org/pdf/2605.21127
+    code: https://github.com/itsluketwist/thinkpack
+    library: https://pypi.org/project/thinkpack/
+    bibtex: ./assets/bibtex/neurips-reasoning-collapse.txt
+
   - title: "Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries"
     authors: <b>Lukas&nbsp;Twist</b>, Mark&nbsp;Harman, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
     main: Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP '26)
@@ -35,15 +45,6 @@ preprint:
     library: https://pypi.org/project/langchoicebench/
     bibtex: ./assets/bibtex/arxiv-langchoicebench.txt
 
-  - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
-    authors: <b>Lukas&nbsp;Twist</b>, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
-    main: arXiv preprint, May 2026
-    arxiv: https://arxiv.org/abs/2605.21127
-    pdf: https://arxiv.org/pdf/2605.21127
-    code: https://github.com/itsluketwist/thinkpack
-    library: https://pypi.org/project/thinkpack/
-    bibtex: ./assets/bibtex/arxiv-reasoning-collapse.txt
-    
   - title: "Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning"
     authors: <b>Lukas&nbsp;Twist</b>, Shu Yang, Hanqi Yan, Jingzhi Gong, Di Wang, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
     main: arXiv preprint, January 2026

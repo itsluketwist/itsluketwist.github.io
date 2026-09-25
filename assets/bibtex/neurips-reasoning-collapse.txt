@@ -1,0 +1,9 @@
+@inproceedings{twistReasoningCollapse2026,
+  title = {{Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning}},
+  author = {Twist, Lukas and Yannakoudakis, Helen and Zhang, Jie M.},
+  booktitle = {Advances in Neural Information Processing Systems: Evaluations and Datasets Track},
+  location = {Sydney, Australia},
+  year = {2026},
+  month = {December},
+  url = {https://arxiv.org/abs/2605.21127},
+}
