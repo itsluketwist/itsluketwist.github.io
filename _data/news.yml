@@ -41,7 +41,7 @@ main:
 
   - date: January 2026
     text: "Paper accepted to <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."
-    graphic: ./assets/graphics/msr-agent-library-usage.png
+    url: https://2026.msrconf.org/details/msr-2026-mining-challenge/2/A-Study-of-Library-Usage-in-Agent-Authored-Pull-Requests
 
   - date: January 2026
     text: "New preprint on arXiv: <i>Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning</i>."

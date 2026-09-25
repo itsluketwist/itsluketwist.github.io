@@ -47,8 +47,7 @@ and `assets/`, not in the HTML/Liquid templates.
 5. Add a news item: `"Paper accepted to <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`,
    with `graphic: ./assets/graphics/<venue>-<paper-slug>.png` instead of a `url:` (the
    news item then links to the acceptance graphic). Name the graphic to match the BibTeX
-   slug and list it in `assets/graphics/README.md`; if there is no graphic yet, link to
-   the arXiv page with `url:` instead.
+   slug; if there is no graphic yet, link to the arXiv page with `url:` instead.
 6. Verify the venue's location and dates (web search) rather than guessing them for the
    BibTeX `location` and `month` fields.
 
