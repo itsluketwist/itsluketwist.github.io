@@ -126,7 +126,7 @@
         <!-- shows at most two venues per line, with a dot only between venues on the same line -->
         <!-- each venue gets a hover tooltip showing its icore rank, when one is set -->
         <div class="pub-venues">
-          <b>First-author publications at:</b>
+          <b>First-author publications:</b>
           <div>
           {%- assign side_highlights = site.data.publications.side | where: "highlight", true -%}
           {%- assign venue_links = site.data.publications.main | concat: side_highlights -%}

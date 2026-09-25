@@ -20,7 +20,7 @@ and `assets/`, not in the HTML/Liquid templates.
   `<venue>-<paper-slug>.png`.
 - `index.md` — homepage main content (about, news, publications, experience).
 - `_layouts/homepage.html` — page layout, including the left-hand sidebar (photo, name,
-  social links) and the auto-generated "First-author publications at:" badge line.
+  social links) and the auto-generated "First-author publications:" badge line.
 - `_includes/`, `_layouts/`, `_sass/` — templates and styling; rarely need changes.
 - `_site/` — build output, gitignored, never edit.
 
@@ -57,7 +57,11 @@ and `assets/`, not in the HTML/Liquid templates.
 1. In `_data/publications.yml`: add `url:` (ACL Anthology / ACM DL / publisher page) and
    point `pdf:` at the official proceedings PDF instead of arXiv.
 2. In the BibTeX file: update `url` to the proceedings page and add `doi`, `pages`, and
-   `isbn` when available.
+   `isbn` when available. Add `publisher` too if it was left out at acceptance.
+3. Check the sidebar badge line: each venue links to the paper's `url`, falling back to
+   `arxiv`, so adding `url:` in step 1 switches it to the proceedings page. After
+   building, confirm the venue link in `_site/index.html` points at the proceedings
+   rather than arXiv.
 
 ### Presented a poster
 
@@ -106,7 +110,7 @@ Follow the style of `assets/bibtex/acl-llm-code-bias.txt`:
 
 ### Sidebar badge line
 
-The "First-author publications at:" line sits in the left-hand sidebar, underneath the
+The "First-author publications:" line sits in the left-hand sidebar, underneath the
 photo, name and social links (`_layouts/homepage.html`, styled by `.pub-venues` in
 `_sass/`). It is generated automatically from every `main` publication plus any `side`
 publication with `highlight: true`, shown at most two venues per line (dot-separated
