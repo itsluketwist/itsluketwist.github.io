@@ -20,7 +20,7 @@ main:
     data: https://huggingface.co/datasets/itsluketwist/LibHalluBench
     library: https://pypi.org/project/libhallubench/
     bibtex: ./assets/bibtex/emnlp-realistic-library-hallucinations.txt
-    poster: ./assets/posters/kcl-realistic-library-hallucinations.pdf
+    poster: ./assets/posters/emnlp-realistic-library-hallucinations.pdf
 
   - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
     authors: <b>Lukas&nbsp;Twist</b>, Mark&nbsp;Harman, Don&nbsp;Syme, Joost Noppen, Helen&nbsp;Yannakoudakis, Detlef&nbsp;Nauck &&nbsp;Jie&nbsp;M.&nbsp;Zhang

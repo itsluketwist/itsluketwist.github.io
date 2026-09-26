@@ -64,9 +64,16 @@ and `assets/`, not in the HTML/Liquid templates.
 
 ### Presented a poster
 
-1. Add the PDF to `assets/posters/` as `<venue>-<paper-slug>.pdf`.
-2. Add/update the `poster:` field on the paper's entry.
-3. Add a news item: `"Presented a poster at <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`.
+1. Add the PDF to `assets/posters/` as `<venue>-<paper-slug>.pdf`. If it replaces an
+   older poster for the same paper, delete the old PDF.
+2. Set the PDF's title metadata to the paper title, exactly as in `publications.yml`.
+   Affinity exports use the document's file name (e.g. `poster-showcase`), and the posters
+   ask viewers to show the title in the browser tab. Use `pypdf`
+   (`PdfWriter(clone_from=...)`) and update both the info dictionary's `/Title` and the
+   XMP `dc:title`. Write to a temporary copy first and check that it renders the same as
+   the original before replacing it. Redo this every time the poster is re-exported.
+3. Add/update the `poster:` field on the paper's entry.
+4. Add a news item: `"Presented a poster at <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`.
 
 ### Other news (invitations, affiliations, attendance)
 
