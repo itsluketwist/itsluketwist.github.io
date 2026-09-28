@@ -2,7 +2,7 @@ main:
 
   - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
     authors: <b>Lukas&nbsp;Twist</b>, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
-    main: Advances in Neural Information Processing Systems 39 (NeurIPS '26)
+    main: Advances in Neural Information Processing Systems (NeurIPS '26)
     core_rank: "A*"
     arxiv: https://arxiv.org/abs/2605.21127
     pdf: https://arxiv.org/pdf/2605.21127
