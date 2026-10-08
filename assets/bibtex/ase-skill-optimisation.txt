@@ -7,6 +7,10 @@
   location = {Munich, Germany},
   year = {2026},
   month = {October},
-  publisher = {IEEE/ACM},
+  publisher = {ACM},
+  doi = {10.1145/3832783.3834550},
+  url = {https://dl.acm.org/doi/10.1145/3832783.3834550},
+  pages = {4580--4584},
+  isbn = {979-8-4007-2882-2},
   note = {New Ideas and Emerging Results Track},
 }

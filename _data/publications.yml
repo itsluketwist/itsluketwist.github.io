@@ -61,7 +61,7 @@ side:
     highlight: true
     url: https://dl.acm.org/doi/10.1145/3793302.3793562
     arxiv: https://arxiv.org/abs/2512.11589
-    pdf: https://arxiv.org/pdf/2512.11589
+    pdf: https://dl.acm.org/doi/pdf/10.1145/3793302.3793562
     code: https://github.com/itsluketwist/agent-library-usage
     bibtex: ./assets/bibtex/msr-agent-library-usage.txt
     poster: ./assets/posters/msr-agent-library-usage.pdf
@@ -76,8 +76,9 @@ side:
   - title: "Multi-Objective Optimization of Agent Skills for Software Engineering"
     where: ASE '26
     core_rank: "A*"
+    url: https://dl.acm.org/doi/10.1145/3832783.3834550
     arxiv: https://arxiv.org/abs/2604.09297
-    pdf: https://arxiv.org/pdf/2604.09297
+    pdf: https://dl.acm.org/doi/pdf/10.1145/3832783.3834550
     bibtex: ./assets/bibtex/ase-skill-optimisation.txt
     not_first_author: true
 
