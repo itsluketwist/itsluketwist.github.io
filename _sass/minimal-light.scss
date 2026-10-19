@@ -14,9 +14,29 @@
   margin-top:0.2em;
 }
 
+/* citation count badge under the venue list, styled like the publication buttons */
+/* the "a." makes this beat the tooltip's dotted underline, so the full border shows */
+a.citations-badge {
+  display:inline-block;
+  font-size:12px;
+  color:#000000;
+  border:1px solid #000000;
+  padding:0.1rem 0.5rem;
+}
+
+/* same orange as the social icons on hover (text only, the border stays the same) */
+a.citations-badge:hover {
+  color:#e65100;
+}
+
 @media (prefers-color-scheme: dark) {
   .pub-venues {
     color:#dadbdf;
+  }
+
+  a.citations-badge {
+    color:#dadbdf;
+    border-color:#dadbdf;
   }
 }
 

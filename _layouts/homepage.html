@@ -149,6 +149,16 @@
         </div>
         <br>
 
+        <!-- google scholar citation count, from _data/scholar.json (updated weekly by .github/workflows/scholar.yml) -->
+        <!-- reuses the venue tooltip style, to show where the number comes from and when it was checked -->
+        {% if site.data.scholar %}
+        <a class="citations-badge core-tooltip" href="{{ site.google_scholar }}" target="_blank" rel="noopener noreferrer" data-tooltip="From Google Scholar, updated {{ site.data.scholar.updated | date: '%-d %b %Y' }}">
+          <i class="ai ai-google-scholar"></i> {{ site.data.scholar.citations }} citations
+        </a>
+        <br>
+        <br>
+        {% endif %}
+
       </header>
       <section>
 
