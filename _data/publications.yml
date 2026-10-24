@@ -15,8 +15,9 @@ main:
     authors: <b>Lukas&nbsp;Twist</b>, Mark&nbsp;Harman, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
     main: Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP '26)
     core_rank: "A*"
+    url: https://aclanthology.org/2026.emnlp-main.78
     arxiv: https://arxiv.org/abs/2509.22202
-    pdf: https://arxiv.org/pdf/2509.22202
+    pdf: https://aclanthology.org/2026.emnlp-main.78.pdf
     code: https://github.com/itsluketwist/realistic-library-hallucinations
     data: https://huggingface.co/datasets/itsluketwist/LibHalluBench
     library: https://pypi.org/project/libhallubench/
