@@ -33,6 +33,7 @@ and `assets/`, not in the HTML/Liquid templates.
 2. Create `assets/bibtex/arxiv-<paper-slug>.txt` (see BibTeX conventions below).
 3. Add a news item at the top of `_data/news.yml`:
    `"New preprint on arXiv: <i>Full Paper Title</i>."` with the arXiv abs URL.
+4. Update the paper's local code repository (see "Project repositories" below).
 
 ### Paper accepted at a venue
 
@@ -50,6 +51,7 @@ and `assets/`, not in the HTML/Liquid templates.
    slug; if there is no graphic yet, link to the arXiv page with `url:` instead.
 6. Verify the venue's location and dates (web search) rather than guessing them for the
    BibTeX `location` and `month` fields.
+7. Update the paper's local code repository (see "Project repositories" below).
 
 ### Proceedings published (camera-ready follow-up)
 
@@ -61,6 +63,7 @@ and `assets/`, not in the HTML/Liquid templates.
    `arxiv`, so adding `url:` in step 1 switches it to the proceedings page. After
    building, confirm the venue link in `_site/index.html` points at the proceedings
    rather than arXiv.
+4. Update the paper's local code repository (see "Project repositories" below).
 
 ### Presented a poster
 
@@ -79,6 +82,28 @@ and `assets/`, not in the HTML/Liquid templates.
 
 Add to the top of `_data/news.yml`; venue/organisation names in `<b>`, paper titles in
 `<i>`, `url:` optional.
+
+### Project repositories
+
+Whenever a paper's publication details change (new preprint, acceptance, proceedings),
+updating its code repository is part of the task when a local clone exists:
+
+1. Find the clone by its git remote, not its folder name (they can differ, e.g.
+   `~/code/thinkguard` holds `itsluketwist/thinkpack`): run
+   `for d in ~/code/*/; do echo "$d $(git -C "$d" remote get-url origin)"; done` and match
+   the paper's `code:` link. If there is no clone, say so instead of quietly skipping it.
+2. In the README, update the intro sentence's paper link and wording (e.g. "accepted to"
+   becomes "published in", linking to the proceedings page), and add a proceedings badge
+   next to the arXiv badge (shields.io needs `--` for a literal hyphen and `%2F` for a
+   slash, e.g. `ACL_Anthology-2026.emnlp--main.78-ED1C24` or
+   `ACM_DL-10.1145%2F3793302.3793562-0085CA` with `&logo=acm`).
+3. Make the BibTeX block match `assets/bibtex/<file>.txt` exactly, and use the
+   publisher's own reference text where it gives one (e.g. the Anthology's "Cite (ACL)"
+   line).
+4. Grep the repo for the arXiv ID and citation key to find other copies, such as Hugging
+   Face or PyPI READMEs. These only go live on the project's next release, so tell the
+   user rather than releasing.
+5. Don't commit or push in that repository unless asked.
 
 ## Conventions
 
