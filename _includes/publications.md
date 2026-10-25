@@ -1,10 +1,24 @@
-{% comment %} renders published papers, preprints, and expandable side projects {% endcomment %}
+{% comment %} renders published papers, short papers, preprints, and expandable side projects {% endcomment %}
 <h2 id="publications" style="margin: 2px 0px -15px;">Publications</h2>
 
 <div class="publications">
 
-<!-- peer-reviewed publications first, then the arXiv preprints under their own subheading -->
+<!-- peer-reviewed long papers first, then short papers and arXiv preprints under their own subheadings -->
 {% for link in site.data.publications.main %}
+
+{% include pub-row.html link=link %}
+<br>
+
+{% endfor %}
+
+<div class="pub-row">
+  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
+    <b><i>Short papers</i></b>
+  </div>
+</div>
+<br>
+
+{% for link in site.data.publications.short %}
 
 {% include pub-row.html link=link %}
 <br>
@@ -27,7 +41,7 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Short papers and side projects</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="
+    <b><i>Side projects and collaborations</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="
   var extra = document.getElementById('side-pubs');
   var toggle = document.getElementById('side-toggle');
   var ellipsis = document.getElementById('side-ellipsis');

@@ -7,11 +7,13 @@ and `assets/`, not in the HTML/Liquid templates.
 
 ## Repo layout
 
-- `_data/publications.yml` — all papers, in three sections:
-  - `main`: accepted, peer-reviewed, first-author papers (newest first).
+- `_data/publications.yml` — all papers, in four sections, rendered in this order:
+  - `main`: accepted, peer-reviewed, first-author long papers (newest first).
+  - `short`: accepted, peer-reviewed, first-author short papers (newest first), same
+    fields as `main`, including the `(VENUE 'YY)` parenthetical.
   - `preprint`: first-author arXiv preprints (newest first).
-  - `side`: short papers and side projects (mark `not_first_author: true` where relevant;
-    add `highlight: true` to show the venue in the sidebar badge line).
+  - `side`: side projects and collaborations, shown in a collapsed list with a short
+    `where:` venue (mark `not_first_author: true` where relevant).
 - `_data/news.yml` — news items, newest first.
 - `_data/experience.yml` — positions and education.
 - `assets/bibtex/*.txt` — one BibTeX file per paper (plain text so they render in-browser).
@@ -143,8 +145,8 @@ Follow the style of `assets/bibtex/acl-llm-code-bias.txt`:
 
 The "First-author publications:" line sits in the left-hand sidebar, underneath the
 photo, name and social links (`_layouts/homepage.html`, styled by `.pub-venues` in
-`_sass/`). It is generated automatically from every `main` publication plus any `side`
-publication with `highlight: true`, shown at most two venues per line (dot-separated
+`_sass/`). It is generated automatically from every `main` publication followed by
+every `short` publication, shown at most two venues per line (dot-separated
 within a line), and each venue link shows its `core_rank` as a hover tooltip — do not
 hard-code venues or ranks there.
 

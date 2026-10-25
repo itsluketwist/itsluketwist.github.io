@@ -1,6 +1,9 @@
 # news announcements and their optional external or graphic links.
 main:
 
+  - date: October 2026
+    text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary) as a volunteer coordinator."
+
   - date: September 2026
     text: "Paper accepted to <b>NeurIPS 2026</b>: <i>Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning</i>."
     graphic: ./assets/graphics/neurips-reasoning-collapse.png
