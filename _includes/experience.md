@@ -18,6 +18,19 @@
         {{ role.extra }}
       </div>
       {% endif %}
+      {% comment %} comma-separated venue list, each with a hover tooltip showing its full name, when one is set {% endcomment %}
+      {% if role.venues %}
+      <div class="extra">
+        {%- for venue in role.venues -%}
+        {%- if venue.full -%}
+        <span class="core-tooltip" data-tooltip="{{ venue.full }}">{{ venue.name }}</span>
+        {%- else -%}
+        {{ venue.name }}
+        {%- endif -%}
+        {%- unless forloop.last %}, {% endunless -%}
+        {%- endfor -%}
+      </div>
+      {% endif %}
       {% if role.start %} 
         <div class="dates">
           <em>{{ role.start }} - {{ role.end }}</em>

@@ -1,8 +1,13 @@
 # news announcements and their optional external or graphic links.
+# an event happening now, shown as a small banner above the news list until the end date.
+attending:
+  text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary)."
+  end: "2026-10-29"
+
 main:
 
   - date: October 2026
-    text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary) as a volunteer coordinator."
+    text: "Served as a volunteer coordinator at <b>EMNLP 2026</b> (Budapest, Hungary)."
 
   - date: September 2026
     text: "Paper accepted to <b>NeurIPS 2026</b>: <i>Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning</i>."
@@ -36,7 +41,7 @@ main:
     graphic: ./assets/graphics/acl-llm-code-bias.png
 
   - date: April 2026
-    text: "Attended <b>ICSE 2026</b> (Rio de Janeiro, Brazil) as a student volunteer."
+    text: "Served as a student volunteer at <b>ICSE 2026</b> (Rio de Janeiro, Brazil)."
 
   - date: April 2026
     text: "Presented at <b>MSR 2026</b>: <i>A Study of Library Usage in Agent-Authored Pull Requests</i>."

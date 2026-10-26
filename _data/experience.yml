@@ -22,11 +22,19 @@ main:
     website: "https://www.kcl.ac.uk/informatics"
 
   - title: Journal Reviewer
-    # abbreviated venues get a hover tooltip with their full name, reusing the icore tooltip style
-    extra: '<span class="core-tooltip" data-tooltip="ACM Transactions on Software Engineering and Methodology">TOSEM</span>, IEEE Software, <span class="core-tooltip" data-tooltip="International Journal of Human–Computer Interaction">IJHCI</span>, Empirical Software Engineering'
+    # venues with a full name get it shown as a hover tooltip
+    venues:
+      - name: TOSEM
+        full: ACM Transactions on Software Engineering and Methodology
+      - name: IEEE Software
+      - name: IJHCI
+        full: International Journal of Human–Computer Interaction
+      - name: Empirical Software Engineering
 
   - title: Conference Reviewer
-    extra: '<span class="core-tooltip" data-tooltip="Conference on Neural Information Processing Systems">NeurIPS</span>'
+    venues:
+      - name: NeurIPS
+        full: Conference on Neural Information Processing Systems
 
 industry:
 

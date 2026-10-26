@@ -15,7 +15,8 @@ and `assets/`, not in the HTML/Liquid templates.
   - `side`: side projects and collaborations, shown in a collapsed list with a short
     `where:` venue (mark `not_first_author: true` where relevant).
 - `_data/news.yml` — news items, newest first.
-- `_data/experience.yml` — positions and education.
+- `_data/experience.yml` — positions and education. Reviewer roles list their `venues:`
+  as `name:` plus an optional `full:` name, which is shown as a hover tooltip.
 - `assets/bibtex/*.txt` — one BibTeX file per paper (plain text so they render in-browser).
 - `assets/posters/*.pdf` — posters, named `<venue>-<paper-slug>.pdf`.
 - `assets/graphics/*.png` — acceptance graphics linked from news items, named
@@ -83,7 +84,15 @@ and `assets/`, not in the HTML/Liquid templates.
 ### Other news (invitations, affiliations, attendance)
 
 Add to the top of `_data/news.yml`; venue/organisation names in `<b>`, paper titles in
-`<i>`, `url:` optional.
+`<i>`, `url:` optional. News items are past tense, e.g. `"Served as a student volunteer
+at <b>ICSE 2026</b> (City, Country)."` (use "served as" for roles, "attended" only for
+plain attendance).
+
+While at an event, also set the `attending:` entry at the top of `_data/news.yml`
+(`text:` kept simple, just the event and place, e.g.
+`"Attending <b>EMNLP 2026</b> (Budapest, Hungary)."`, and `end:` as the quoted
+event's last day, `"YYYY-MM-DD"`). It shows as a small banner above the news list and hides
+itself in the browser after the end date; replace it for the next event, or delete it.
 
 ### Project repositories
 

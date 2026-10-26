@@ -40,6 +40,20 @@ a.citations-badge:hover {
   }
 }
 
+/* small box above the news list while at an event, set by attending in _data/news.yml */
+/* the see-through orange background works in both light and dark mode */
+.attending-banner {
+  display:inline-block;
+  margin:0 15px 1em;
+  padding:0.3rem 0.75rem;
+  border-left:3px solid #e65100;
+  background-color:rgba(230, 81, 0, 0.1);
+}
+
+.attending-banner i {
+  color:#e65100;
+}
+
 .social-icons a{
   display:inline-block;
   height:2.4rem;
