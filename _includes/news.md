@@ -20,18 +20,6 @@
 
 <div class="publications">
 
-{% comment %} small banner for an event happening now, set by attending in _data/news.yml {% endcomment %}
-{% if site.data.news.attending %}
-<div class="attending-banner" data-end="{{ site.data.news.attending.end }}">
-  <i class="fas fa-location-dot"></i> {{ site.data.news.attending.text }}
-</div>
-<script>
-  // hide the banner once the end date has passed, so it never goes stale if left in the data
-  var banner = document.querySelector('.attending-banner');
-  if (new Date() > new Date(banner.dataset.end + 'T23:59:59')) banner.remove();
-</script>
-{% endif %}
-
 {% assign news_items = site.data.news.main %}
 
 {% for item in news_items limit: news_limit %}

@@ -91,7 +91,7 @@ plain attendance).
 While at an event, also set the `attending:` entry at the top of `_data/news.yml`
 (`text:` kept simple, just the event and place, e.g.
 `"Attending <b>EMNLP 2026</b> (Budapest, Hungary)."`, and `end:` as the quoted
-event's last day, `"YYYY-MM-DD"`). It shows as a small banner above the news list and hides
+event's last day, `"YYYY-MM-DD"`). It shows as a banner under the about section and hides
 itself in the browser after the end date; replace it for the next event, or delete it.
 
 ### Project repositories

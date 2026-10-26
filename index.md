@@ -15,6 +15,8 @@ robust, innovative, and genuinely useful.
 
 If you’re a researcher or practitioner working in these areas and are interested in collaborating, I’d love to connect — reach out via <span class="copy-email">email 📨</span>.
 
+{% include attending.html %}
+
 ## Research Interests
 
 <div style="padding-left: 15px;">

@@ -1,5 +1,5 @@
 # news announcements and their optional external or graphic links.
-# an event happening now, shown as a small banner above the news list until the end date.
+# an event happening now, shown as a banner under the about section until the end date.
 attending:
   text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary)."
   end: "2026-10-29"

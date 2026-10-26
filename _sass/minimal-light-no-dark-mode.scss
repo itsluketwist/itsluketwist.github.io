@@ -29,11 +29,10 @@ a.citations-badge:hover {
   color:#e65100;
 }
 
-/* small box above the news list while at an event, set by attending in _data/news.yml */
+/* content-width banner under the about section while at an event, set by attending in _data/news.yml */
 /* the see-through orange background works in both light and dark mode */
 .attending-banner {
-  display:inline-block;
-  margin:0 15px 1em;
+  margin-bottom:1em;
   padding:0.3rem 0.75rem;
   border-left:3px solid #e65100;
   background-color:rgba(230, 81, 0, 0.1);
