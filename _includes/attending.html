@@ -1,12 +1,18 @@
-{% comment %} banner for an event happening now, set by attending in _data/news.yml, shown under the about section {% endcomment %}
+{% comment %} banner for an event happening now, picked from _data/attending.yml, shown under the about section {% endcomment %}
 {% comment %} kept unindented, as it is included into markdown, where indented lines would become code blocks {% endcomment %}
-{% if site.data.news.attending %}
-<div class="attending-banner" data-end="{{ site.data.news.attending.end }}">
-<i class="fas fa-location-dot"></i> {{ site.data.news.attending.text }}
+{% for event in site.data.attending %}
+<div class="attending-banner" data-start="{{ event.start }}" data-end="{{ event.end }}" hidden>
+<i class="fas fa-location-dot"></i> {{ event.text }}
 </div>
+{% endfor %}
 <script>
-// hide the banner once the end date has passed, so it never goes stale if left in the data
-var banner = document.querySelector('.attending-banner');
-if (new Date() > new Date(banner.dataset.end + 'T23:59:59')) banner.remove();
+// show only the first event from 2 days before its start until the end of the day after it finishes
+var DAY = 24 * 60 * 60 * 1000;
+var now = new Date();
+var banner = Array.from(document.querySelectorAll('.attending-banner')).find(function (b) {
+  var from = new Date(b.dataset.start + 'T00:00:00').getTime() - 2 * DAY;
+  var until = new Date(b.dataset.end + 'T23:59:59').getTime() + DAY;
+  return now >= from && now <= until;
+});
+if (banner) banner.hidden = false;
 </script>
-{% endif %}

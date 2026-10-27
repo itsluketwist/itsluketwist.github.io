@@ -1,10 +1,14 @@
 # news announcements and their optional external or graphic links.
-# an event happening now, shown as a banner under the about section until the end date.
-attending:
-  text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary)."
-  end: "2026-10-29"
 
 main:
+
+  - date: October 2026
+    text: "Presented at <b>EMNLP 2026</b>: <i>Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries</i>."
+    url: https://aclanthology.org/2026.emnlp-main.78/
+
+  - date: October 2026
+    text: "New preprint on arXiv: <i>Software Engineering for AI-Driven Science</i>."
+    url: https://arxiv.org/abs/2610.34573
 
   - date: October 2026
     text: "Served as a volunteer coordinator at <b>EMNLP 2026</b> (Budapest, Hungary)."

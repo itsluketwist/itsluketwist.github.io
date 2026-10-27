@@ -1,9 +1,22 @@
-{% comment %} renders published papers, short papers, preprints, and expandable side projects {% endcomment %}
+{% comment %} renders published papers, short papers, and expandable preprints and side projects {% endcomment %}
+<script>
+// show or hide a collapsed list (preprint or side), swapping its "..." placeholder and plus/minus icon
+function togglePubs(name) {
+  var extra = document.getElementById(name + '-pubs');
+  var toggle = document.getElementById(name + '-toggle');
+  var ellipsis = document.getElementById(name + '-ellipsis');
+  var hidden = extra.style.display === 'none';
+  extra.style.display = hidden ? 'block' : 'none';
+  ellipsis.style.display = hidden ? 'none' : 'block';
+  toggle.innerHTML = hidden ? '<i class="fas fa-circle-minus"></i>' : '<i class="fas fa-circle-plus"></i>';
+  toggle.title = hidden ? 'Hide' : 'Show';
+}
+</script>
 <h2 id="publications" style="margin: 2px 0px -15px;">Publications</h2>
 
 <div class="publications">
 
-<!-- peer-reviewed long papers first, then short papers and arXiv preprints under their own subheadings -->
+<!-- peer-reviewed long papers first, then short papers, then collapsed arXiv preprints, under their own subheadings -->
 {% for link in site.data.publications.main %}
 
 {% include pub-row.html link=link %}
@@ -27,10 +40,13 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Preprints</i></b>
+    <b><i>Preprints</i></b> <a id="preprint-toggle" href="javascript:void(0);" title="Show" onclick="togglePubs('preprint')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>
 </div>
-<br>
+
+<div id="preprint-ellipsis" style="padding-left:15px;color:#999;">...</div>
+
+<div id="preprint-pubs" style="display:none;padding-left:15px;">
 
 {% for link in site.data.publications.preprint %}
 
@@ -39,24 +55,12 @@
 
 {% endfor %}
 
+</div>
+<br>
+
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Side projects and collaborations</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="
-  var extra = document.getElementById('side-pubs');
-  var toggle = document.getElementById('side-toggle');
-  var ellipsis = document.getElementById('side-ellipsis');
-  if (extra.style.display === 'none') {
-    extra.style.display = 'block';
-    if (ellipsis) ellipsis.style.display = 'none';
-    toggle.innerHTML = '<i class=\'fas fa-circle-minus\'></i>';
-    toggle.title = 'Hide';
-  } else {
-    extra.style.display = 'none';
-    if (ellipsis) ellipsis.style.display = 'block';
-    toggle.innerHTML = '<i class=\'fas fa-circle-plus\'></i>';
-    toggle.title = 'Show';
-  }
-" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
+    <b><i>Side projects and collaborations</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="togglePubs('side')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>
 </div>
 

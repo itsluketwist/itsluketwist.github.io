@@ -1,0 +1,11 @@
+# events to attend, newest first like news (add new trips to the top and leave old ones).
+# the first event whose window contains today is shown as a banner under the about section,
+# from 2 days before start until the day after end (dates quoted, "YYYY-MM-DD").
+
+- text: "Attending <b>NeurIPS 2026</b> (Paris, France)."
+  start: "2026-12-09"
+  end: "2026-12-13"
+
+- text: "Attending <b>EMNLP 2026</b> (Budapest, Hungary)."
+  start: "2026-10-24"
+  end: "2026-10-29"

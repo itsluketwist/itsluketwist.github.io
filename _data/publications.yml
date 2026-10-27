@@ -50,6 +50,14 @@ short:
 
 preprint:
 
+  - title: "Software Engineering for AI-Driven Science"
+    authors: <b>Lukas&nbsp;Twist</b>, Xinjian&nbsp;Wu, Jingzhi&nbsp;Gong, Shuyin&nbsp;Ouyang, Ying&nbsp;Xiao, Benedetta&nbsp;Donato, Yaoqi&nbsp;Guo, Zhenpeng&nbsp;Chen, Leonardo&nbsp;Mariani, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
+    main: arXiv preprint, October 2026
+    arxiv: https://arxiv.org/abs/2610.34573
+    pdf: https://arxiv.org/pdf/2610.34573
+    code: https://github.com/SOfTwareAiLab/awesome-se4ai4sci
+    bibtex: ./assets/bibtex/arxiv-se4ai4sci.txt
+
   - title: "LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs"
     authors: <b>Lukas&nbsp;Twist</b>, Twm&nbsp;Stone, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
     main: arXiv preprint, August 2026

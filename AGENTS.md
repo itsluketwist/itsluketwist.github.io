@@ -11,10 +11,11 @@ and `assets/`, not in the HTML/Liquid templates.
   - `main`: accepted, peer-reviewed, first-author long papers (newest first).
   - `short`: accepted, peer-reviewed, first-author short papers (newest first), same
     fields as `main`, including the `(VENUE 'YY)` parenthetical.
-  - `preprint`: first-author arXiv preprints (newest first).
+  - `preprint`: first-author arXiv preprints (newest first), shown in a collapsed list.
   - `side`: side projects and collaborations, shown in a collapsed list with a short
     `where:` venue (mark `not_first_author: true` where relevant).
 - `_data/news.yml` — news items, newest first.
+- `_data/attending.yml` — events to attend (newest first), shown as a banner while on.
 - `_data/experience.yml` — positions and education. Reviewer roles list their `venues:`
   as `name:` plus an optional `full:` name, which is shown as a hover tooltip.
 - `assets/bibtex/*.txt` — one BibTeX file per paper (plain text so they render in-browser).
@@ -79,7 +80,8 @@ and `assets/`, not in the HTML/Liquid templates.
    XMP `dc:title`. Write to a temporary copy first and check that it renders the same as
    the original before replacing it. Redo this every time the poster is re-exported.
 3. Add/update the `poster:` field on the paper's entry.
-4. Add a news item: `"Presented a poster at <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`.
+4. Add a news item: `"Presented at <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`, with the
+   paper's `url:` (proceedings page) when it has one.
 
 ### Other news (invitations, affiliations, attendance)
 
@@ -88,11 +90,12 @@ Add to the top of `_data/news.yml`; venue/organisation names in `<b>`, paper tit
 at <b>ICSE 2026</b> (City, Country)."` (use "served as" for roles, "attended" only for
 plain attendance).
 
-While at an event, also set the `attending:` entry at the top of `_data/news.yml`
+As soon as a trip is planned, add it to the top of `_data/attending.yml`
 (`text:` kept simple, just the event and place, e.g.
-`"Attending <b>EMNLP 2026</b> (Budapest, Hungary)."`, and `end:` as the quoted
-event's last day, `"YYYY-MM-DD"`). It shows as a banner under the about section and hides
-itself in the browser after the end date; replace it for the next event, or delete it.
+`"Attending <b>EMNLP 2026</b> (Budapest, Hungary)."`, plus quoted `start:` and `end:`
+dates, `"YYYY-MM-DD"`, verified rather than guessed). The browser shows the first
+matching event as a banner under the about section from 2 days before `start:` until
+the day after `end:`, so past events can be left in place.
 
 ### Project repositories
 
