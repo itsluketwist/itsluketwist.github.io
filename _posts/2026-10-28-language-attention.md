@@ -14,7 +14,7 @@ Naturally, as someone who spends a lot of time researching LLMs for code generat
 
 So I decided to find out!
 
-We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist: counting Hugging Face models and datasets tagged with *programming languages*, and swapping speakers for GitHub developers. That covers 259 languages, using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026.
+We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist. Just like the original analysis, we counted models and datasets on Hugging Face, but this time looked for **programming-language** tags instead of **natural-language** tags. We also swapped native speakers for GitHub developers. Using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026, the analysis covers 259 programming languages.
 
 ## Python is the English of coding AI
 
@@ -53,6 +53,18 @@ JavaScript accounts for around 22% of developer-language activity in the data, b
 Of course, there are plenty of reasons for this. Some programming languages are particularly useful for specific AI tasks, and the number of language-specific models doesn't necessarily tell us how good general-purpose coding models are at writing that language.
 
 In particular, many capable coding models aren't tagged with individual programming languages at all. So these figures tell us about the distribution of *language-tagged resources*, rather than actual coding capabilities.
+
+## What can we take away from this?
+
+A few things stood out to me from these figures.
+
+- **AI resources are highly concentrated, but so are developers.** The distribution of models and datasets is actually quite similar to the distribution of developers across languages. The interesting part is *which* languages get the attention.
+- **Popularity isn't everything.** Languages associated with specific AI tasks, like Lean for theorem proving and SQL for database queries, attract far more resources than their developer populations might suggest.
+- **Some very popular languages receive surprisingly little attention.** JavaScript, TypeScript, Kotlin and Swift are all good examples, although that doesn't necessarily mean existing coding models perform poorly on them.
+
+One important distinction is that **dataset counts might be more informative than model counts**. General-purpose coding models can support many languages without being tagged for them individually, making model counts a fairly limited measure. Datasets don't have quite the same issue, although large multilingual code datasets can also be missed when their individual languages aren't tagged.
+
+So these figures aren't a complete picture of AI support for different programming languages, but I think they give us an interesting glimpse into where the AI research community is directing its attention!
 
 ## A final thought
 
