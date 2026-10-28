@@ -78,12 +78,12 @@ preprint:
 
 side:
 
-  - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
-    where: arXiv '25
-    arxiv: https://arxiv.org/abs/2511.18782
-    pdf: https://arxiv.org/pdf/2511.18782
-    code: https://github.com/itsluketwist/summary-mediated-repair
-    bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
+  - title: "Honesty Testing of LLMs and AI Agents: A Vision for Software Engineering"
+    where: arXiv '26
+    arxiv: https://arxiv.org/abs/2610.34239
+    pdf: https://arxiv.org/pdf/2610.34239
+    bibtex: ./assets/bibtex/arxiv-honesty-testing.txt
+    not_first_author: true
 
   - title: "Multi-Objective Optimization of Agent Skills for Software Engineering"
     where: ASE '26
@@ -93,6 +93,13 @@ side:
     pdf: https://dl.acm.org/doi/pdf/10.1145/3832783.3834550
     bibtex: ./assets/bibtex/ase-skill-optimisation.txt
     not_first_author: true
+
+  - title: "Summary-Mediated Repair: Can LLMs use code summarisation for program repair?"
+    where: arXiv '25
+    arxiv: https://arxiv.org/abs/2511.18782
+    pdf: https://arxiv.org/pdf/2511.18782
+    code: https://github.com/itsluketwist/summary-mediated-repair
+    bibtex: ./assets/bibtex/arxiv-summary-mediated-repair.txt
 
   - title: "Green and Effective Feature Selection toward Hotfix Bug Taxonomy"
     where: SSBSE '25

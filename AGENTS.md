@@ -12,8 +12,8 @@ and `assets/`, not in the HTML/Liquid templates.
   - `short`: accepted, peer-reviewed, first-author short papers (newest first), same
     fields as `main`, including the `(VENUE 'YY)` parenthetical.
   - `preprint`: first-author arXiv preprints (newest first), shown in a collapsed list.
-  - `side`: side projects and collaborations, shown in a collapsed list with a short
-    `where:` venue (mark `not_first_author: true` where relevant).
+  - `side`: side projects and collaborations (newest first), shown in a collapsed list
+    with a short `where:` venue (mark `not_first_author: true` where relevant).
 - `_data/news.yml` — news items, newest first.
 - `_data/attending.yml` — events to attend (newest first), shown as a banner while on.
 - `_data/experience.yml` — positions and education. Reviewer roles list their `venues:`

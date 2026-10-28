@@ -1,0 +1,10 @@
+@article{xiaoHonestyTesting2026,
+  title = {{Honesty Testing of LLMs and AI Agents: A Vision for Software Engineering}},
+  author = {Xiao, Ying and Wu, Xinjian and Twist, Lukas and Guo, Yaoqi and Liu, Yepang and Chen, Zhenpeng and Zhang, Jie M.},
+  journal = {{arXiv preprint arXiv:2610.34239}},
+  year = {2026},
+  month = {October},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2610.34239},
+  url = {http://arxiv.org/abs/2610.34239},
+}
