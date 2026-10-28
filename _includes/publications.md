@@ -13,7 +13,7 @@ function togglePubs(name) {
   toggle.setAttribute('aria-label', toggle.dataset.tooltip);
 }
 </script>
-<h2 id="publications" style="margin: 2px 0px -15px;">Publications</h2>
+<h2 id="publications" style="margin-bottom: -17px;">Publications</h2>
 
 <div class="publications">
 
@@ -124,25 +124,5 @@ function togglePubs(name) {
 <div style="padding-left:15px;"><small><span style="color:#e65100;">*</span> not first author</small></div>
 
 </div>
-
-<br>
-<br>
-
-<!-- <b><i>Blog posts:</i></b>
-
-<br>
-
-{% for link in site.data.publications.blog %}
-
-<div class="pub-row">
-  <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-      <div class="sidetitle"><a href="{{ link.url }}"  target="_blank">{{ link.title }}</a></div>
-      <i>{{ link.where }}, {{ link.date }}</i>
-  </div>
-</div>
-
-{% endfor %}
-
-<br> -->
 
 </div>

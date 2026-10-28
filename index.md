@@ -26,12 +26,10 @@ If you’re a researcher or practitioner working in these areas and are interest
   <div><i class="fas fa-angle-right" style="margin-right: 8px;color:#e65100;"></i><b>LLM Reasoning & Coding Intelligence</b></div>
 </div>
 
-<br>
-
 {% include_relative _includes/news.md %}
 
-{% include_relative _includes/blog.md %}
-
 {% include_relative _includes/publications.md %}
+
+{% include_relative _includes/blog.md %}
 
 {% include_relative _includes/experience.md %}

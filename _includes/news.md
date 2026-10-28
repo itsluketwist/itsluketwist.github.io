@@ -1,7 +1,7 @@
 {% comment %} renders recent news and an expandable list of older announcements {% endcomment %}
 {% comment %} how many news items show before the rest are hidden behind the toggle {% endcomment %}
 {% assign news_limit = 5 %}
-<h2 id="news" style="margin: 2px 0px -15px;">News{% if site.data.news.main.size > news_limit %} <a id="news-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show more" aria-label="Show more" onclick="
+<h2 id="news" style="margin-bottom: -17px;">News{% if site.data.news.main.size > news_limit %} <a id="news-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show more" aria-label="Show more" onclick="
   var extra = document.getElementById('news-extra');
   var toggle = document.getElementById('news-toggle');
   var ellipsis = document.getElementById('news-ellipsis');
@@ -51,7 +51,5 @@
 {% endfor %}
 </div>
 {% endif %}
-
-<br>
 
 </div>

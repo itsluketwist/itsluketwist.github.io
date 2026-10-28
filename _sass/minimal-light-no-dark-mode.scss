@@ -644,3 +644,13 @@ footer {
     text-align:center;
   }
 }
+
+/* even spacing between homepage sections: every section heading gets the same gap above it */
+/* (the sections themselves no longer end with extra line breaks) */
+section h2 {
+  margin-top:40px;
+}
+
+section h2:first-child {
+  margin-top:0;
+}

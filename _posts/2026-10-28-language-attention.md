@@ -2,7 +2,6 @@
 title: Which programming languages get the most AI attention?
 description: Recreating figures from Anna Korhonen's EMNLP 2026 keynote on the global AI divide, but for programming languages, using Hugging Face models and datasets and GitHub developer counts.
 code: https://github.com/itsluketwist/blog-languages
-unlisted: true
 ---
 
 At EMNLP 2026, I attended a really interesting keynote by Anna Korhonen, titled [*AI for the Many: Starting from the World, Not the Model*](https://2026.emnlp.org/program/keynotes/).

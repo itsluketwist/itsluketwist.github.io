@@ -25,7 +25,9 @@ and `assets/`, not in the HTML/Liquid templates.
 - `_posts/YYYY-MM-DD-<slug>.md` — blog posts, rendered with `_layouts/post.html` (single
   column, bio at the bottom instead of the sidebar) at `/blog/<slug>/`, and listed on the
   homepage under "Blog" (`_includes/blog.md`, hidden while there are no posts).
-- `index.md` — homepage main content (about, news, publications, experience).
+- `index.md` — homepage main content (about, research interests, news, publications, blog,
+  experience). Section spacing is set once in `_sass/` (`section h2`), so sections
+  should not end with extra `<br>` lines.
 - `_layouts/homepage.html` — page layout, including the left-hand sidebar (photo, name,
   social links) and the auto-generated "First-author publications:" badge line.
 - `_includes/`, `_layouts/`, `_sass/` — templates and styling; rarely need changes.

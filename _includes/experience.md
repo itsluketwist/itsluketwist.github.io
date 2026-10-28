@@ -1,4 +1,4 @@
-<h2 id="publications" style="margin: 2px 0px -15px;">Research Experience</h2>
+<h2 id="experience" style="margin-bottom: -17px;">Research Experience</h2>
 
 <div class="publications">
 
@@ -141,8 +141,5 @@
 {% endfor %}
 
 </div>
-
-<br>
-<br>
 
 </div>
