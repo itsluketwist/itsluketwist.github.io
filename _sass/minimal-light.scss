@@ -67,7 +67,8 @@ a.citations-badge:hover {
 
 @media (prefers-color-scheme: dark) { .social-icons a {color: #3eb7f0 !important; }}
 
-.social-icons a:last-child{margin-right:0}.social-icons a:hover{background-color:white;
+.social-icons a:last-child{margin-right:0}/* no hover circle, the icon just turns orange and grows */
+.social-icons a:hover{
     color:#e65100!important;
     transform: scale(1.2)}
     /*
@@ -673,6 +674,16 @@ footer {
 /* white buttons so they stand out from the blue box */
 .post-header .publications .links .btn {
   background:#ffffff;
+}
+
+/* images in a post get the same blue left line and padding as the title box, so they line up */
+/* the padding is the figures' faint blue, so each figure sits inset at ~95% width */
+/* border-box keeps the line and padding inside the image's full width */
+.post-wrapper article img {
+  border-left:3px solid #3399cc;
+  padding:1em;
+  background-color:#f5fafd;
+  box-sizing:border-box;
 }
 
 .post-header .post-date {

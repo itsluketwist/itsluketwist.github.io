@@ -71,7 +71,8 @@
       <div class="post-bio">
         <a href="{{ '/' | relative_url }}"><img src="{{ site.avatars[0] | remove_first: '.' | relative_url }}" alt="avatar"></a>
         <div>
-          <b><a href="{{ '/' | relative_url }}">{{ site.title }}</a></b><br>
+          <!-- twist icon after the name, as after the "About Me" heading on the homepage -->
+          <b><a href="{{ '/' | relative_url }}">{{ site.title }}</a></b> <img src="{{ site.favicon | remove_first: '.' | relative_url }}" alt="" style="display: inline; width: 16px; height: 16px; vertical-align: -2px;"><br>
           {{ site.position }}, <a href="{{ site.affiliation_link }}" target="_blank" rel="noopener noreferrer">{{ site.affiliation }}</a><br>
           <span class="copy-email core-tooltip tooltip-plain" data-tooltip="Copy email">{{ site.email }} <i class="fas fa-copy"></i></span>
           {% include social-icons.html %}
