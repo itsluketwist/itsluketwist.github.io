@@ -103,6 +103,8 @@ and `assets/`, not in the HTML/Liquid templates.
    month.
 3. Put the post's images in `assets/blog/<slug>/` and link them with absolute paths
    (`/assets/blog/<slug>/figure.png`), since posts are served from `/blog/<slug>/`.
+   Wrap each image in a link to its own file, `[![alt](src)](src)`, so tapping it opens
+   the full-size image to zoom on mobile.
 
 To check a post on the live site before announcing it, add `unlisted: true` to its front
 matter: it is published at its URL but left off the homepage list and out of search

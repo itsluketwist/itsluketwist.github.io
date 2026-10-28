@@ -18,7 +18,7 @@ We (me and my buddy Claude) recreated several of Anna's figures, but with a prog
 
 ## Python is the English of coding AI
 
-![Distribution of Hugging Face models and datasets across programming languages](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/zipf.png)
+[![Distribution of Hugging Face models and datasets across programming languages](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/zipf.png)](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/zipf.png)
 
 Perhaps unsurprisingly, Python dominates. It accounts for around 28% of language-tagged models and 24% of datasets, with the top 10 languages accounting for roughly three-quarters of both.
 
@@ -30,9 +30,9 @@ In fact, only 91 of the 259 languages have at least one tagged model, showing ju
 
 ## Does developer popularity explain model availability?
 
-![Programming language developers versus model availability](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_models.png)
+[![Programming language developers versus model availability](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_models.png)](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_models.png)
 
-![Programming language developers versus dataset availability](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_datasets.png)
+[![Programming language developers versus dataset availability](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_datasets.png)](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/developers_vs_datasets.png)
 
 This is where things get a bit more interesting.
 
@@ -44,7 +44,7 @@ Meanwhile, languages like JavaScript, TypeScript, Kotlin and Swift have relative
 
 ## A different kind of language imbalance
 
-![Share of developers compared with Hugging Face models and datasets](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/share.png)
+[![Share of developers compared with Hugging Face models and datasets](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/share.png)](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/share.png)
 
 Looking at the most popular languages makes this especially clear.
 
