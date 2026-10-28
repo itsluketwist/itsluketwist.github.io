@@ -22,6 +22,9 @@ and `assets/`, not in the HTML/Liquid templates.
 - `assets/posters/*.pdf` — posters, named `<venue>-<paper-slug>.pdf`.
 - `assets/graphics/*.png` — acceptance graphics linked from news items, named
   `<venue>-<paper-slug>.png`.
+- `_posts/YYYY-MM-DD-<slug>.md` — blog posts, rendered with `_layouts/post.html` (single
+  column, bio at the bottom instead of the sidebar) at `/blog/<slug>/`, and listed on the
+  homepage under "Blog" (`_includes/blog.md`, hidden while there are no posts).
 - `index.md` — homepage main content (about, news, publications, experience).
 - `_layouts/homepage.html` — page layout, including the left-hand sidebar (photo, name,
   social links) and the auto-generated "First-author publications:" badge line.
@@ -82,6 +85,29 @@ and `assets/`, not in the HTML/Liquid templates.
 3. Add/update the `poster:` field on the paper's entry.
 4. Add a news item: `"Presented at <b>VENUE YYYY</b>: <i>Full Paper Title</i>."`, with the
    paper's `url:` (proceedings page) when it has one.
+
+### New blog post
+
+1. Save the post as `_posts/YYYY-MM-DD-<slug>.md` with front matter `title:` (and an
+   optional one-line `description:` for search engines, otherwise the first paragraph is
+   used). The layout, URL and homepage listing are set automatically.
+   Don't add a `# Title` heading in the body, the layout shows the title. An optional
+   `code:` (URL) adds a Code button under the date.
+2. Every post needs a BibTeX file at `assets/bibtex/blog/<slug>.txt` (kept apart from
+   the paper BibTeX files), which adds the BibTeX and Reference buttons. The layout finds
+   it from the post's file name; local builds show a red "Missing ..." note if it isn't
+   there. It is a `@misc` with citation key `twist<PostSlug><Year>`,
+   `howpublished = {Blog post}` and the post's full URL; set its `month` to the publish
+   month.
+3. Put the post's images in `assets/blog/<slug>/` and link them with absolute paths
+   (`/assets/blog/<slug>/figure.png`), since posts are served from `/blog/<slug>/`.
+
+To check a post on the live site before announcing it, add `unlisted: true` to its front
+matter: it is published at its URL but left off the homepage list and out of search
+engines (`noindex`). Remove the line to publish it properly.
+
+Work-in-progress posts go in `_drafts/<slug>.md` (no date, never published); preview
+them locally with `bundle exec jekyll serve --drafts`.
 
 ### Other news (invitations, affiliations, attendance)
 

@@ -41,6 +41,9 @@ function showCopyTooltip(element, message) {
     tooltip.remove();
   });
 
+  // hide the element's hover tooltip so the two do not overlap.
+  element.classList.add("tooltip-hide");
+
   const tooltip = document.createElement("div");
   tooltip.className = "copy-tooltip";
   tooltip.setAttribute("role", "status");
@@ -61,6 +64,7 @@ function showCopyTooltip(element, message) {
   }, 3000);
   setTimeout(function () {
     tooltip.remove();
+    element.classList.remove("tooltip-hide");
   }, 3400);
 }
 
@@ -119,6 +123,9 @@ function formatReference(bibtex, fallbackUrl) {
     if (fields.publisher) parts.push(fields.publisher + ".");
   } else if (fields.journal) {
     parts.push(fields.journal + ".");
+  } else if (fields.howpublished) {
+    // blog posts are @misc entries, e.g. "Blog post".
+    parts.push(fields.howpublished + ".");
   }
 
   // prefer a stable doi; the publication link also covers forthcoming papers.

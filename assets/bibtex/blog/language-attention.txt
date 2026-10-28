@@ -1,0 +1,8 @@
+@misc{twistLanguageAttention2026,
+  title = {{Which programming languages get the most AI attention?}},
+  author = {Twist, Lukas},
+  year = {2026},
+  month = {October},
+  howpublished = {Blog post},
+  url = {https://www.lukastwist.com/blog/language-attention/},
+}

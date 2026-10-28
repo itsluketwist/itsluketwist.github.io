@@ -100,3 +100,9 @@ blockquote { background: var(--global-bg-color); border-left: 2px solid var(--gl
 
 /* keep the usual link cursor when the tooltip is on a link, e.g. the sidebar venue list */
 a.core-tooltip { cursor: pointer; }
+
+/* no dotted underline for tooltips on icons, toggles and plain links */
+.core-tooltip.tooltip-plain { border-bottom: none; }
+
+/* hide the hover tooltip while a "Copied!" message shows in the same place */
+.core-tooltip.tooltip-hide::after { visibility: hidden; }

@@ -555,3 +555,81 @@ footer {
   display:none;
   font-family: monospace;
 }
+
+/* blog post pages (_layouts/post.html): one centred column, no sidebar */
+.post-wrapper {
+  max-width:680px;
+  margin:0 auto;
+  padding:3em 15px 50px;
+}
+
+.post-home {
+  font-size:0.9rem;
+}
+
+.post-wrapper article {
+  margin-top:2em;
+  line-height:1.7;
+}
+
+/* box around the post title and byline: the link blue (#3399cc) at 5% on white, */
+/* the same faint blue used as the figure backgrounds */
+.post-header {
+  margin-bottom:1.5em;
+  padding:1em;
+  border-left:3px solid #3399cc;
+  background-color:#f5fafd;
+}
+
+/* white buttons so they stand out from the blue box */
+.post-header .publications .links .btn {
+  background:#ffffff;
+}
+
+.post-header .post-date {
+  margin-bottom:0;
+}
+
+.post-date {
+  color:#e65100;
+  font-style:italic;
+  margin-top:-10px;
+}
+
+/* the home link is just code, kept in the link colour */
+.post-home code {
+  font-size:0.85rem;
+  color:inherit;
+  padding:0 3px;
+}
+
+/* bio at the bottom of each post, stands in for the homepage sidebar */
+/* same see-through orange box as the attending banner */
+.post-bio {
+  display:flex;
+  align-items:center;
+  gap:1.5em;
+  margin-top:40px;
+  padding:1em;
+  border-left:3px solid #e65100;
+  background-color:rgba(230, 81, 0, 0.1);
+}
+
+.post-wrapper pre {
+  max-width:100%;
+}
+
+/* the headshot is portrait, so crop it to a square from the top */
+.post-bio img {
+  width:110px;
+  height:110px;
+  object-fit:cover;
+  object-position:top;
+}
+
+@media screen and (max-width: 560px) {
+  .post-bio {
+    flex-direction:column;
+    text-align:center;
+  }
+}

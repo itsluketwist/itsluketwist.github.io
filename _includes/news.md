@@ -1,7 +1,7 @@
 {% comment %} renders recent news and an expandable list of older announcements {% endcomment %}
 {% comment %} how many news items show before the rest are hidden behind the toggle {% endcomment %}
 {% assign news_limit = 5 %}
-<h2 id="news" style="margin: 2px 0px -15px;">News{% if site.data.news.main.size > news_limit %} <a id="news-toggle" href="javascript:void(0);" title="Show more" onclick="
+<h2 id="news" style="margin: 2px 0px -15px;">News{% if site.data.news.main.size > news_limit %} <a id="news-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show more" aria-label="Show more" onclick="
   var extra = document.getElementById('news-extra');
   var toggle = document.getElementById('news-toggle');
   var ellipsis = document.getElementById('news-ellipsis');
@@ -9,12 +9,14 @@
     extra.style.display = 'block';
     if (ellipsis) ellipsis.style.display = 'none';
     toggle.innerHTML = '<i class=\'fas fa-circle-minus\'></i>';
-    toggle.title = 'Show less';
+    toggle.dataset.tooltip = 'Show less';
+    toggle.setAttribute('aria-label', 'Show less');
   } else {
     extra.style.display = 'none';
     if (ellipsis) ellipsis.style.display = 'block';
     toggle.innerHTML = '<i class=\'fas fa-circle-plus\'></i>';
-    toggle.title = 'Show more';
+    toggle.dataset.tooltip = 'Show more';
+    toggle.setAttribute('aria-label', 'Show more');
   }
 " style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>{% endif %}</h2>
 

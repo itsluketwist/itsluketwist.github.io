@@ -30,6 +30,8 @@ If you’re a researcher or practitioner working in these areas and are interest
 
 {% include_relative _includes/news.md %}
 
+{% include_relative _includes/blog.md %}
+
 {% include_relative _includes/publications.md %}
 
 {% include_relative _includes/experience.md %}

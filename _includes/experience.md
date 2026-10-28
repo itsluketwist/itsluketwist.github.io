@@ -45,7 +45,7 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Prior Industry Experience</i></b> <a id="industry-toggle" href="javascript:void(0);" title="Show" onclick="
+    <b><i>Prior Industry Experience</i></b> <a id="industry-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show" aria-label="Show" onclick="
   var extra = document.getElementById('industry-list');
   var toggle = document.getElementById('industry-toggle');
   var ellipsis = document.getElementById('industry-ellipsis');
@@ -53,12 +53,14 @@
     extra.style.display = 'block';
     if (ellipsis) ellipsis.style.display = 'none';
     toggle.innerHTML = '<i class=\'fas fa-circle-minus\'></i>';
-    toggle.title = 'Hide';
+    toggle.dataset.tooltip = 'Hide';
+    toggle.setAttribute('aria-label', 'Hide');
   } else {
     extra.style.display = 'none';
     if (ellipsis) ellipsis.style.display = 'block';
     toggle.innerHTML = '<i class=\'fas fa-circle-plus\'></i>';
-    toggle.title = 'Show';
+    toggle.dataset.tooltip = 'Show';
+    toggle.setAttribute('aria-label', 'Show');
   }
 " style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>
@@ -101,7 +103,7 @@
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Prior Education</i></b> <a id="edu-toggle" href="javascript:void(0);" title="Show" onclick="
+    <b><i>Prior Education</i></b> <a id="edu-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show" aria-label="Show" onclick="
   var extra = document.getElementById('edu-list');
   var toggle = document.getElementById('edu-toggle');
   var ellipsis = document.getElementById('edu-ellipsis');
@@ -109,12 +111,14 @@
     extra.style.display = 'block';
     if (ellipsis) ellipsis.style.display = 'none';
     toggle.innerHTML = '<i class=\'fas fa-circle-minus\'></i>';
-    toggle.title = 'Hide';
+    toggle.dataset.tooltip = 'Hide';
+    toggle.setAttribute('aria-label', 'Hide');
   } else {
     extra.style.display = 'none';
     if (ellipsis) ellipsis.style.display = 'block';
     toggle.innerHTML = '<i class=\'fas fa-circle-plus\'></i>';
-    toggle.title = 'Show';
+    toggle.dataset.tooltip = 'Show';
+    toggle.setAttribute('aria-label', 'Show');
   }
 " style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>

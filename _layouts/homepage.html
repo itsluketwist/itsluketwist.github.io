@@ -68,57 +68,13 @@
 
         {% if site.email %}
         <email>
-          <span class="copy-email">{{ site.email }} <i class="fas fa-copy" title="Copy email"></i></span>
+          <span class="copy-email core-tooltip tooltip-plain" data-tooltip="Copy email">{{ site.email }} <i class="fas fa-copy"></i></span>
         </email>
         {% endif %}
 
         <br>
         <br>
-        <div class="social-icons">
-
-        {% if site.google_scholar %}
-        <a style="margin: 0 0 0 0" href="{{ site.google_scholar }}" target="_blank" rel="noopener noreferrer">
-          <i class="ai ai-google-scholar" style="font-size:1.2rem"></i>
-        </a>  
-        {% endif %}
-
-        {% if site.cv_link %}
-        <a style="margin: 0 0 0 0" href="{{ site.cv_link }}" target="_blank" rel="noopener noreferrer">
-          <i class="ai ai-cv" style="font-size:1.3rem;"></i>
-        </a>
-        {% endif %}
-
-        {% if site.github_link %}
-        <a style="margin: 0 0 0 0" href="{{ site.github_link }}" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-github"></i>
-        </a>
-        {% endif %}
-
-        {% if site.linkedin %}
-        <a style="margin: 0 0 0 0" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-linkedin"></i>
-        </a>
-        {% endif %}
-
-        {% if site.bluesky %}
-        <a style="margin: 0 0 0 0" href="{{ site.bluesky }}" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-bluesky"></i>
-        </a>
-        {% endif %}
-
-        {% if site.twitter %}
-        <a style="margin: 0 0 0 0" href="{{ site.twitter }}" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-x-twitter"></i>
-        </a>
-        {% endif %}
-
-        {% if site.orcid %}
-        <a style="margin: 0 0 0 0" href="{{ site.orcid }}" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-orcid"></i>
-        </a>
-        {% endif %}
-
-        </div>
+        {% include social-icons.html %}
         <br>
 
         <!-- list of venues with first-author publications, built from the publications data -->

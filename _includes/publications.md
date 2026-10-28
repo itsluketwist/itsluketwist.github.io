@@ -9,7 +9,8 @@ function togglePubs(name) {
   extra.style.display = hidden ? 'block' : 'none';
   ellipsis.style.display = hidden ? 'none' : 'block';
   toggle.innerHTML = hidden ? '<i class="fas fa-circle-minus"></i>' : '<i class="fas fa-circle-plus"></i>';
-  toggle.title = hidden ? 'Hide' : 'Show';
+  toggle.dataset.tooltip = hidden ? 'Hide' : 'Show';
+  toggle.setAttribute('aria-label', toggle.dataset.tooltip);
 }
 </script>
 <h2 id="publications" style="margin: 2px 0px -15px;">Publications</h2>
@@ -40,7 +41,7 @@ function togglePubs(name) {
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Preprints</i></b> <a id="preprint-toggle" href="javascript:void(0);" title="Show" onclick="togglePubs('preprint')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
+    <b><i>Preprints</i></b> <a id="preprint-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show" aria-label="Show" onclick="togglePubs('preprint')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>
 </div>
 
@@ -60,7 +61,7 @@ function togglePubs(name) {
 
 <div class="pub-row">
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 15px;">
-    <b><i>Side projects and collaborations</i></b> <a id="side-toggle" href="javascript:void(0);" title="Show" onclick="togglePubs('side')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
+    <b><i>Side projects and collaborations</i></b> <a id="side-toggle" href="javascript:void(0);" class="core-tooltip tooltip-plain" data-tooltip="Show" aria-label="Show" onclick="togglePubs('side')" style="font-size:1rem;font-weight:normal;text-decoration:none;vertical-align:middle;margin-left:4px;"><i class="fas fa-circle-plus"></i></a>
   </div>
 </div>
 

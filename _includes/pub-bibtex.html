@@ -1,13 +1,15 @@
 {% comment %} links to the reference file and enables copying once its text is loaded {% endcomment %}
-{% if include.link.bibtex %}
-<a href="{{ include.link.bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
+{% comment %} blog posts pass their file path as bibtex=, papers set it on the link {% endcomment %}
+{% assign bibtex = include.bibtex | default: include.link.bibtex %}
+{% if bibtex %}
+<a href="{{ bibtex }}" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">BibTeX</a>
 <button
   type="button"
-  class="btn btn-sm z-depth-0 copy-reference"
-  data-bibtex="{{ include.link.bibtex | escape }}"
+  class="btn btn-sm z-depth-0 copy-reference core-tooltip"
+  data-bibtex="{{ bibtex | escape }}"
   data-reference-url="{{ include.link.url | default: include.link.arxiv | escape }}"
   aria-label="Copy reference for {{ include.link.title | escape }}"
-  title="Copy formatted reference"
+  data-tooltip="Copy formatted reference"
   hidden
 >Reference <i class="fas fa-copy" aria-hidden="true"></i></button>
 {% endif %}
