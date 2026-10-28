@@ -62,8 +62,6 @@ But I still found it fun to see how some of the same patterns appear in a comple
 
 Huge credit to **Anna Korhonen** for the original analysis, visualisations and inspiration. The questions, figure designs and idea of comparing Hugging Face resources across languages are directly adapted from her keynote, and I'd highly recommend looking into the original work.
 
-I've put all the code, data, figures and methodological details in a repository, if anyone wants to have a look or play around with the results:
-
-**[GitHub: blog-languages](https://github.com/itsluketwist/blog-languages)**
+I've put all the code, data, figures and methodological details in a [GitHub repository](https://github.com/itsluketwist/blog-languages), if anyone wants to have a look or play around with the results.
 
 *One disclaimer: I used Claude Code to help build the repository and produce the figures. I've reviewed parts of the code and results, but haven't checked everything independently. So please treat this as a fun exploratory analysis, rather than a fully validated study!*
