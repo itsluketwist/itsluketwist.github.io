@@ -14,7 +14,7 @@ Naturally, as someone who spends a lot of time researching LLMs for code generat
 
 So I decided to find out!
 
-We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist. Just like the original analysis, we counted models and datasets on Hugging Face, but this time looked for **programming-language** tags instead of **natural-language** tags. We also swapped native speakers for GitHub developers. Using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026, the analysis covers 259 programming languages.
+We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist. Just like the original analysis, we counted models and datasets on Hugging Face, but this time looked for *programming-language* tags instead of *natural-language* tags. We also swapped *native speakers* for *GitHub developers*. Using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026, the analysis covers 259 programming languages.
 
 ## Python is the English of coding AI
 
