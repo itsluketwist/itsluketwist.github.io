@@ -14,7 +14,9 @@ Naturally, as someone who spends a lot of time researching LLMs for code generat
 
 So I decided to find out!
 
-We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist. Just like the original analysis, we counted models and datasets on Hugging Face, but this time looked for *programming-language* tags instead of *natural-language* tags. We also swapped *native speakers* for *GitHub developers*. Using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026, the analysis covers 259 programming languages.
+We (me and my buddy Claude) recreated several of Anna's figures, but with a programming-language twist. Just like the original analysis, we counted models and datasets on Hugging Face, but this time looked for *programming-language* tags instead of *natural-language* tags. We only count resources explicitly tagged with each language, and resources tagged with multiple languages are counted once for each, so the percentages represent shares of language-tagged resources.
+
+We also swapped *native speakers* for *GitHub developers*. Using developer counts from the GitHub Innovation Graph (2026 Q1) and Hugging Face data from October 2026, the analysis covers 259 programming languages.
 
 ## Python is the English of coding AI
 
@@ -22,7 +24,9 @@ We (me and my buddy Claude) recreated several of Anna's figures, but with a prog
 
 Perhaps unsurprisingly, Python dominates. It accounts for around 28% of language-tagged models and 24% of datasets, with the top 10 languages accounting for roughly three-quarters of both.
 
-SQL comes in second, while languages such as JavaScript, Rust and Java also feature prominently.
+SQL comes in second, which surprised me at first, until I remembered just how much AI research focuses on text-to-SQL tasks!
+
+But perhaps the biggest surprise is **Lean in third place**, with 171 models and 214 datasets, despite having only around 4,400 recorded GitHub developers! This likely reflects the growing interest in AI for formal mathematics and theorem proving.
 
 At the other end of the distribution, there are some interesting cases. Perl, for example, has around 138,000 active GitHub developers, but just one language-tagged model and two datasets!
 
@@ -36,29 +40,29 @@ In fact, only 91 of the 259 languages have at least one tagged model, showing ju
 
 This is where things get a bit more interesting.
 
-Among languages with at least one relevant resource, developer population explains only **43% of the variation in model availability**, and 34% for datasets.
+Among languages with at least one relevant resource, developer population explains only **43% of the variation in log model counts**, and 34% for datasets.
 
-Some languages have far more resources than their developer populations would suggest. Lean is a particularly interesting example, with just 4,400 developers but 171 models, likely reflecting the growing interest in AI for theorem proving. SQL is another, helped by the popularity of text-to-SQL tasks.
+As we saw with Lean and SQL, some languages attract far more resources than their developer populations would suggest. And this isn't limited to those two! Verilog, for example, has as many tagged models as Java (92), despite having around 38 times fewer developers. Solidity and Cypher also stand out.
 
-Meanwhile, languages like JavaScript, TypeScript, Kotlin and Swift have relatively few language-tagged models given their large developer communities.
+There seems to be a pattern here: languages associated with specific AI research tasks, like theorem proving, database querying and hardware design, attract a disproportionate amount of attention.
 
 ## A different kind of language imbalance
 
 [![Share of developers compared with Hugging Face models and datasets](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/share.png)](https://raw.githubusercontent.com/itsluketwist/blog-languages/main/figures/share.png)
 
-Looking at the most popular languages makes this especially clear.
+There's another way to look at this: how do the shares of developers compare to the shares of models and datasets?
+
+Languages like JavaScript, TypeScript, Kotlin and Swift have relatively small shares of language-tagged models given their large developer communities.
 
 JavaScript accounts for around 22% of developer-language activity in the data, but only 5% of tagged models. Python, meanwhile, accounts for around 16% of developers but 28% of models.
 
-Of course, there are plenty of reasons for this. Some programming languages are particularly useful for specific AI tasks, and the number of language-specific models doesn't necessarily tell us how good general-purpose coding models are at writing that language.
-
-In particular, many capable coding models aren't tagged with individual programming languages at all. So these figures tell us about the distribution of *language-tagged resources*, rather than actual coding capabilities.
+Of course, there are plenty of reasons for this, as we've seen with specialised tasks like text-to-SQL and theorem proving.
 
 ## What can we take away from this?
 
 A few things stood out to me from these figures.
 
-- **AI resources are highly concentrated, but so are developers.** The distribution of models and datasets is actually quite similar to the distribution of developers across languages. The interesting part is *which* languages get the attention.
+- **AI resources are highly concentrated, but so are developers.** The overall level of concentration is actually quite similar across developers, models and datasets. The interesting part is *which* languages get the attention.
 - **Popularity isn't everything.** Languages associated with specific AI tasks, like Lean for theorem proving and SQL for database queries, attract far more resources than their developer populations might suggest.
 - **Some very popular languages receive surprisingly little attention.** JavaScript, TypeScript, Kotlin and Swift are all good examples, although that doesn't necessarily mean existing coding models perform poorly on them.
 
