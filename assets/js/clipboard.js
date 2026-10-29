@@ -115,7 +115,13 @@ function formatReference(bibtex, fallbackUrl) {
 
   // retain question marks and other existing punctuation at the end of titles.
   const title = /[.!?]$/.test(fields.title) ? fields.title : fields.title + ".";
-  const parts = [authorList + " (" + fields.year + ").", title];
+  // blog posts have a full date, cited as "(2026, October 29)"; papers just use the year.
+  let dateText = fields.year;
+  const fullDate = /^\d{4}-\d{2}-(\d{2})$/.exec(fields.date || "");
+  if (fullDate && fields.month) {
+    dateText = fields.year + ", " + fields.month + " " + Number(fullDate[1]);
+  }
+  const parts = [authorList + " (" + dateText + ").", title];
   if (fields.booktitle) {
     let venue = "In " + fields.booktitle;
     if (fields.pages) venue += " (pp. " + fields.pages.replace(/--/g, "–") + ")";

@@ -99,8 +99,9 @@ and `assets/`, not in the HTML/Liquid templates.
    the paper BibTeX files), which adds the BibTeX and Reference buttons. The layout finds
    it from the post's file name; local builds show a red "Missing ..." note if it isn't
    there. It is a `@misc` with citation key `twist<PostSlug><Year>`,
-   `howpublished = {Blog post}` and the post's full URL; set its `month` to the publish
-   month.
+   `howpublished = {Blog post}` and the post's full URL. Set `year`, `month` and
+   `date = {YYYY-MM-DD}` to the date in the post's file name, and update all three if
+   the release date changes.
 3. Put the post's images in `assets/blog/<slug>/` and link them with absolute paths
    (`/assets/blog/<slug>/figure.png`), since posts are served from `/blog/<slug>/`.
    Wrap each image in a link to its own file, `[![alt](src)](src)`, so tapping it opens

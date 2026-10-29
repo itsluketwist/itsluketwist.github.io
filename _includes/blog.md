@@ -6,7 +6,7 @@
 
 <div style="padding-left: 15px;">
 {% for post in listed_posts %}
-  <div style="margin-bottom: 8px;"><em style="color:#e65100;">{{ post.date | date: "%b %Y" }}</em> &mdash; <a href="{{ post.url | relative_url }}">{{ post.title }}</a></div>
+  <div style="margin-bottom: 8px;"><em style="color:#e65100;">{{ post.date | date: "%B %Y" }}</em> &mdash; <a href="{{ post.url | relative_url }}">{{ post.title }}</a></div>
 {% endfor %}
 </div>
 {% endif %}
