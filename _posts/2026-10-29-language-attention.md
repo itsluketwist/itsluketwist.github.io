@@ -80,4 +80,4 @@ Huge credit to **Anna Korhonen** for the original analysis, visualisations and i
 
 I've put all the code, data, figures and methodological details in a [GitHub repository](https://github.com/itsluketwist/blog-languages), if anyone wants to have a look or play around with the results.
 
-*One disclaimer: I used Claude Code to help build the repository and produce the figures. I've reviewed parts of the code and results, but haven't checked everything independently. So please treat this as a fun exploratory analysis, rather than a fully validated study!*
+*A final disclaimer: I used Claude Code to help build the repository and produce the figures. I've reviewed parts of the code and results, but haven't checked everything thoroughly myself. So please treat this as a fun exploratory analysis, rather than a fully validated study!*
