@@ -4,7 +4,7 @@ description: Recreating figures from Anna Korhonen's EMNLP 2026 keynote on the g
 code: https://github.com/itsluketwist/blog-languages
 ---
 
-At EMNLP 2026, I attended a really interesting keynote by Anna Korhonen, titled [*AI for the Many: Starting from the World, Not the Model*](https://2026.emnlp.org/program/keynotes/).
+At EMNLP 2026, I attended a really interesting keynote by Anna Korhonen, titled [*AI for the Many: Starting from the World, Not the Model*](https://2026.emnlp.org/program/keynotes/#keynote-3-anna-korhonen).
 
 The talk explored the global AI divide, and particularly how unevenly AI models and datasets are distributed across the world's languages. More importantly, it made the case that AI research should start with the needs of people and communities, rather than simply trying to extend ever-larger models to more languages.
 
