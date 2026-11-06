@@ -1,6 +1,7 @@
 // copies email addresses and publication references with tooltip feedback.
 
-const EMAIL = "lukas.twist@kcl.ac.uk";
+// kept as "[at]" so scrapers never see the full address; it is only built on click.
+const EMAIL = "lukas.twist[at]kcl.ac.uk";
 
 // inject tooltip styles once when the script loads
 (function () {
@@ -70,7 +71,7 @@ function showCopyTooltip(element, message) {
 
 async function copyEmail(element) {
   try {
-    await navigator.clipboard.writeText(EMAIL);
+    await navigator.clipboard.writeText(EMAIL.replace("[at]", "@"));
     showCopyTooltip(element, "Copied!");
   } catch {
     showCopyTooltip(element, "Couldn't copy email.");

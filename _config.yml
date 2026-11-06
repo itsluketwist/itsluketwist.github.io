@@ -2,7 +2,7 @@
 title: Lukas Twist
 position: Ph.D. Researcher
 affiliation: King's College London
-email: lukas.twist@kcl.ac.uk
+email: lukas.twist[at]kcl.ac.uk # "[at]" hides the address from scrapers, clipboard.js builds it on copy.
 
 # Search Engine Optimization (SEO)
 # The following information is used to improve the website traffic from search engines, e.g., Google.

@@ -1,0 +1,10 @@
+@article{twistReasoningOverflow2026,
+  title = {{Reasoning-Trace Overflow in Code Generation: An Empirical Study of Explicit Reasoning Models}},
+  author = {Twist, Lukas and Yannakoudakis, Helen and Zhang, Jie M.},
+  journal = {{arXiv preprint arXiv:2611.06095}},
+  year = {2026},
+  month = {November},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2611.06095},
+  url = {http://arxiv.org/abs/2611.06095},
+}

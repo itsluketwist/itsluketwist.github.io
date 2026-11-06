@@ -2,6 +2,10 @@
 
 main:
 
+  - date: November 2026
+    text: "New preprint on arXiv: <i>Reasoning-Trace Overflow in Code Generation: An Empirical Study of Explicit Reasoning Models</i>."
+    url: https://arxiv.org/abs/2611.06095
+
   - date: October 2026
     text: "Presented at <b>EMNLP 2026</b>: <i>Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries</i>."
     url: https://aclanthology.org/2026.emnlp-main.78/

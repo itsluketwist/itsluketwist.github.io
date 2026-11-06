@@ -26,8 +26,8 @@ main:
 
   - title: "A Study of LLMs' Preferences for Libraries and Programming Languages"
     authors: <b>Lukas&nbsp;Twist</b>, Mark&nbsp;Harman, Don&nbsp;Syme, Joost Noppen, Helen&nbsp;Yannakoudakis, Detlef&nbsp;Nauck &&nbsp;Jie&nbsp;M.&nbsp;Zhang
-    main: Findings of the Association for Computational Linguistics 2026 (ACL '26)
-    core_rank: "A*"
+    main: Findings of the Association for Computational Linguistics 2026 (ACL Findings '26)
+    core_rank: "A* (ACL)"
     url: https://aclanthology.org/2026.findings-acl.15
     arxiv: https://arxiv.org/abs/2503.17181
     pdf: https://aclanthology.org/2026.findings-acl.15.pdf
@@ -49,6 +49,14 @@ short:
     poster: ./assets/posters/msr-agent-library-usage.pdf
 
 preprint:
+
+  - title: "Reasoning-Trace Overflow in Code Generation: An Empirical Study of Explicit Reasoning Models"
+    authors: <b>Lukas&nbsp;Twist</b>, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
+    main: arXiv preprint, November 2026
+    arxiv: https://arxiv.org/abs/2611.06095
+    pdf: https://arxiv.org/pdf/2611.06095
+    code: https://github.com/itsluketwist/think-overflow
+    bibtex: ./assets/bibtex/arxiv-reasoning-overflow.txt
 
   - title: "Software Engineering for AI-Driven Science"
     authors: <b>Lukas&nbsp;Twist</b>, Xinjian&nbsp;Wu, Jingzhi&nbsp;Gong, Shuyin&nbsp;Ouyang, Ying&nbsp;Xiao, Benedetta&nbsp;Donato, Yaoqi&nbsp;Guo, Zhenpeng&nbsp;Chen, Leonardo&nbsp;Mariani, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
