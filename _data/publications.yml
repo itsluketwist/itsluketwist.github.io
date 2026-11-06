@@ -10,6 +10,7 @@ main:
     code: https://github.com/itsluketwist/thinkpack
     library: https://pypi.org/project/thinkpack/
     bibtex: ./assets/bibtex/neurips-reasoning-collapse.txt
+    poster: ./assets/posters/neurips-reasoning-collapse.pdf
 
   - title: "Library Hallucinations in LLM-Generated Code: A Risk Analysis Grounded in Developer Queries"
     authors: <b>Lukas&nbsp;Twist</b>, Mark&nbsp;Harman, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
