@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "cards": [
+    {
+      "id": "day1-tokenisation-long",
+      "area": "Transformer Internals",
+      "topic": "Tokenisation",
+      "length": "long",
+      "question": "How does tokenisation work in LLMs, and what are the vocabulary-size trade-offs?",
+      "answer": "- **Purpose:** Convert text into token IDs from a fixed vocabulary before embedding lookup.\n- **Byte-level BPE:** Start from individual bytes and learn frequent adjacent merges from a training corpus; encode new text using the learned vocabulary and merges.\n- **Unfamiliar text:** Can fall back to smaller pieces or bytes, so byte-level BPE normally does not require an `[UNK]` token.\n- **Larger vocabulary:** Often reduces tokens per input, but increases embedding/output parameters and can give rare tokens less training data.\n- **Poor segmentation:** Increases sequence length, compute, KV-cache use and context consumption; it can also make patterns harder to learn, especially off-domain."
+    },
+    {
+      "id": "day1-embeddings-position-long",
+      "area": "Transformer Internals",
+      "topic": "Embeddings",
+      "length": "long",
+      "question": "How are token IDs converted into embeddings, and where does position enter a modern Transformer?",
+      "answer": "- **Lookup:** An embedding table `E` has shape `[V, d_model]`; indexing with IDs `[B, T]` produces `[B, T, d_model]`.\n- **One-hot intuition:** Looking up row `i` is equivalent to multiplying a one-hot vector by `E`, but implementations do not construct the one-hot vector.\n- **Learned representations:** Embeddings are trainable parameters; the residual stream keeps width `d_model` through the blocks.\n- **Positions:** Modern decoder-only LLMs commonly apply RoPE to attention **Q and K**, not V; older designs added sinusoidal or learned position vectors to input embeddings.\n- **Why needed:** Without positional information, attention alone cannot distinguish ordering from the content vectors."
+    },
+    {
+      "id": "day1-forward-pass-long",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "long",
+      "question": "Walk through a modern decoder-only Transformer from token IDs to next-token logits.",
+      "answer": "- **Input:** Token IDs `[B, T]` index learned embeddings to create `X` of shape `[B, T, d_model]`.\n- **Pre-norm attention:** `H = X + Attn(RMSNorm(X))`; attention uses positional information (typically RoPE) and a causal mask.\n- **Pre-norm FFN:** `Y = H + FFN(RMSNorm(H))`; repeat this attention/FFN block for every layer, preserving `[B, T, d_model]`.\n- **Output:** Typically apply final `RMSNorm`, then one linear projection `[d_model, V]` to logits `[B, T, V]` (not an extra MLP).\n- **Use:** Training scores next-token targets at many positions; generation uses the final-position logits, with softmax/sampling as a separate step."
+    },
+    {
+      "id": "day1-residual-prenorm-long",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "long",
+      "question": "How do residual connections and pre-norm differ from post-norm, and why does this matter?",
+      "answer": "- **Residual stream:** Each sublayer adds its output to its input; the stream maintains width `d_model` and carries information across layers.\n- **Pre-norm:** `x_next = x + F(Norm(x))`; the skip path bypasses both the sublayer and normalisation.\n- **Gradient flow:** Its derivative includes a direct identity contribution, helping gradients propagate through deep stacks.\n- **Post-norm:** `x_next = Norm(x + F(x))`; normalisation sits after the addition, so the overall block lacks that same direct identity path.\n- **Trade-off:** Pre-norm generally makes deep LLM optimisation more stable, although post-norm can work with appropriate training choices."
+    },
+    {
+      "id": "day1-attention-mha-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "How does multi-head self-attention work, including the formula and tensor dimensions?",
+      "answer": "- **Projections:** Apply learned Q/K/V matrices to hidden states; for standard MHA reshape each to `[B, n_heads, T, d_head]`, usually with `n_heads × d_head = d_model`.\n- **Scores:** `Q @ K.transpose(-2,-1)` has shape `[B, n_heads, T, T]`, with query positions along the second-last dimension and key positions last.\n- **Scaled attention:** `Attn(Q,K,V) = softmax(QKᵀ / sqrt(d_head) + M) V`; softmax is over **key positions** (`dim=-1`).\n- **Values:** Multiplying weights by V gives `[B, n_heads, T, d_head]`, a weighted sum of values for each query.\n- **Output:** Concatenate heads to `[B, T, n_heads × d_head]` and apply learned `W_O` back to `[B, T, d_model]`.\n- **Why multiple heads:** Heads can learn different attention patterns and representational subspaces, rather than one single mixture."
+    },
+    {
+      "id": "day1-masking-scaling-rope-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "Why do decoder-only Transformers use causal masking, attention scaling and RoPE?",
+      "answer": "- **Causal mask:** Add `0` for allowed current/past positions and `-inf` for future positions to the attention scores before softmax.\n- **Scaling:** Divide QK dot products by `sqrt(d_head)`; if feature contributions have roughly unit variance, unscaled score variance grows with `d_head` and can saturate softmax.\n- **RoPE:** Rotate Q and K using position-dependent angles before their dot product, making their attention scores sensitive to relative position.\n- **Placement:** RoPE acts on Q and K, not usually V; scaling and mask act on scores before the softmax.\n- **Distinction:** `sqrt(d_head)` is an internal attention stabiliser, not the sampling temperature used on vocabulary logits."
+    },
+    {
+      "id": "day1-norms-long",
+      "area": "Transformer Internals",
+      "topic": "Normalisation",
+      "length": "long",
+      "question": "How do LayerNorm and RMSNorm work mathematically, and why is RMSNorm common in LLMs?",
+      "answer": "- **Axis:** Both normalise each token vector independently across its final `d` features, not across batches or sequence positions.\n- **LayerNorm:** `μ = mean(x)` and `σ² = mean((x-μ)²)`; `LN(x) = γ ⊙ (x-μ)/sqrt(σ²+ε) + β`.\n- **RMSNorm:** `RMS(x) = sqrt(mean(x²)+ε)` and `RMSNorm(x) = γ ⊙ x/RMS(x)`; it does not subtract the mean.\n- **Parameters:** LayerNorm typically has learned scale `γ` and bias `β`; RMSNorm usually only has learned scale `γ`.\n- **Trade-off:** RMSNorm removes mean-centering and uses fewer operations while often keeping comparable stabilising behaviour; `ε` prevents division by (near) zero."
+    },
+    {
+      "id": "day1-attention-vs-ffn-long",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "long",
+      "question": "What different roles do attention and the FFN play in a Transformer?",
+      "answer": "- **Attention:** Mixes information across token positions, producing context-dependent representations from previous tokens under a causal mask.\n- **FFN:** Processes each token representation independently with learned nonlinear feature transformations; it does not directly communicate across positions.\n- **Together:** Attention retrieves/mixes contextual information and the FFN transforms features in that representation.\n- **Removing the FFN:** The architecture would still perform attention, but lose considerable capacity and generally perform much worse."
+    },
+    {
+      "id": "day1-swiglu-long",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "long",
+      "question": "How do GELU, SiLU and SwiGLU differ, and how does the Transformer FFN use them?",
+      "answer": "- **Basic FFN:** Up-project `[B, T, d] → [B, T, m]`, apply a nonlinear activation, then down-project to `[B, T, d]`.\n- **GELU:** `GELU(x) = x Φ(x)` (standard normal CDF); similar to a smooth ReLU but can retain small negative outputs.\n- **SiLU / Swish:** `SiLU(x) = x sigmoid(x)`; smooth and used as the gate activation in SwiGLU.\n- **SwiGLU:** `FFN(x) = (SiLU(xW_gate) ⊙ (xW_up)) W_down` with two up-projections and one down-projection.\n- **Why multiply:** Input-dependent multiplicative gating lets one feature representation modulate another; addition would still be nonlinear via SiLU but would not implement the same gating."
+    },
+    {
+      "id": "day1-mlp-params-long",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "long",
+      "question": "How do you calculate MLP parameter counts, and why is the SwiGLU intermediate width often around 8d/3?",
+      "answer": "- **Standard MLP:** Two matrices of shapes `[d, D]` and `[D, d]` give `2dD` weights, excluding biases.\n- **Baseline width:** Choosing `D = 4d` gives `8d²` weights.\n- **SwiGLU:** Two matrices `[d, m]` plus one `[m, d]` give `3dm` weights.\n- **Matching parameters:** `3dm = 8d²` implies `m = 8d/3`; the smaller intermediate width compensates for the third matrix.\n- **Practice:** Implementations round `m` for hardware efficiency (e.g. `d=4096`, `m=11008`); matched parameter counts mean roughly comparable FLOPs, not identical latency."
+    },
+    {
+      "id": "day1-weight-tying-long",
+      "area": "Transformer Internals",
+      "topic": "Parameters",
+      "length": "long",
+      "question": "How do input embeddings, output projections and weight tying affect LLM parameter counts?",
+      "answer": "- **Input table:** `E` has shape `[V, d]` with `Vd` weights; token IDs index its rows.\n- **Output head:** `W_out` has shape `[d, V]` with another `Vd` weights; `logits = H W_out`.\n- **Tied weights:** Use `W_out = Eᵀ`, so `logits = H Eᵀ`; this saves `Vd` distinct parameters and their optimiser state.\n- **Trade-off:** Tying encourages a shared input/output representation and reduces size; untied weights allow more independent flexibility.\n- **Example:** `V=32000`, `d=4096` gives about **131.1M** weights per matrix, or **262.1M** combined if untied."
+    },
+    {
+      "id": "day1-teacher-forcing-long",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "long",
+      "question": "How does next-token prediction work during training, and why can positions be processed in parallel?",
+      "answer": "- **Teacher forcing:** The model receives the actual prior tokens rather than having to sample its earlier predictions.\n- **Causal attention:** Position `t` may see tokens up to `t`, but not later positions, despite processing all positions in a batch.\n- **Outputs:** Logits have shape `[B, T, V]` and are compared with next-token targets shifted by one position.\n- **Loss:** Cross-entropy over valid target positions trains the model to assign higher probability to the correct next token.\n- **Parallelism:** The target sequence is already known, so training computes predictions for all positions simultaneously; this is not the same terminology as inference prefill."
+    },
+    {
+      "id": "day1-generation-long",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "long",
+      "question": "How do prefill, autoregressive decoding, logits, temperature and sampling fit together?",
+      "answer": "- **Prefill:** Process the known prompt tokens in parallel; the final prompt position provides logits for the first generated token.\n- **Logits:** A linear output projection gives unnormalised vocabulary scores; softmax is optional when the consumer only needs logits.\n- **Temperature:** For sampling, `p_i = softmax(logits / τ)_i` with `τ > 0`; lower `τ` sharpens the distribution and higher `τ` flattens it.\n- **Selection:** Greedy decoding selects the highest logit; sampling may use temperature with top-k or top-p filtering.\n- **Autoregression:** Each selected token becomes an input for the next step, so generation is sequential across time, even though requests can be batched."
+    },
+    {
+      "id": "day1-kv-cache-long",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "long",
+      "question": "What does the KV cache store, and why do we cache K and V rather than Q?",
+      "answer": "- **Per layer:** Store K and V for every already-processed token at each Transformer attention layer; K is typically cached after RoPE and V is normally unrotated.\n- **Reason:** Under causal attention, an earlier position cannot depend on future positions, so its K and V can be reused.\n- **New token:** Compute its Q/K/V, attend from the new Q to cached-plus-new K/V, and append its K/V to the layer cache.\n- **No Q cache:** Old queries were only needed to compute outputs for their own positions, so they will not be reused for future token attention.\n- **Shape:** Standard MHA per-layer K and V each have `[B, n_kv_heads, T_cached, d_head]`; GQA uses fewer KV heads than query heads."
+    },
+    {
+      "id": "day1-costs-long",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "long",
+      "question": "How do context length, KV-cache memory and attention compute scale in prefill versus decoding?",
+      "answer": "- **Prefill attention:** Full attention over `T` prompt tokens costs `O(T²)` in sequence length for the score/value operations.\n- **Other prefill work:** Projections and FFNs scale as `O(T)` in sequence length for fixed model dimensions; total prefill runtime is not necessarily quadratic at short contexts.\n- **Cached decoding attention:** Attending one new query to `T` existing key/value positions costs `O(T)` in attention work.\n- **KV memory:** Cache grows as `O(T)` at fixed batch, layers, KV heads, head width and dtype; doubling context doubles the cache.\n- **Hardware distinction:** Prefill is often compute-bound; decoding is frequently memory-bandwidth-bound because weights and KV cache are read repeatedly."
+    },
+    {
+      "id": "day1-tensor-tracing-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "How do you trace the tensor shapes of standard multi-head attention for an example model?",
+      "answer": "- **Setup:** For `B=2`, `T=64`, `d_model=4096`, `n_heads=32`, choose `d_head=128`.\n- **Input/QKV:** `[2,64,4096]` → each projected Q/K/V `[2,64,4096]` → reshape/transpose to `[2,32,64,128]`.\n- **Scores:** Q `[2,32,64,128]` times Kᵀ `[2,32,128,64]` gives `[2,32,64,64]` (positions × positions, **not** head-width × head-width).\n- **Weighted values:** Softmax over last dimension and multiply V to get `[2,32,64,128]`.\n- **Return width:** Concatenate heads to `[2,64,4096]`, then apply `W_O` to remain `[2,64,4096]`."
+    },
+    {
+      "id": "day1-implementation-norm-mlp-long",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "long",
+      "question": "What are the main PyTorch implementation details and common mistakes for RMSNorm and SwiGLU?",
+      "answer": "- **RMSNorm reduction:** Use `(x.pow(2).mean(dim=-1, keepdim=True) + eps).sqrt()` so every token is normalised across features independently.\n- **Avoid `sum(x**2)`:** Python `sum` reduces the first axis, which can silently mix batch elements through broadcasting.\n- **Learned scale:** Register `nn.Parameter(torch.ones(dim))`, broadcast it across the leading dimensions and keep the original shape.\n- **SwiGLU layers:** Create bias-free linear projections `dim→hidden`, `dim→hidden`, `hidden→dim`; return `down(silu(gate(x)) * up(x))`.\n- **PyTorch practice:** Call the module with `module(x)` rather than `module.forward(x)`; FP32 RMS statistics can improve mixed-precision stability."
+    },
+    {
+      "id": "day1-implementation-attn-block-long",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "long",
+      "question": "What mistakes are common when assembling a pre-norm causal attention block in PyTorch?",
+      "answer": "- **Correct order:** `h = norm1(x)` → `attn_out = attention(h)` → `x = x + attn_out` → `x = x + ffn(norm2(x))`.\n- **Separate norms:** Use `norm1` for attention and `norm2` for the FFN; their scales are separately learned.\n- **Correct residual:** Add FFN output to the **updated residual stream** `x`, not to the earlier normalised tensor `h`.\n- **Causality:** Supply a causal attention mask; for `nn.MultiheadAttention`, boolean `True` means disallowed and the diagonal must remain allowed.\n- **Built-in module:** `nn.MultiheadAttention` already performs Q/K/V and output projections; ordinary self-attention passes the same normalised tensor as its three source inputs, but RoPE is not added automatically."
+    },
+    {
+      "id": "day1-bpe-short",
+      "area": "Transformer Internals",
+      "topic": "Tokenisation",
+      "length": "short",
+      "question": "What does byte-level BPE start with?",
+      "answer": "Individual bytes, then merges of frequent adjacent token pairs learned on a training corpus."
+    },
+    {
+      "id": "day1-unknown-token-short",
+      "area": "Transformer Internals",
+      "topic": "Tokenisation",
+      "length": "short",
+      "question": "Why can byte-level BPE avoid `[UNK]` tokens?",
+      "answer": "Any UTF-8 text can be represented with byte tokens, even if no larger subword matches."
+    },
+    {
+      "id": "day1-vocab-cost-short",
+      "area": "Transformer Internals",
+      "topic": "Tokenisation",
+      "length": "short",
+      "question": "What is the main trade-off in increasing vocabulary size?",
+      "answer": "Usually fewer tokens per input, but larger embedding/output matrices and potentially less data per rare token."
+    },
+    {
+      "id": "day1-embedding-shape-short",
+      "area": "Transformer Internals",
+      "topic": "Embeddings",
+      "length": "short",
+      "question": "What shapes are token IDs, embeddings and the embedding table?",
+      "answer": "IDs: `[B,T]`; lookup output: `[B,T,d_model]`; table: `[V,d_model]`."
+    },
+    {
+      "id": "day1-one-hot-short",
+      "area": "Transformer Internals",
+      "topic": "Embeddings",
+      "length": "short",
+      "question": "Are token IDs actually converted to one-hot vectors before embedding lookup?",
+      "answer": "No. One-hot multiplication is a mathematical equivalent; implementations index the embedding table directly."
+    },
+    {
+      "id": "day1-rope-qk-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Which attention tensors receive RoPE?",
+      "answer": "Q and K, not normally V; RoPE adds position information through position-dependent rotations."
+    },
+    {
+      "id": "day1-layer-equations-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "What are the two pre-norm Transformer block equations?",
+      "answer": "`H = X + Attn(Norm(X))`; `Y = H + FFN(Norm(H))` (separate learned norms)."
+    },
+    {
+      "id": "day1-final-head-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "What transforms the final hidden states into vocabulary logits?",
+      "answer": "Usually a final RMSNorm followed by a linear projection `[d_model,V]`, giving logits `[B,T,V]`."
+    },
+    {
+      "id": "day1-prenorm-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "Why is pre-norm typically easier to optimise than post-norm?",
+      "answer": "Its skip connection provides a direct identity path for gradients around both normalisation and the sublayer."
+    },
+    {
+      "id": "day1-qkv-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What do Q, K and V represent in self-attention?",
+      "answer": "Q queries relevant context, K is matched against queries, and V holds information to mix into the output."
+    },
+    {
+      "id": "day1-attention-formula-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What is the scaled dot-product attention formula with masking?",
+      "answer": "`Attn(Q,K,V) = softmax(QKᵀ / sqrt(d_head) + M) V`, with softmax over key positions."
+    },
+    {
+      "id": "day1-score-shape-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What is the attention-score shape for Q/K `[B,H,T,d_head]`?",
+      "answer": "`[B,H,T,T]`: query positions × key positions for each batch item and head."
+    },
+    {
+      "id": "day1-softmax-axis-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Which axis receives softmax in attention?",
+      "answer": "The final axis (`dim=-1`), representing key positions for each query position."
+    },
+    {
+      "id": "day1-mask-values-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What values go in an additive causal attention mask?",
+      "answer": "`0` at allowed past/current positions and `-inf` at disallowed future positions, before softmax."
+    },
+    {
+      "id": "day1-attention-scaling-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Why divide attention scores by `sqrt(d_head)`?",
+      "answer": "To control QK dot-product variance as head dimension increases and reduce softmax saturation."
+    },
+    {
+      "id": "day1-temperature-vs-scaling-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "How does sampling temperature differ from attention scaling?",
+      "answer": "Attention uses `1/sqrt(d_head)` internally for score scale; sampling divides vocabulary logits by `τ` to control output randomness."
+    },
+    {
+      "id": "day1-heads-vs-sequence-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "For `T=64`, `d_head=128`, what are per-head QKᵀ dimensions?",
+      "answer": "`[64,64]` per head, because scores compare query positions with key positions, not feature dimensions."
+    },
+    {
+      "id": "day1-rms-formula-short",
+      "area": "Transformer Internals",
+      "topic": "Normalisation",
+      "length": "short",
+      "question": "What is the RMSNorm formula?",
+      "answer": "`RMSNorm(x) = γ ⊙ x / sqrt(mean(x²) + ε)`, where the mean is across the last feature dimension."
+    },
+    {
+      "id": "day1-layernorm-formula-short",
+      "area": "Transformer Internals",
+      "topic": "Normalisation",
+      "length": "short",
+      "question": "What is the LayerNorm formula?",
+      "answer": "`LN(x) = γ ⊙ (x-μ)/sqrt(σ²+ε) + β`, with mean and variance over each token vector."
+    },
+    {
+      "id": "day1-norm-axis-short",
+      "area": "Transformer Internals",
+      "topic": "Normalisation",
+      "length": "short",
+      "question": "Do LayerNorm and RMSNorm mix information across tokens?",
+      "answer": "No. Both normally compute statistics independently across each token’s final feature dimension."
+    },
+    {
+      "id": "day1-rms-epsilon-short",
+      "area": "Transformer Internals",
+      "topic": "Normalisation",
+      "length": "short",
+      "question": "Where is epsilon added in RMSNorm?",
+      "answer": "After taking the mean of squared features and before the square root: `sqrt(mean(x²) + ε)`."
+    },
+    {
+      "id": "day1-rms-reduction-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "Why is `sum(x**2)` wrong for batched RMSNorm inputs?",
+      "answer": "Python `sum` reduces the first (batch) dimension, not the final feature dimension."
+    },
+    {
+      "id": "day1-rms-keepdim-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "Why use `keepdim=True` in RMSNorm?",
+      "answer": "It preserves a trailing size-1 feature axis so the per-token RMS broadcasts across features."
+    },
+    {
+      "id": "day1-gelu-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "What is GELU?",
+      "answer": "`GELU(x) = x Φ(x)` where `Φ` is the standard normal CDF; a smooth alternative to ReLU."
+    },
+    {
+      "id": "day1-silu-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "What is SiLU?",
+      "answer": "`SiLU(x) = x sigmoid(x)`; it is the smooth gate activation used in SwiGLU."
+    },
+    {
+      "id": "day1-swiglu-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "What is the SwiGLU FFN equation?",
+      "answer": "`FFN(x) = (SiLU(xW_gate) ⊙ xW_up) W_down`: two up-projections and one down-projection."
+    },
+    {
+      "id": "day1-gating-vs-add-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "Why does SwiGLU multiply its two intermediate vectors rather than add them?",
+      "answer": "Multiplication provides input-dependent feature gating; addition would not provide the same interaction."
+    },
+    {
+      "id": "day1-mlp-param-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "How many weights do a standard MLP and SwiGLU MLP contain?",
+      "answer": "Ignoring biases: standard `2dD`; SwiGLU `3dm`, with `d` as model width and `D`/`m` as intermediate widths."
+    },
+    {
+      "id": "day1-swiglu-width-short",
+      "area": "Transformer Internals",
+      "topic": "MLPs",
+      "length": "short",
+      "question": "Why is the parameter-matched SwiGLU width approximately `8d/3`?",
+      "answer": "Match a conventional `4d` MLP: `3dm = 8d²`, so `m = 8d/3`."
+    },
+    {
+      "id": "day1-nnlinear-bias-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "What bias-related detail matters when implementing a modern SwiGLU MLP with `nn.Linear`?",
+      "answer": "`nn.Linear` defaults to `bias=True`; set `bias=False` when matching a bias-free LLM FFN."
+    },
+    {
+      "id": "day1-weight-tying-short",
+      "area": "Transformer Internals",
+      "topic": "Parameters",
+      "length": "short",
+      "question": "What is embedding/output weight tying?",
+      "answer": "Reuse the embedding table `E [V,d]` as the transposed output projection: `logits = H Eᵀ`."
+    },
+    {
+      "id": "day1-weight-count-short",
+      "area": "Transformer Internals",
+      "topic": "Parameters",
+      "length": "short",
+      "question": "How many weights does a `[32000,4096]` embedding table contain?",
+      "answer": "`32,000 × 4,096 = 131,072,000`, about 131.1 million parameters."
+    },
+    {
+      "id": "day1-teacher-forcing-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "What does teacher forcing mean for next-token training?",
+      "answer": "The model receives ground-truth previous tokens, allowing predictions at all positions in parallel."
+    },
+    {
+      "id": "day1-shifted-labels-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "How are next-token targets aligned with logits in LLM training?",
+      "answer": "Logits at position `t` are compared with the ground-truth token at `t+1` using cross-entropy."
+    },
+    {
+      "id": "day1-logits-vs-probs-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "What is the difference between logits and token probabilities?",
+      "answer": "Logits are unnormalised vocabulary scores; softmax converts them into a distribution summing to one."
+    },
+    {
+      "id": "day1-temperature-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "What happens when you lower the sampling temperature?",
+      "answer": "Dividing logits by a smaller positive `τ` sharpens the softmax distribution and favours high-scoring tokens."
+    },
+    {
+      "id": "day1-prefill-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "What is prefill during LLM inference?",
+      "answer": "The model processes the entire known prompt in parallel before autoregressive token decoding."
+    },
+    {
+      "id": "day1-decode-dependency-short",
+      "area": "Transformer Internals",
+      "topic": "Training and Inference",
+      "length": "short",
+      "question": "Why is generation sequential across time?",
+      "answer": "The next token depends on the token chosen at the previous step, so it cannot be known in advance."
+    },
+    {
+      "id": "day1-cache-contents-short",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "short",
+      "question": "Which tensors does each Transformer layer keep in the KV cache?",
+      "answer": "K and V for earlier processed tokens; K is typically after RoPE, while V is not rotated."
+    },
+    {
+      "id": "day1-why-no-q-short",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "short",
+      "question": "Why are previous queries not cached?",
+      "answer": "Past Q vectors have already been used for their own outputs; future queries use past K and V instead."
+    },
+    {
+      "id": "day1-cache-memory-short",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "short",
+      "question": "How does KV-cache memory change when context length doubles?",
+      "answer": "It roughly doubles, with fixed batch size, layer count, KV heads, head width and dtype."
+    },
+    {
+      "id": "day1-prefill-quadratic-short",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "short",
+      "question": "What happens to full-attention prefill work when sequence length doubles?",
+      "answer": "The quadratic attention score/value work grows about 4×, though the full block also includes linear-in-length work."
+    },
+    {
+      "id": "day1-decode-linear-short",
+      "area": "Transformer Internals",
+      "topic": "Efficiency",
+      "length": "short",
+      "question": "How does cached single-token attention work scale with existing context length?",
+      "answer": "It scales linearly in the number of cached positions, because one query attends to all cached keys."
+    },
+    {
+      "id": "day1-pytorch-mha-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "Does `nn.MultiheadAttention` require you to supply pre-projected Q, K and V?",
+      "answer": "No. It learns Q/K/V and output projections internally; supply the source tensors and an appropriate causal mask."
+    },
+    {
+      "id": "day1-residual-bug-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "After attention, what should the FFN residual be added to in a pre-norm block?",
+      "answer": "The updated residual stream after the attention addition, not the earlier normalised tensor."
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "cards": [
+    {
+      "id": "ml-probability-long",
+      "area": "ML Fundamentals",
+      "topic": "Probability",
+      "length": "long",
+      "question": "What are conditional probability, Bayes' theorem and independence?",
+      "answer": "- **Conditional probability:** The chance of A happening given that B has occurred: `P(A|B) = P(A ∩ B) / P(B)` (where `P(B) > 0`).\n- **Bayes' theorem:** Update a prior belief using new evidence: `P(A|B) = P(B|A)P(A) / P(B)`.\n- **Prior:** `P(A)` is the probability before observing B; **posterior:** `P(A|B)` is the updated probability.\n- **Independence:** If A and B are independent, knowing B does not change the probability of A: `P(A|B) = P(A)`."
+    },
+    {
+      "id": "ml-regression-long",
+      "area": "ML Fundamentals",
+      "topic": "Regression",
+      "length": "long",
+      "question": "How do linear and logistic regression differ, and how are they trained?",
+      "answer": "- **Both:** Discriminative models that can use multiple input features, represented by a weight vector `w`.\n- **Linear regression:** Predicts a continuous value with `f(x) = wᵀx + b`; typically uses mean squared error (MSE).\n- **Logistic regression:** Predicts a binary-class probability with `f(x) = sigmoid(wᵀx + b)`; typically uses binary cross-entropy (BCE).\n- **Sigmoid:** Maps any real-valued score to a probability between 0 and 1.\n- **Training:** Both can use gradient descent and backpropagation, and are equivalent to a single neuron with no hidden layers (with or without sigmoid).\n- **Difference:** Ordinary least-squares linear regression also has a closed-form solution; logistic regression is normally trained iteratively."
+    },
+    {
+      "id": "ml-kmeans-long",
+      "area": "ML Fundamentals",
+      "topic": "Clustering",
+      "length": "long",
+      "question": "How does K-means clustering work, and what are its limitations?",
+      "answer": "- **Purpose:** Unsupervised algorithm for grouping points into `K` clusters in a vector space.\n- **Step 1:** Initialise `K` centroids, randomly or using K-means++.\n- **Step 2:** Assign each point to its nearest centroid.\n- **Step 3:** Recalculate each centroid as the mean of its assigned points.\n- **Step 4:** Repeat assignment and updating until the clusters stabilise or another stopping criterion is met.\n- **Objective:** Minimise the sum of squared distances from each point to its assigned centroid.\n- **Limitations:** Can converge to local optima; sensitive to initialisation, feature scaling and outliers. Works best with compact clusters."
+    },
+    {
+      "id": "ml-knn-long",
+      "area": "ML Fundamentals",
+      "topic": "Nearest Neighbours",
+      "length": "long",
+      "question": "How does KNN work, and how does it differ from K-means?",
+      "answer": "- **Purpose:** Supervised classification or regression based on nearby labelled examples.\n- **Training:** Little or no model fitting; stores the labelled training points.\n- **Inference:** Find the `K` nearest training examples using a distance metric.\n- **Prediction:** Use a majority vote or neighbour frequencies for classification, or an average for regression.\n- **KNN vs K-means:** `K` means neighbours in KNN, but clusters in K-means; KNN is supervised, K-means unsupervised.\n- **Curse of dimensionality:** Distances get more expensive and can become less informative as dimensions increase."
+    },
+    {
+      "id": "ml-splits-long",
+      "area": "ML Fundamentals",
+      "topic": "Evaluation",
+      "length": "long",
+      "question": "What are training, validation and test sets, and how should they be used?",
+      "answer": "- **Training set:** Learn the model parameters.\n- **Validation set:** Tune hyperparameters, select checkpoints and monitor training.\n- **Test set:** Estimate generalisation after model selection, ideally without bias from prior tuning.\n- **Data leakage:** Unavailable information influences training or model selection. Repeatedly tuning using test results also biases evaluation.\n- **Distribution:** Splits usually represent the same underlying distribution (IID); deliberately different test sets can measure out-of-distribution robustness."
+    },
+    {
+      "id": "ml-overfitting-long",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "long",
+      "question": "What is overfitting, and how can it be reduced?",
+      "answer": "- **Overfitting:** The model learns training-specific patterns or noise and fails to generalise to unseen data.\n- **Warning sign:** Training loss continues decreasing while validation loss starts increasing.\n- **Dropout:** Randomly disables some activations during training to reduce reliance on particular pathways.\n- **Early stopping:** Stops training when validation performance no longer improves.\n- **L1 regularisation:** Penalises absolute weights, encouraging sparse or zero weights.\n- **L2 regularisation:** Penalises squared weights, encouraging smaller weights, especially avoiding large ones.\n- **Other approaches:** Use a simpler model, or more representative and better-quality training data."
+    },
+    {
+      "id": "ml-bias-variance-long",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "long",
+      "question": "What is the bias–variance tradeoff?",
+      "answer": "- **Bias:** Systematic error from restrictive model assumptions; high bias often causes underfitting.\n- **Variance:** How much a fitted model changes when trained on different samples of data.\n- **High variance:** A flexible model can fit training-specific noise, making it prone to overfitting.\n- **Tradeoff:** More complexity often lowers bias but raises variance; aim to learn useful patterns without fitting noise.\n- **Important:** Model variance means variation *across different training datasets*, not simply variation in predictions across inputs."
+    },
+    {
+      "id": "ml-ce-kl-long",
+      "area": "ML Fundamentals",
+      "topic": "Loss Functions",
+      "length": "long",
+      "question": "What is the relationship between cross-entropy and KL divergence?",
+      "answer": "- **Cross-entropy:** `H(P,Q)` is the expected negative log-probability under prediction `Q` when the target comes from `P`.\n- **KL divergence:** `KL(P||Q)` measures the extra cost of using `Q` instead of the target distribution `P`.\n- **Relationship:** `H(P,Q) = H(P) + KL(P||Q)`; they differ by the entropy of the target distribution.\n- **One-hot targets:** `H(P) = 0`, so cross-entropy and KL are numerically equal for standard per-token LLM pretraining/SFT targets.\n- **Uses:** Cross-entropy is a standard training loss; KL can measure or penalise divergence from a reference policy during RL. KL direction matters."
+    },
+    {
+      "id": "ml-generative-discriminative-long",
+      "area": "ML Fundamentals",
+      "topic": "Model Types",
+      "length": "long",
+      "question": "How do generative and discriminative models differ?",
+      "answer": "- **Generative models:** Learn a data distribution, such as `P(x)` or the joint distribution `P(x,y)`.\n- **Generative examples:** Autoregressive LLMs, image generation models and naive Bayes classifiers. Generating new samples is not required.\n- **Discriminative models:** Learn conditional predictions such as `P(y|x)`, or directly learn a decision boundary.\n- **Discriminative examples:** Logistic regression and neural-network classifiers.\n- **Key difference:** What they model, rather than simply generating data versus classifying. Clustering is not necessarily discriminative."
+    },
+    {
+      "id": "tf-architectures-long",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "long",
+      "question": "How do encoder-only, encoder–decoder and decoder-only Transformers differ?",
+      "answer": "- **Encoder-only (e.g. BERT):** Bidirectional self-attention over the full input; produces contextualised representations, often for classification or understanding tasks.\n- **Encoder–decoder (e.g. T5):** Encoder reads the input bidirectionally; decoder generates output autoregressively using causal self-attention plus cross-attention to the encoder.\n- **Decoder-only (e.g. GPT, Mistral):** Causal self-attention means each token attends only to itself and earlier tokens; predicts the next token.\n- **Why decoder-only is common:** Simple, flexible design with a scalable next-token pretraining objective on large text corpora."
+    },
+    {
+      "id": "tf-cross-attention-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "How do self-attention and cross-attention work in an encoder–decoder Transformer?",
+      "answer": "- **Decoder self-attention:** Q, K and V come from the decoder hidden states; causal masking blocks future output tokens.\n- **Cross-attention:** Q comes from the decoder, while K and V come from the encoder outputs.\n- **Purpose:** Lets each decoder position select relevant information from the input sequence while generating output.\n- **Caching:** Encoder-side K and V remain fixed during generation and can be cached; decoder self-attention KV cache grows with generated tokens.\n- **Important:** Standard encoder–decoder cross-attention does not also use decoder K and V; the decoder attends to its own tokens through self-attention."
+    },
+    {
+      "id": "ml-conditional-short",
+      "area": "ML Fundamentals",
+      "topic": "Probability",
+      "length": "short",
+      "question": "What is conditional probability?",
+      "answer": "The chance of `A` given `B`: `P(A|B) = P(A ∩ B) / P(B)` (for `P(B) > 0`)."
+    },
+    {
+      "id": "ml-bayes-short",
+      "area": "ML Fundamentals",
+      "topic": "Probability",
+      "length": "short",
+      "question": "What is Bayes' theorem?",
+      "answer": "`P(A|B) = P(B|A)P(A) / P(B)`. It updates a prior belief using evidence."
+    },
+    {
+      "id": "ml-independence-short",
+      "area": "ML Fundamentals",
+      "topic": "Probability",
+      "length": "short",
+      "question": "What does it mean for two events to be independent?",
+      "answer": "Knowing one occurred does not change the other's probability: `P(A|B) = P(A)` when `P(B) > 0`."
+    },
+    {
+      "id": "ml-regression-difference-short",
+      "area": "ML Fundamentals",
+      "topic": "Regression",
+      "length": "short",
+      "question": "Linear vs logistic regression?",
+      "answer": "Linear predicts a continuous value; logistic predicts a binary-class probability using sigmoid."
+    },
+    {
+      "id": "ml-regression-loss-short",
+      "area": "ML Fundamentals",
+      "topic": "Regression",
+      "length": "short",
+      "question": "What losses are typically used for linear and logistic regression?",
+      "answer": "Linear: mean squared error (MSE). Logistic: binary cross-entropy (BCE)."
+    },
+    {
+      "id": "ml-sigmoid-short",
+      "area": "ML Fundamentals",
+      "topic": "Regression",
+      "length": "short",
+      "question": "What does the sigmoid function do?",
+      "answer": "Maps a real-valued score to a value between 0 and 1."
+    },
+    {
+      "id": "ml-regression-training-short",
+      "area": "ML Fundamentals",
+      "topic": "Regression",
+      "length": "short",
+      "question": "Can linear and logistic regression both use gradient descent?",
+      "answer": "Yes. Both use gradients to update their weights; least-squares linear regression also has a closed-form solution."
+    },
+    {
+      "id": "ml-kmeans-short",
+      "area": "ML Fundamentals",
+      "topic": "Clustering",
+      "length": "short",
+      "question": "What is K-means?",
+      "answer": "Unsupervised clustering: assign points to `K` centroids, recompute centroid means, repeat."
+    },
+    {
+      "id": "ml-kmeans-objective-short",
+      "area": "ML Fundamentals",
+      "topic": "Clustering",
+      "length": "short",
+      "question": "What does K-means minimise?",
+      "answer": "The sum of squared distances between each point and its assigned centroid."
+    },
+    {
+      "id": "ml-knn-short",
+      "area": "ML Fundamentals",
+      "topic": "Nearest Neighbours",
+      "length": "short",
+      "question": "What is KNN?",
+      "answer": "A supervised method predicting from the labels or values of the `K` closest training examples."
+    },
+    {
+      "id": "ml-k-difference-short",
+      "area": "ML Fundamentals",
+      "topic": "Nearest Neighbours",
+      "length": "short",
+      "question": "What does K mean in KNN versus K-means?",
+      "answer": "KNN: number of neighbours. K-means: number of clusters."
+    },
+    {
+      "id": "ml-dimensionality-short",
+      "area": "ML Fundamentals",
+      "topic": "Nearest Neighbours",
+      "length": "short",
+      "question": "Why does KNN struggle in high dimensions?",
+      "answer": "Distance calculations grow costlier, and sparse high-dimensional distances can become less informative."
+    },
+    {
+      "id": "ml-splits-short",
+      "area": "ML Fundamentals",
+      "topic": "Evaluation",
+      "length": "short",
+      "question": "What is each data split for?",
+      "answer": "Training fits parameters; validation tunes/selects models; test estimates final generalisation."
+    },
+    {
+      "id": "ml-leakage-short",
+      "area": "ML Fundamentals",
+      "topic": "Evaluation",
+      "length": "short",
+      "question": "What is data leakage?",
+      "answer": "Information that should be unavailable improperly influences training or model selection, inflating evaluation."
+    },
+    {
+      "id": "ml-shift-short",
+      "area": "ML Fundamentals",
+      "topic": "Evaluation",
+      "length": "short",
+      "question": "What is distribution shift?",
+      "answer": "When data seen during deployment or evaluation follows a different distribution from training data."
+    },
+    {
+      "id": "ml-test-tuning-short",
+      "area": "ML Fundamentals",
+      "topic": "Evaluation",
+      "length": "short",
+      "question": "Why avoid repeatedly tuning against the test set?",
+      "answer": "You indirectly select models to fit that test set, making its evaluation optimistically biased."
+    },
+    {
+      "id": "ml-overfitting-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What is overfitting?",
+      "answer": "Learning training-specific patterns or noise that don't generalise to unseen examples."
+    },
+    {
+      "id": "ml-dropout-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What is dropout?",
+      "answer": "Randomly disable some activations during training to discourage reliance on particular pathways."
+    },
+    {
+      "id": "ml-early-stop-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What is early stopping?",
+      "answer": "Stop when validation performance stops improving, rather than continuing to fit the training set."
+    },
+    {
+      "id": "ml-regularisation-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What is regularisation?",
+      "answer": "Constraining or penalising model complexity to help generalisation and reduce overfitting."
+    },
+    {
+      "id": "ml-l1-l2-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "How do L1 and L2 regularisation differ?",
+      "answer": "L1 penalises absolute weights and encourages sparsity; L2 penalises squared weights and encourages small weights."
+    },
+    {
+      "id": "ml-adamw-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "How does AdamW weight decay relate to L2 regularisation?",
+      "answer": "AdamW applies decoupled weight decay; unlike SGD, Adam's L2 penalty is not generally equivalent to weight decay."
+    },
+    {
+      "id": "ml-bias-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What does high model bias mean?",
+      "answer": "Overly restrictive assumptions cause systematic error, often leading to underfitting."
+    },
+    {
+      "id": "ml-variance-short",
+      "area": "ML Fundamentals",
+      "topic": "Generalisation",
+      "length": "short",
+      "question": "What does high model variance mean?",
+      "answer": "The fitted model changes substantially when trained on different samples of data."
+    },
+    {
+      "id": "ml-ce-kl-short",
+      "area": "ML Fundamentals",
+      "topic": "Loss Functions",
+      "length": "short",
+      "question": "How are cross-entropy and KL divergence related?",
+      "answer": "`H(P,Q) = H(P) + KL(P||Q)`. They are equal for zero-entropy targets, including one-hot labels."
+    },
+    {
+      "id": "ml-one-hot-short",
+      "area": "ML Fundamentals",
+      "topic": "Loss Functions",
+      "length": "short",
+      "question": "Why are cross-entropy and KL equal for one-hot targets?",
+      "answer": "A one-hot target has zero entropy, so `H(P,Q) = KL(P||Q)`."
+    },
+    {
+      "id": "ml-gen-discrim-short",
+      "area": "ML Fundamentals",
+      "topic": "Model Types",
+      "length": "short",
+      "question": "Generative vs discriminative models?",
+      "answer": "Generative models learn data or joint distributions; discriminative models learn conditional predictions or boundaries."
+    },
+    {
+      "id": "tf-encoder-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "What is an encoder-only Transformer used for?",
+      "answer": "Bidirectional input representations, commonly used for classification and understanding tasks (e.g. BERT)."
+    },
+    {
+      "id": "tf-encdec-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "What distinguishes an encoder–decoder Transformer?",
+      "answer": "A bidirectional encoder and causal decoder, connected by cross-attention (e.g. T5)."
+    },
+    {
+      "id": "tf-decoder-short",
+      "area": "Transformer Internals",
+      "topic": "Architectures",
+      "length": "short",
+      "question": "What distinguishes a decoder-only Transformer?",
+      "answer": "Causal self-attention with autoregressive next-token prediction (e.g. GPT or Mistral)."
+    },
+    {
+      "id": "tf-self-cross-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Self-attention vs cross-attention?",
+      "answer": "Self-attention draws Q/K/V from one sequence; cross-attention uses decoder Q and encoder K/V."
+    },
+    {
+      "id": "tf-cross-kv-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "In encoder–decoder cross-attention, where do K and V come from?",
+      "answer": "Both come from encoder outputs; decoder states provide Q."
+    },
+    {
+      "id": "tf-causal-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does a causal attention mask prevent?",
+      "answer": "A token attending to future token positions during autoregressive prediction."
+    }
+  ]
+}

@@ -1,0 +1,479 @@
+---
+# flashcard revision page, served at /llmcards/ (unlisted: not linked from the homepage, not in search engines)
+# the cards come from every json file in _data/llmcards/, embedded when the site is built (see the script below)
+layout: null
+sitemap: false
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM flashcards | {{ site.title }}</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="{{ site.favicon | remove_first: '.' | relative_url }}" type="image/png">
+
+  <!-- the site's own font and styles, as used by blog posts (this page is light mode only) -->
+  <link rel="stylesheet" href="{{ '/assets/css/font_sans_serif.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style-no-dark-mode.css' | relative_url }}">
+
+  <style>
+    /* colours taken from the rest of the site */
+    :root {
+      --ink: #043361;       /* heading navy */
+      --muted: #828282;
+      --line: #e5e5e5;      /* border grey */
+      --blue: #3399cc;      /* link blue */
+      --blue-dark: #006699; /* link hover blue */
+      --blue-bg: #f5fafd;   /* faint blue of the blog post title box */
+      --orange: #e65100;    /* hover orange */
+      --good: #197450;
+      --good-bg: #e7f6ef;
+      --bad: #b94145;
+      --bad-bg: #fff0f0;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    /* filters: two dropdowns, then the card length tabs and the random toggle */
+    .filters { margin-bottom: 1.5em; }
+    .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field-label { display: block; margin-bottom: 4px; font-size: 12px; color: var(--muted); }
+    .multiselect { position: relative; }
+    .dropdown { width: 100%; min-height: 40px; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; text-align: left; color: #333; background: #fff; border: 1px solid var(--line); }
+    .dropdown:hover { border-color: var(--blue); }
+    .dropdown .val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chevron { font-size: 11px; color: var(--muted); }
+    .menu { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; right: 0; max-height: 260px; overflow: auto; padding: 6px; background: #fff; border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); }
+    .menu-head { padding: 4px 6px 6px; font-size: 11px; color: var(--muted); }
+    .option { display: flex; align-items: center; gap: 8px; padding: 6px; font-size: 13px; cursor: pointer; }
+    .option:hover { background: var(--blue-bg); }
+    .option input, .check input { width: 16px; height: 16px; margin: 0; accent-color: var(--blue); }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; }
+    .tabs { display: inline-flex; }
+    .tabs button { padding: 6px 12px; font-size: 12px; color: #333; background: #fff; border: 1px solid var(--line); }
+    .tabs button + button { border-left: 0; }
+    .tabs button[aria-pressed="true"] { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .check { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+    .note { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+
+    /* round progress */
+    .status { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: 12px; color: var(--muted); }
+    .status strong { color: var(--ink); font-weight: 600; }
+    .progress { height: 4px; margin-bottom: 1em; background: var(--line); }
+    .progress > div { width: 0; height: 100%; background: var(--blue); transition: width 0.2s; }
+
+    /* the card and the end-of-round boxes: white, with the site's blue line on the left */
+    .panel { padding: 1.2em 1.4em; border: 1px solid var(--line); border-left: 3px solid var(--blue); }
+    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .overline { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .chip { padding: 2px 8px; font-size: 11px; color: var(--muted); border: 1px solid var(--line); }
+    .question { min-height: 120px; display: flex; align-items: center; justify-content: center; margin: 16px 0; text-align: center; }
+    .question h2 { margin: 0; font-size: 22px; line-height: 1.35; }
+    .answer { padding: 14px 18px; background: var(--blue-bg); }
+    .answer p, .answer ul, .answer ol { margin: 0 0 10px; }
+    .answer > :last-child { margin-bottom: 0; }
+    .answer ul, .answer ol { padding-left: 22px; }
+    .answer li { margin: 3px 0; }
+    .answer code { padding: 1px 4px; font-size: 0.9em; background: #fff; }
+    .answer strong { color: var(--ink); font-weight: 600; }
+    .card-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .tip { font-size: 12px; color: var(--muted); }
+
+    /* buttons: square and outlined like the publication buttons, main action in the link blue */
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn { min-height: 40px; padding: 8px 14px; font-size: 13px; color: #000; background: #fff; border: 1px solid #000; }
+    .btn:hover { color: var(--orange); border-color: var(--orange); }
+    .btn.primary { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .btn.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .btn.good { color: var(--good); background: var(--good-bg); border-color: var(--good); }
+    .btn.bad { color: var(--bad); background: var(--bad-bg); border-color: var(--bad); }
+    .btn.good:hover, .btn.bad:hover { filter: brightness(0.95); }
+    .summary { text-align: center; }
+    .summary h2 { margin: 6px 0 10px; }
+    .summary p { max-width: 520px; margin: 0 auto 18px; }
+    .summary .actions { justify-content: center; }
+    .error { color: var(--bad); border-left-color: var(--bad); }
+    .bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 12px; }
+    .link-button { padding: 4px 0; font-size: 12px; color: var(--blue); background: none; border: 0; }
+    .link-button:hover { color: var(--blue-dark); }
+
+    /* phones have no keyboard, so hide the shortcut hint */
+    @media (hover: none) { .keys { display: none; } }
+
+    @media (max-width: 560px) {
+      .filter-grid { grid-template-columns: 1fr; }
+      .tabs { width: 100%; }
+      .tabs button { flex: 1; padding: 8px 4px; }
+      .panel { padding: 1em; }
+      .actions { width: 100%; }
+      .actions .btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- divs rather than header/section/footer tags, which the site's stylesheet lays out for the homepage -->
+  <div class="post-wrapper">
+
+    <!-- "cd ~" is the shell command for going home, as on blog posts -->
+    <a class="post-home" href="{{ '/' | relative_url }}"><code>cd ~</code></a>
+
+    <!-- title in the same faint blue box as blog post titles -->
+    <div class="post-header" style="margin-top: 2em;">
+      <h1>LLM flashcards</h1>
+      <p class="post-date">Interview revision &middot; <span id="totalCards">loading&hellip;</span></p>
+    </div>
+
+    <div class="filters" role="group" aria-label="Study filters">
+      <div class="filter-grid">
+        <div class="multiselect">
+          <label class="field-label" for="areasButton">Areas</label>
+          <button type="button" id="areasButton" class="dropdown" aria-haspopup="true" aria-expanded="false"><span class="val">All areas</span><span class="chevron">&#9662;</span></button>
+          <div id="areasMenu" class="menu" hidden></div>
+        </div>
+        <div class="multiselect">
+          <label class="field-label" for="topicsButton">Topics</label>
+          <button type="button" id="topicsButton" class="dropdown" aria-haspopup="true" aria-expanded="false"><span class="val">All topics</span><span class="chevron">&#9662;</span></button>
+          <div id="topicsMenu" class="menu" hidden></div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="tabs" role="group" aria-label="Card length">
+          <button type="button" data-length="short" aria-pressed="false">Quick recall</button>
+          <button type="button" data-length="long" aria-pressed="true">Interview questions</button>
+          <button type="button" data-length="both" aria-pressed="false">Both</button>
+        </div>
+        <label class="check"><input id="randomToggle" type="checkbox"> Random order</label>
+      </div>
+      <p class="note">Changing a filter starts a new round. Leaving a filter unticked includes everything.</p>
+    </div>
+
+    <div class="status" aria-live="polite"><span id="progressLabel">Loading cards&hellip;</span><span id="scoreLabel"></span></div>
+    <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+
+    <!-- the current card -->
+    <div class="panel" id="studyCard" hidden>
+      <div class="card-top"><span class="overline" id="sideLabel">Question</span><span class="chip" id="topicLabel"></span></div>
+      <div class="question"><h2 id="questionText"></h2></div>
+      <div id="answerText" class="answer" hidden></div>
+      <div class="card-foot">
+        <span id="tipText" class="tip"></span>
+        <div class="actions">
+          <button type="button" class="btn primary" id="revealButton">Reveal answer</button>
+          <button type="button" class="btn bad" id="wrongButton" hidden>&#10005; Wrong</button>
+          <button type="button" class="btn good" id="rightButton" hidden>&#10003; Right</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- shown at the end of a round -->
+    <div class="panel summary" id="finished" hidden aria-live="polite">
+      <div class="overline" id="finishEyebrow"></div>
+      <h2 id="finishTitle"></h2>
+      <p id="finishDescription"></p>
+      <div class="actions">
+        <button type="button" class="btn primary" id="retryWrongButton">Redo wrong cards</button>
+        <button type="button" class="btn" id="restartButton">Restart all</button>
+      </div>
+    </div>
+
+    <div class="panel summary" id="empty" hidden><h2>No matching cards</h2><p>Try changing the selected areas, topics or card length.</p></div>
+    <div class="panel error" id="loadError" hidden></div>
+
+    <div class="bottom">
+      <button class="link-button" type="button" id="resetButton">&#8634; Restart this selection</button>
+      <span class="tip keys">Keyboard: Space = reveal &middot; 1 = wrong &middot; 2 = right</span>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    // every json file in _data/llmcards/ is embedded here by jekyll when the site is built, keyed by file name
+    // ("</" is escaped so that card text can never close this script tag)
+    const decks = {{ site.data.llmcards | jsonify | replace: '</', '<\/' }};
+
+    const $ = id => document.getElementById(id);
+
+    // everything the page remembers about the current round
+    const state = {
+      cards: [],         // every card, from every file
+      areas: new Set(),  // ticked areas (none ticked = all)
+      topics: new Set(), // ticked topics (none ticked = all)
+      length: 'long',    // 'short', 'long' or 'both'
+      random: false,
+      queue: [],         // the cards in this round, in order
+      index: 0,          // position in the queue
+      wrong: new Set(),  // ids of cards still to revisit
+      correct: 0,
+      incorrect: 0,
+      retry: false,      // true while redoing the wrong cards
+      revealed: false,
+    };
+
+    // merge the cards from every file, checking each one so a typo shows an error instead of a broken card
+    function collectCards() {
+      const cards = [];
+      const ids = new Set();
+      // numeric sort, so day_2 comes before day_10
+      const files = Object.keys(decks || {}).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+      for (const file of files) {
+        if (!Array.isArray(decks[file].cards)) throw Error(`${file}.json has no "cards" list`);
+        for (const c of decks[file].cards) {
+          const valid = c.id && c.area && c.topic && ['short', 'long'].includes(c.length)
+            && typeof c.question === 'string' && typeof c.answer === 'string';
+          if (!valid) throw Error(`invalid card "${c.id || 'with no id'}" in ${file}.json`);
+          if (ids.has(c.id)) throw Error(`duplicate card id "${c.id}" in ${file}.json`);
+          ids.add(c.id);
+          cards.push(c);
+        }
+      }
+      return cards;
+    }
+
+    // card text is escaped before any formatting is added, so it can never inject html
+    const escapeHtml = s => String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    // inline markdown: `code`, **bold** and *italic* (odd pieces between backticks are code, left unformatted)
+    const inlineMd = raw => escapeHtml(raw)
+      .split('`')
+      .map((part, i) => i % 2
+        ? `<code>${part}</code>`
+        : part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*]+)\*/g, '<em>$1</em>'))
+      .join('');
+
+    // block markdown: paragraphs, "- " bullet lists and "1. " numbered lists
+    function markdown(raw) {
+      const bullet = /^[-*] /;
+      const numbered = /^\d+[.)] /;
+      const lines = String(raw).replace(/\r\n?/g, '\n').split('\n');
+      const parts = [];
+      let i = 0;
+      while (i < lines.length) {
+        if (!lines[i].trim()) { i++; continue; }
+        // a run of list lines becomes one list
+        const marker = numbered.test(lines[i]) ? numbered : bullet.test(lines[i]) ? bullet : null;
+        if (marker) {
+          const items = [];
+          while (i < lines.length && marker.test(lines[i])) {
+            items.push(`<li>${inlineMd(lines[i].replace(marker, ''))}</li>`);
+            i++;
+          }
+          const tag = marker === numbered ? 'ol' : 'ul';
+          parts.push(`<${tag}>${items.join('')}</${tag}>`);
+          continue;
+        }
+        // other lines, up to a blank line or a list, form one paragraph
+        const paragraph = [];
+        while (i < lines.length && lines[i].trim() && !bullet.test(lines[i]) && !numbered.test(lines[i])) {
+          paragraph.push(inlineMd(lines[i]));
+          i++;
+        }
+        parts.push(`<p>${paragraph.join('<br>')}</p>`);
+      }
+      return parts.join('');
+    }
+
+    function shuffle(cards) {
+      const a = [...cards];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // filtering
+    const inAreas = c => !state.areas.size || state.areas.has(c.area);
+    const areasAvailable = () => [...new Set(state.cards.map(c => c.area))].sort();
+    const topicsAvailable = () => [...new Set(state.cards.filter(inAreas).map(c => c.topic))].sort(); // topics of ticked areas only
+    const selectedCards = () => state.cards.filter(c =>
+      inAreas(c)
+      && (!state.topics.size || state.topics.has(c.topic))
+      && (state.length === 'both' || state.length === c.length)
+    );
+
+    // rebuild a dropdown's label and its list of checkboxes ("areas" or "topics")
+    function updateMenu(which) {
+      const isArea = which === 'areas';
+      const choices = isArea ? areasAvailable() : topicsAvailable();
+      const selected = isArea ? state.areas : state.topics;
+      $(which + 'Button').querySelector('.val').textContent =
+        selected.size === 0 ? `All ${which}`
+        : selected.size === 1 ? [...selected][0]
+        : `${selected.size} ${which} selected`;
+
+      const menu = $(which + 'Menu');
+      const header = document.createElement('div');
+      header.className = 'menu-head';
+      header.textContent = choices.length ? 'Tick any number, or leave all unticked' : 'No available options';
+      menu.replaceChildren(header);
+      for (const name of choices) {
+        const item = document.createElement('label');
+        item.className = 'option';
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.checked = selected.has(name);
+        const span = document.createElement('span');
+        span.textContent = name;
+        check.addEventListener('change', () => {
+          if (check.checked) selected.add(name); else selected.delete(name);
+          if (isArea) {
+            // untick any topics that no longer belong to a ticked area
+            const possible = new Set(topicsAvailable());
+            state.topics = new Set([...state.topics].filter(t => possible.has(t)));
+            updateMenu('topics');
+          }
+          updateMenu(which);
+          startAll();
+        });
+        item.append(check, span);
+        menu.append(item);
+      }
+    }
+
+    function closeMenus() {
+      for (const which of ['areas', 'topics']) {
+        $(which + 'Menu').hidden = true;
+        $(which + 'Button').setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    for (const which of ['areas', 'topics']) {
+      $(which + 'Button').addEventListener('click', () => {
+        const wasOpen = !$(which + 'Menu').hidden;
+        closeMenus();
+        $(which + 'Menu').hidden = wasOpen;
+        $(which + 'Button').setAttribute('aria-expanded', String(!wasOpen));
+      });
+    }
+
+    // rounds
+    function startRound(cards, retry) {
+      state.queue = state.random ? shuffle(cards) : cards;
+      state.index = 0;
+      state.correct = 0;
+      state.incorrect = 0;
+      state.retry = retry;
+      state.revealed = false;
+      render();
+    }
+
+    function startAll() {
+      state.wrong.clear();
+      startRound(selectedCards(), false);
+    }
+
+    function startWrong() {
+      startRound(selectedCards().filter(c => state.wrong.has(c.id)), true);
+    }
+
+    function reveal() {
+      if (state.index >= state.queue.length || state.revealed) return;
+      state.revealed = true;
+      render();
+    }
+
+    function rate(correct) {
+      if (state.index >= state.queue.length || !state.revealed) return;
+      const card = state.queue[state.index];
+      if (correct) {
+        state.correct++;
+        state.wrong.delete(card.id);
+      } else {
+        state.incorrect++;
+        state.wrong.add(card.id);
+      }
+      state.index++;
+      state.revealed = false;
+      render();
+    }
+
+    // draw the page from the current state
+    function render() {
+      const total = state.queue.length;
+      const done = Math.min(state.index, total);
+      const complete = done >= total;
+      $('studyCard').hidden = total === 0 || complete;
+      $('finished').hidden = total === 0 || !complete;
+      $('empty').hidden = total !== 0;
+      $('progressLabel').innerHTML = total
+        ? `<strong>${state.retry ? 'Retry round' : 'Round'} &middot; ${complete ? 'Complete' : `Card ${done + 1} of ${total}`}</strong>`
+        : 'No cards selected';
+      $('scoreLabel').textContent = `${state.correct} right · ${state.incorrect} wrong · ${state.wrong.size} to revisit`;
+      $('progressFill').style.width = total ? `${(100 * done) / total}%` : '0%';
+      if (!total) return;
+
+      if (complete) {
+        const remain = state.wrong.size;
+        $('finishEyebrow').textContent = state.retry ? 'Retry round complete' : 'Round complete';
+        $('finishTitle').textContent = remain ? 'Ready for another pass?' : 'All cards correct!';
+        $('finishDescription').textContent = remain
+          ? `${state.correct} right and ${state.incorrect} wrong in this round. ${remain} card${remain === 1 ? '' : 's'} still to revisit.`
+          : `You completed this round with ${state.correct} correct answer${state.correct === 1 ? '' : 's'}. No wrong cards remaining.`;
+        $('retryWrongButton').hidden = remain === 0;
+        $('retryWrongButton').textContent = `Redo wrong cards (${remain})`;
+        return;
+      }
+
+      const c = state.queue[state.index];
+      $('sideLabel').textContent = state.revealed ? 'Answer' : 'Question';
+      $('topicLabel').textContent = `${c.area} · ${c.topic}`;
+      $('questionText').textContent = c.question;
+      $('answerText').innerHTML = markdown(c.answer);
+      $('answerText').hidden = !state.revealed;
+      $('tipText').textContent = state.revealed ? 'Mark whether you answered correctly.' : 'Think through your answer, then reveal it.';
+      $('revealButton').hidden = state.revealed;
+      $('rightButton').hidden = !state.revealed;
+      $('wrongButton').hidden = !state.revealed;
+    }
+
+    // controls
+    document.querySelectorAll('[data-length]').forEach(btn => btn.addEventListener('click', () => {
+      state.length = btn.dataset.length;
+      document.querySelectorAll('[data-length]').forEach(x => x.setAttribute('aria-pressed', String(x === btn)));
+      startAll();
+    }));
+    $('randomToggle').addEventListener('change', e => { state.random = e.target.checked; startAll(); });
+    $('revealButton').addEventListener('click', reveal);
+    $('rightButton').addEventListener('click', () => rate(true));
+    $('wrongButton').addEventListener('click', () => rate(false));
+    $('retryWrongButton').addEventListener('click', startWrong);
+    $('restartButton').addEventListener('click', startAll);
+    $('resetButton').addEventListener('click', startAll);
+
+    // clicking outside a dropdown closes it
+    document.addEventListener('click', e => { if (!e.target.closest('.multiselect')) closeMenus(); });
+
+    // a mouse click leaves focus on the clicked control, where space would press it again (restarting the round)
+    // instead of revealing, so drop focus after mouse clicks; keyboard presses (detail 0) keep their focus
+    document.addEventListener('click', e => { if (e.detail) setTimeout(() => document.activeElement.blur()); });
+
+    // keyboard shortcuts, ignored while a control has keyboard focus so space still presses it
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeMenus();
+      if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest('button, input')) return;
+      if (e.code === 'Space') { e.preventDefault(); reveal(); }
+      if (e.key === '1') rate(false);
+      if (e.key === '2') rate(true);
+    });
+
+    // start
+    try {
+      state.cards = collectCards();
+      $('totalCards').textContent = `${state.cards.length} cards`;
+      updateMenu('areas');
+      updateMenu('topics');
+      startAll();
+    } catch (err) {
+      $('loadError').hidden = false;
+      $('loadError').textContent = `Could not load the flashcards: ${err.message}.`;
+      $('progressLabel').textContent = 'Unable to load cards';
+    }
+  </script>
+</body>
+</html>

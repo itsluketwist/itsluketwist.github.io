@@ -25,6 +25,9 @@ and `assets/`, not in the HTML/Liquid templates.
 - `_posts/YYYY-MM-DD-<slug>.md` — blog posts, rendered with `_layouts/post.html` (single
   column, bio at the bottom instead of the sidebar) at `/blog/<slug>/`, and listed on the
   homepage under "Blog" (`_includes/blog.md`, hidden while there are no posts).
+- `llmcards/index.html` — personal flashcard revision page at `/llmcards/`, unlisted (not
+  linked from the homepage, `noindex`, out of the sitemap). It embeds every JSON file in
+  `_data/llmcards/` at build time (see "New flashcards" below).
 - `index.md` — homepage main content (about, research interests, news, publications, blog,
   experience). Section spacing is set once in `_sass/` (`section h2`), so sections
   should not end with extra `<br>` lines.
@@ -113,6 +116,18 @@ engines (`noindex`). Remove the line to publish it properly.
 
 Work-in-progress posts go in `_drafts/<slug>.md` (no date, never published); preview
 them locally with `bundle exec jekyll serve --drafts`.
+
+### New flashcards
+
+Add a JSON file to `_data/llmcards/` (e.g. `day_1_flashcards.json`), shaped like
+`{"cards": [...]}`. Each card has `id` (unique across all files), `area`, `topic`,
+`length` (`short` for quick recall, `long` for interview questions), `question` and
+`answer`. Answers support `- ` and `1. ` lists, `**bold**`, `*italic*` and `` `code` ``.
+Nothing else needs changing: new areas and topics appear in the page's filters
+automatically. Files load in name order with numbers sorted properly (`day_2` before
+`day_10`). A broken or duplicate card shows an error on the page naming its file, and a
+JSON syntax error fails the site build (Jekyll reads it as YAML, so a stray trailing
+comma is tolerated).
 
 ### Other news (invitations, affiliations, attendance)
 
