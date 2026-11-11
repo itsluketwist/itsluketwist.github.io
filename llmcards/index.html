@@ -38,7 +38,11 @@ sitemap: false
     [hidden] { display: none !important; }
 
     /* filters: two dropdowns, then the card length tabs and the random toggle */
-    .filters { margin-bottom: 1.5em; }
+    /* collapsible options box (a native details element, collapsed on phones by the script below) */
+    .filters { margin-bottom: 1.5em; border: 1px solid var(--line); }
+    .filters summary { padding: 8px 12px; font-size: 13px; color: #333; cursor: pointer; }
+    .filters[open] summary { border-bottom: 1px solid var(--line); }
+    .filter-body { padding: 12px; }
     .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .field-label { display: block; margin-bottom: 4px; font-size: 12px; color: var(--muted); }
     .multiselect { position: relative; }
@@ -126,7 +130,9 @@ sitemap: false
       <p class="post-date">Interview revision &middot; <span id="totalCards">loading&hellip;</span></p>
     </div>
 
-    <div class="filters" role="group" aria-label="Study filters">
+    <details class="filters" id="options" open>
+      <summary>Options</summary>
+      <div class="filter-body">
       <div class="filter-grid">
         <div class="multiselect">
           <label class="field-label" for="areasButton">Areas</label>
@@ -148,7 +154,8 @@ sitemap: false
         <label class="check"><input id="randomToggle" type="checkbox"> Random order</label>
       </div>
       <p class="note">Changing a filter starts a new round. Leaving a filter unticked includes everything.</p>
-    </div>
+      </div>
+    </details>
 
     <div class="status" aria-live="polite"><span id="progressLabel">Loading cards&hellip;</span><span id="scoreLabel"></span></div>
     <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
@@ -456,13 +463,14 @@ sitemap: false
     // keyboard shortcuts, ignored while a control has keyboard focus so space still presses it
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMenus();
-      if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest('button, input')) return;
+      if (e.altKey || e.ctrlKey || e.metaKey || e.target.closest('button, input, summary')) return;
       if (e.code === 'Space') { e.preventDefault(); reveal(); }
       if (e.key === '1') rate(false);
       if (e.key === '2') rate(true);
     });
 
-    // start
+    // start, with the options box collapsed on phones so the card is in view
+    if (matchMedia('(max-width: 560px)').matches) $('options').open = false;
     try {
       state.cards = collectCards();
       $('totalCards').textContent = `${state.cards.length} cards`;
