@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "cards": [
+    {
+      "id": "day2-qkv-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "What are Queries, Keys and Values in Transformer attention, and how are they calculated?",
+      "answer": "- **Projections:** Given input `X` of shape `[B, T, d_model]`, learned projections produce `Q = W_Q(X)`, `K = W_K(X)` and `V = W_V(X)` (often with biases).\n- **Queries:** Represent what information a token is looking for from other tokens.\n- **Keys:** Represent information used to decide how relevant each token is to a query, through query-key dot products.\n- **Values:** Contain the information carried forward, combined as a weighted sum using the attention weights.\n- **RoPE:** In RoPE-based models, rotate pairs of dimensions in Q and K according to position, so their dot products encode relative positional information; V is not rotated."
+    },
+    {
+      "id": "day2-scaled-dot-product-long",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "long",
+      "question": "How does scaled dot-product attention work, and why is it scaled?",
+      "answer": "- **Equation:** `Attention(Q,K,V) = softmax(QKᵀ / √d_k + M) V`, with `M` an optional additive mask.\n- **Scores:** `QKᵀ` calculates one scalar compatibility score between each query and key; in causal self-attention each query can use itself and earlier keys.\n- **Scaling:** Divide scores by `√d_k`, where `d_k` is the key/query dimension **per head**, not sequence length. Under independent zero-mean, unit-variance components, this keeps score variance near 1.\n- **Mask and softmax:** Add `0` for allowed positions and `−∞` for disallowed ones before softmax. Normalise across keys separately for each query.\n- **Aggregation:** Multiply the attention probabilities by V to obtain a weighted sum of whole value vectors. Each query produces one output vector of dimension `d_v`."
+    },
+    {
+      "id": "day2-multihead-long",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "long",
+      "question": "How does multi-head attention work, and why use multiple heads?",
+      "answer": "- **Separate heads:** Q, K and V are split into `H` heads; each head independently computes attention using its own learned projection subspace.\n- **Dimensions:** In standard multi-head attention, `d_k = d_v = d_model / H`; the total projected Q/K/V width is still `d_model`.\n- **Output:** Concatenate head outputs, then apply `W_O` to mix information across heads and return to model dimension.\n- **Benefit:** Heads can learn different token relationships or representation patterns, although specialisation is not guaranteed and some heads may be redundant.\n- **Trade-off:** For fixed total width, multi-head attention has roughly the same arithmetic complexity as one full-width head, but explicitly materialised score/weight matrices use `O(B H T²)` memory."
+    },
+    {
+      "id": "day2-shapes-long",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "long",
+      "question": "What are the tensor dimensions throughout standard multi-head self-attention?",
+      "answer": "- **Input/projections:** `X: [B,T,d_model]`; each standard Q/K/V projection maps `d_model → d_model`, so each output is `[B,T,d_model]`.\n- **Split heads:** `reshape(B,T,H,d_k).transpose(1,2)` gives `[B,H,T,d_k]`, assuming `H d_k = d_model`.\n- **Scores:** `Q @ K.transpose(-2,-1)` gives `[B,H,T,T]`; softmax is over the last (key) dimension.\n- **Values:** Attention weights `[B,H,T,T] @ V [B,H,T,d_v]` gives `[B,H,T,d_v]`.\n- **Combine:** Transpose to `[B,T,H,d_v]`, reshape to `[B,T,H d_v]`, then apply an output projection to `[B,T,d_model]`.\n- **Implementation trap:** A direct reshape from `[B,T,d_model]` to `[B,H,T,d_k]` has the right shape but mixes token positions with heads."
+    },
+    {
+      "id": "day2-causal-softmax-long",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "long",
+      "question": "How do causal masking and softmax work, including numerical-stability edge cases?",
+      "answer": "- **Causal mask:** Add a `[T,T]` matrix of `0` on/below the diagonal and `−∞` above it to scaled scores, before softmax; tokens can attend to themselves.\n- **Normalisation:** `softmax(dim=-1)` acts across keys for each query, giving nonnegative weights that sum to 1 when at least one key is allowed.\n- **Stable softmax:** Subtract the **maximum within each query row** before exponentiation; this avoids overflow and leaves probabilities mathematically unchanged.\n- **Fully masked query:** A row of all `−∞` yields NaNs with ordinary softmax (`−∞ − (−∞)` is undefined); the implementation must avoid or explicitly handle empty rows.\n- **Practical details:** `torch.softmax` is numerically stable, but masks must have compatible device/dtype and broadcast against `[B,H,T,T]` correctly."
+    },
+    {
+      "id": "day2-self-cross-long",
+      "area": "Transformer Internals",
+      "topic": "Attention Architectures",
+      "length": "long",
+      "question": "How does self-attention differ from cross-attention, and where are they used?",
+      "answer": "- **Self-attention:** Q/K/V originate from the same sequence. It can be bidirectional (typical encoder) or causal (typical decoder).\n- **Cross-attention:** Q originates from the querying sequence; K/V originate from another sequence, such as encoder outputs.\n- **Encoder-only:** Typically uses bidirectional self-attention over available input tokens, with padding masks when needed.\n- **Decoder-only:** Uses causal self-attention, allowing each position to attend to itself and previous positions.\n- **Encoder-decoder:** Encoder uses self-attention; decoder uses causal self-attention followed by cross-attention, with Q from decoder states and K/V from encoder states.\n- **Cross-attention shapes:** With source length `S` and target length `T`, Q is `[B,H,T,d_k]`, K/V are `[B,H,S,d_k/d_v]`, and scores are `[B,H,T,S]`; usually no causal mask across the source."
+    },
+    {
+      "id": "day2-prefill-decode-long",
+      "area": "Transformer Internals",
+      "topic": "Generation",
+      "length": "long",
+      "question": "How does attention differ between full-sequence processing and autoregressive decoding?",
+      "answer": "- **Full sequence:** During pretraining/SFT and prompt prefill, many positions are processed in parallel; causal masking prevents access to future positions.\n- **Full-sequence shapes:** For self-attention, Q/K/V are `[B,H,T,d_k]` (V may use `d_v`), and score matrices are `[B,H,T,T]`.\n- **Decoding:** Generation is sequential across new tokens. For one new token, the query is `[B,H,1,d_k]` and attends to the available past/current keys.\n- **KV cache:** Store previously computed K/V **at each layer**; append new K/V so previous token representations need not be recomputed every decoding step.\n- **Cost distinction:** Prefill parallelises many positions; single-token decoding forms a query-to-history score row rather than a full square attention matrix (assuming caching).\n- **Cross-attention:** Encoder K/V can be reused across decoder steps; single-token Q gives scores `[B,H,1,S]` for encoder length `S`."
+    },
+    {
+      "id": "day2-complexity-long",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "long",
+      "question": "What are the computational and memory complexities of standard attention?",
+      "answer": "- **Projections:** Q/K/V and output projections each cost `O(B T d_model²)` for standard full-width projections.\n- **Attention calculation:** `QKᵀ` and weighted aggregation (`weights @ V`) each cost `O(B T² d_model)` when the total width across heads is `d_model`.\n- **Overall compute:** `O(B T d_model² + B T² d_model)` for full-sequence attention, ignoring constants.\n- **Materialised scores/weights:** Require `O(B H T²)` memory, whereas Q/K/V activations are `O(B T d_model)`; a per-layer KV cache grows linearly with the stored context.\n- **Doubling T:** Doubles projection compute and Q/K/V storage, but quadruples full-sequence attention compute and explicit attention-matrix storage.\n- **Causal masking:** Roughly half the pairs are valid, but naïve dense matrix multiplications still compute the square matrix; causal-aware kernels can skip some work without changing the quadratic asymptotic scaling."
+    },
+    {
+      "id": "day2-flash-long",
+      "area": "Transformer Internals",
+      "topic": "FlashAttention",
+      "length": "long",
+      "question": "What is FlashAttention, and how does it make attention more efficient?",
+      "answer": "- **Bottleneck:** Naïve attention writes/reads large intermediate score and probability matrices to/from GPU high-bandwidth memory (HBM).\n- **Tiling:** FlashAttention processes blocks of Q/K/V that fit in faster on-chip memory (SRAM) instead of materialising the full `[T,T]` attention matrix in HBM.\n- **Online softmax:** Maintains running per-query maxima, normalisation sums and weighted sums while processing key/value blocks, so global softmax can be reconstructed incrementally.\n- **Benefit:** Fused, tiled kernels greatly reduce HBM traffic and attention intermediate storage, producing the same mathematical result up to floating-point differences.\n- **Trade-off:** Arithmetic complexity stays `O(T² d)`; FlashAttention is primarily an IO/memory optimisation, not a subquadratic attention algorithm.\n- **Training:** Backward kernels can recompute attention intermediates rather than storing the entire score/weight matrices."
+    },
+    {
+      "id": "day2-implementation-long",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "long",
+      "question": "How would you implement multi-head causal self-attention from scratch in PyTorch?",
+      "answer": "- **Modules:** Define `nn.Linear(d_model,d_model)` for Q, K, V and output projections in an `nn.Module`.\n- **Projection/split:** Project `x: [B,T,D]`; reshape each to `[B,T,H,d_k]` then transpose to `[B,H,T,d_k]`.\n- **Scores:** Optionally apply RoPE to Q/K, then compute `scores = Q @ K.transpose(-2,-1) / sqrt(d_k)`.\n- **Mask and softmax:** Mask future key positions with `−∞`, broadcast correctly over batch/heads, then apply `softmax(dim=-1)`.\n- **Aggregate/merge:** Compute `weights @ V`; transpose `[B,H,T,d_v] → [B,T,H,d_v]`, reshape to `[B,T,H*d_v]`, and apply output projection.\n- **Common bugs:** Wrong reshape/transposition order, scaling by sequence length, incorrect mask triangle, incompatible device/dtype, or trying to use `@` on an `nn.Linear` module.\n- **Scope:** Residual connections and pre-norm belong to the surrounding transformer block, not the core attention calculation."
+    },
+    {
+      "id": "day2-testing-long",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "long",
+      "question": "How would you verify and debug a PyTorch attention implementation?",
+      "answer": "- **Shapes:** Assert intermediate and output dimensions across different batches, sequence lengths, widths and head counts.\n- **Reference:** Compare against `F.scaled_dot_product_attention` using the exact same projected Q/K/V, masking and dropout settings; check `torch.allclose`.\n- **Causality:** Change a future input token and confirm all earlier outputs remain unchanged; this catches some head-layout and mask bugs.\n- **Weights:** For valid rows, attention probabilities should be finite, nonnegative, sum to approximately 1 and assign zero weight to masked positions.\n- **Numerics:** Test large scores, padding/combined masks, dtype/device compatibility and fully masked rows if supported.\n- **Gradients:** Run backward and verify finite gradients for inputs and projection weights; passing shape tests alone is insufficient."
+    },
+    {
+      "id": "day2-qkv-source-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What produces Q, K and V in self-attention?",
+      "answer": "Three learned projections of the same input hidden states: `Q=W_Q(X)`, `K=W_K(X)`, `V=W_V(X)`."
+    },
+    {
+      "id": "day2-q-role-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does a query vector represent?",
+      "answer": "What information a token is looking for in the available keys."
+    },
+    {
+      "id": "day2-k-role-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does a key vector represent?",
+      "answer": "Features used to score how relevant a token is to a query."
+    },
+    {
+      "id": "day2-v-role-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does a value vector represent?",
+      "answer": "The information combined into the output using attention weights."
+    },
+    {
+      "id": "day2-formula-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What is the scaled dot-product attention equation?",
+      "answer": "`softmax(QKᵀ / √d_k + M) V`, where `M` is an optional additive mask."
+    },
+    {
+      "id": "day2-dk-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does `d_k` refer to?",
+      "answer": "The number of features in each query/key vector **per head**, not the sequence length."
+    },
+    {
+      "id": "day2-scale-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Why divide attention scores by `√d_k`?",
+      "answer": "It keeps query-key dot-product variance approximately constant as head dimension changes, reducing softmax saturation."
+    },
+    {
+      "id": "day2-ropek-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "Which attention vectors receive RoPE, and why?",
+      "answer": "RoPE rotates pairs of dimensions in **Q and K**, not V, so attention scores encode relative positions."
+    },
+    {
+      "id": "day2-attention-meaning-short",
+      "area": "Transformer Internals",
+      "topic": "Attention",
+      "length": "short",
+      "question": "What does one row of an attention matrix represent?",
+      "answer": "The attention distribution from one query position over the available key positions."
+    },
+    {
+      "id": "day2-self-allowed-short",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "short",
+      "question": "Can a token attend to itself in causal attention?",
+      "answer": "Yes. The diagonal and earlier positions are allowed; only future positions are masked."
+    },
+    {
+      "id": "day2-mask-values-short",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "short",
+      "question": "What values does an additive causal mask contain?",
+      "answer": "`0` at allowed positions and `−∞` above the diagonal, added before softmax."
+    },
+    {
+      "id": "day2-softmax-axis-short",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "short",
+      "question": "Which dimension does attention softmax normalise?",
+      "answer": "The **key** dimension (`dim=-1` for scores shaped `[B,H,T_q,T_k]`)."
+    },
+    {
+      "id": "day2-softmax-stability-short",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "short",
+      "question": "How is softmax made numerically stable?",
+      "answer": "Subtract the maximum score **within each query row** before exponentiation."
+    },
+    {
+      "id": "day2-mask-nan-short",
+      "area": "Transformer Internals",
+      "topic": "Masking and Stability",
+      "length": "short",
+      "question": "What happens if all keys are masked for a query?",
+      "answer": "Ordinary softmax returns NaNs: all scores are `−∞`, so normalisation is undefined."
+    },
+    {
+      "id": "day2-multisplit-short",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "short",
+      "question": "How do you split `[B,T,D]` into attention heads?",
+      "answer": "`reshape(B,T,H,d_k).transpose(1,2)` to obtain `[B,H,T,d_k]`."
+    },
+    {
+      "id": "day2-scores-shape-short",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "short",
+      "question": "What is the shape of self-attention score matrices?",
+      "answer": "`[B,H,T,T]` for a full-sequence, equal-length query/key self-attention pass."
+    },
+    {
+      "id": "day2-weighted-shape-short",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "short",
+      "question": "What is the shape after attention weights multiply V?",
+      "answer": "`[B,H,T,d_v]` for self-attention."
+    },
+    {
+      "id": "day2-concat-short",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "short",
+      "question": "How are per-head outputs concatenated?",
+      "answer": "Transpose `[B,H,T,d_v]` to `[B,T,H,d_v]`, reshape to `[B,T,H*d_v]`, then project."
+    },
+    {
+      "id": "day2-heads-benefit-short",
+      "area": "Transformer Internals",
+      "topic": "Multi-Head Attention",
+      "length": "short",
+      "question": "What is the main benefit of multiple attention heads?",
+      "answer": "Heads can learn different relationships or representation subspaces in parallel."
+    },
+    {
+      "id": "day2-cross-origin-short",
+      "area": "Transformer Internals",
+      "topic": "Attention Architectures",
+      "length": "short",
+      "question": "Where do Q, K and V come from in decoder cross-attention?",
+      "answer": "Q comes from decoder states; K and V come from the encoder output states."
+    },
+    {
+      "id": "day2-cross-shape-short",
+      "area": "Transformer Internals",
+      "topic": "Attention Architectures",
+      "length": "short",
+      "question": "What shape are cross-attention scores for target length T and source length S?",
+      "answer": "`[B,H,T,S]`: each target query attends over source keys."
+    },
+    {
+      "id": "day2-causal-v-bidir-short",
+      "area": "Transformer Internals",
+      "topic": "Attention Architectures",
+      "length": "short",
+      "question": "Is self-attention always causal?",
+      "answer": "No. Decoder self-attention is typically causal; encoder self-attention is typically bidirectional."
+    },
+    {
+      "id": "day2-cross-mask-short",
+      "area": "Transformer Internals",
+      "topic": "Attention Architectures",
+      "length": "short",
+      "question": "Does decoder-to-encoder cross-attention need a causal mask?",
+      "answer": "Usually no: decoder queries may attend to all available encoder positions (but padding may be masked)."
+    },
+    {
+      "id": "day2-decode-q-short",
+      "area": "Transformer Internals",
+      "topic": "Generation",
+      "length": "short",
+      "question": "What is the shape of Q during single-token decoding?",
+      "answer": "`[B,H,1,d_k]`; keys/values span the cached context plus the current position."
+    },
+    {
+      "id": "day2-cache-meaning-short",
+      "area": "Transformer Internals",
+      "topic": "Generation",
+      "length": "short",
+      "question": "What is stored in a Transformer KV cache?",
+      "answer": "Past key and value projections for each attention layer, avoiding recomputation during decoding."
+    },
+    {
+      "id": "day2-projections-compute-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "What is the computation cost of standard Q/K/V projections?",
+      "answer": "`O(B T d_model²)` each, assuming `d_model × d_model` projections."
+    },
+    {
+      "id": "day2-attn-compute-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "What is the compute complexity of full-sequence attention?",
+      "answer": "`O(B T² d_model)` for QKᵀ and separately for the weighted value aggregation."
+    },
+    {
+      "id": "day2-total-compute-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "What is the overall full-sequence attention compute complexity?",
+      "answer": "`O(B T d_model² + B T² d_model)` for standard multi-head attention."
+    },
+    {
+      "id": "day2-attn-memory-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "What is the size of a materialised attention matrix?",
+      "answer": "`O(B H T²)` elements for scores or weights."
+    },
+    {
+      "id": "day2-doubling-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "If sequence length doubles, how do full-attention compute and matrix memory scale?",
+      "answer": "Both quadruple for fixed B, H and model dimension; projection compute doubles."
+    },
+    {
+      "id": "day2-kv-memory-short",
+      "area": "Transformer Internals",
+      "topic": "Complexity",
+      "length": "short",
+      "question": "How does KV-cache size scale with context length?",
+      "answer": "Linearly with cached token count: `O(B T d_model)` per standard attention layer."
+    },
+    {
+      "id": "day2-flash-primary-short",
+      "area": "Transformer Internals",
+      "topic": "FlashAttention",
+      "length": "short",
+      "question": "What is FlashAttention primarily optimising?",
+      "answer": "GPU memory traffic: tile and fuse attention to avoid materialising the full attention matrix in HBM."
+    },
+    {
+      "id": "day2-flash-online-short",
+      "area": "Transformer Internals",
+      "topic": "FlashAttention",
+      "length": "short",
+      "question": "Why does FlashAttention need online softmax?",
+      "answer": "To normalise scores across multiple key blocks using running maxima and sums."
+    },
+    {
+      "id": "day2-flash-compute-short",
+      "area": "Transformer Internals",
+      "topic": "FlashAttention",
+      "length": "short",
+      "question": "Does FlashAttention eliminate quadratic attention computation?",
+      "answer": "No. Standard exact full attention still has `O(T² d)` arithmetic complexity."
+    },
+    {
+      "id": "day2-linear-call-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "How do you apply a PyTorch `nn.Linear` projection?",
+      "answer": "Call the module, e.g. `Q = self.Wq(x)`, rather than `x @ self.Wq`."
+    },
+    {
+      "id": "day2-reshape-bug-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "Why is directly reshaping `[B,T,D]` to `[B,H,T,d_k]` wrong?",
+      "answer": "It can mix token positions and heads; reshape to `[B,T,H,d_k]` then transpose."
+    },
+    {
+      "id": "day2-causality-test-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "How can you test causal attention behaviour?",
+      "answer": "Change a future token and verify that all earlier output positions remain unchanged."
+    },
+    {
+      "id": "day2-reference-test-short",
+      "area": "Transformer Internals",
+      "topic": "Implementation",
+      "length": "short",
+      "question": "What PyTorch function can verify your attention output?",
+      "answer": "`F.scaled_dot_product_attention` with the same Q/K/V, causal mask and dropout settings."
+    }
+  ]
+}

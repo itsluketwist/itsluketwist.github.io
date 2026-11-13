@@ -1,5 +1,16 @@
 main:
 
+  - title: "LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs"
+    authors: <b>Lukas&nbsp;Twist</b>, Twm&nbsp;Stone, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
+    main: Proceedings of the 20th Conference of the European Chapter of the Association for Computational Linguistics (EACL '27)
+    core_rank: "A"
+    arxiv: https://arxiv.org/abs/2608.06041
+    pdf: https://arxiv.org/pdf/2608.06041
+    code: https://github.com/itsluketwist/lang-choice
+    data: https://huggingface.co/datasets/itsluketwist/LangChoiceBench
+    library: https://pypi.org/project/langchoicebench/
+    bibtex: ./assets/bibtex/eacl-langchoicebench.txt
+
   - title: "Reasoning-Trace Collapse: Evaluating the Loss of Explicit Reasoning During Fine-Tuning"
     authors: <b>Lukas&nbsp;Twist</b>, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
     main: Advances in Neural Information Processing Systems (NeurIPS '26)
@@ -66,16 +77,6 @@ preprint:
     pdf: https://arxiv.org/pdf/2610.34573
     code: https://github.com/SOfTwareAiLab/awesome-se4ai4sci
     bibtex: ./assets/bibtex/arxiv-se4ai4sci.txt
-
-  - title: "LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs"
-    authors: <b>Lukas&nbsp;Twist</b>, Twm&nbsp;Stone, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang
-    main: arXiv preprint, August 2026
-    arxiv: https://arxiv.org/abs/2608.06041
-    pdf: https://arxiv.org/pdf/2608.06041
-    code: https://github.com/itsluketwist/lang-choice
-    data: https://huggingface.co/datasets/itsluketwist/LangChoiceBench
-    library: https://pypi.org/project/langchoicebench/
-    bibtex: ./assets/bibtex/arxiv-langchoicebench.txt
 
   - title: "Not All Code Is Equal: A Data-Centric Study of Code Complexity and LLM Reasoning"
     authors: <b>Lukas&nbsp;Twist</b>, Shu Yang, Hanqi Yan, Jingzhi Gong, Di Wang, Helen&nbsp;Yannakoudakis &&nbsp;Jie&nbsp;M.&nbsp;Zhang

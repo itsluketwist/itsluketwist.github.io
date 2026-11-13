@@ -3,6 +3,10 @@
 main:
 
   - date: November 2026
+    text: "Paper accepted to <b>EACL 2027</b>: <i>LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs</i>."
+    graphic: ./assets/graphics/eacl-langchoicebench.png
+
+  - date: November 2026
     text: "New preprint on arXiv: <i>Reasoning-Trace Overflow in Code Generation: An Empirical Study of Explicit Reasoning Models</i>."
     url: https://arxiv.org/abs/2611.06095
 

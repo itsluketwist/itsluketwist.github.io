@@ -1,0 +1,10 @@
+@inproceedings{twistLangChoiceBench2027,
+  title = {{LangChoiceBench: Measuring and Explaining Programming-Language Choice in LLMs}},
+  author = {Twist, Lukas and Stone, Twm and Yannakoudakis, Helen and Zhang, Jie M.},
+  booktitle = {Proceedings of the 20th Conference of the European Chapter of the Association for Computational Linguistics},
+  location = {Athens, Greece},
+  year = {2027},
+  month = {March},
+  publisher = {Association for Computational Linguistics},
+  url = {https://arxiv.org/abs/2608.06041},
+}

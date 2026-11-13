@@ -205,7 +205,8 @@ The "First-author publications:" line sits in the left-hand sidebar, underneath 
 photo, name and social links (`_layouts/homepage.html`, styled by `.pub-venues` in
 `_sass/`). It is generated automatically from every `main` publication followed by
 every `short` publication, shown at most two venues per line (dot-separated
-within a line), and each venue link shows its `core_rank` as a hover tooltip — do not
+within a line). Lines are filled from the bottom, so the top line holds any odd venue
+out and a new `main` paper only changes the top line. Each venue link shows its `core_rank` as a hover tooltip — do not
 hard-code venues or ranks there.
 
 ## Checking changes

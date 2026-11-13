@@ -80,6 +80,7 @@
         <!-- list of venues with first-author publications, built from the publications data -->
         <!-- includes all main publications, then all short papers -->
         <!-- shows at most two venues per line, with a dot only between venues on the same line -->
+        <!-- lines are filled from the bottom, so only the top line changes when a new paper is added -->
         <!-- each venue gets a hover tooltip showing its icore rank, when one is set -->
         <div class="pub-venues">
           <b>First-author publications:</b>
@@ -89,10 +90,10 @@
           {%- comment -%} the short venue name is the (VENUE 'YY) part at the end of the venue line {%- endcomment -%}
           {%- assign venue_short = link.main | split: "(" | last | remove: ")" -%}
           {%- assign paper_url = link.url | default: link.arxiv -%}
-          {%- comment -%} start a new line before the 3rd, 5th, ... venue, otherwise separate with a dot {%- endcomment -%}
+          {%- comment -%} start a new line when an even number of venues are left (rindex counts this one), otherwise separate with a dot {%- endcomment -%}
           {%- unless forloop.first -%}
-          {%- assign line_position = forloop.index0 | modulo: 2 -%}
-          {%- if line_position == 0 -%}<br>{%- else %} · {% endif -%}
+          {%- assign venues_left = forloop.rindex | modulo: 2 -%}
+          {%- if venues_left == 0 -%}<br>{%- else %} · {% endif -%}
           {%- endunless -%}
           <a href="{{ paper_url }}" target="_blank"{% if link.core_rank %} class="core-tooltip" data-tooltip="ICORE 2026 rank: {{ link.core_rank }}"{% endif %}><b>{{ venue_short }}</b></a>
           {%- endfor -%}
