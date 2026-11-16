@@ -123,9 +123,10 @@ Add a JSON file to `_data/llmcards/` (e.g. `day_1_flashcards.json`), shaped like
 `{"cards": [...]}`. Each card has `id` (unique across all files), `area`, `topic`,
 `length` (`short` for quick recall, `long` for interview questions), `question` and
 `answer`. Answers support `- ` and `1. ` lists, `**bold**`, `*italic*` and `` `code` ``.
-Nothing else needs changing: new areas and topics appear in the page's filters
-automatically. Files load in name order with numbers sorted properly (`day_2` before
-`day_10`). A broken or duplicate card shows an error on the page naming its file, and a
+Nothing else needs changing: new days, areas and topics appear in the page's filters
+automatically. The day comes from the file name (`day_3_...` is "Day 3"; a file not named
+`day_<n>_...` shows under its own name). Files load in name order with numbers sorted
+properly (`day_2` before `day_10`). A broken or duplicate card shows an error on the page naming its file, and a
 JSON syntax error fails the site build (Jekyll reads it as YAML, so a stray trailing
 comma is tolerated).
 

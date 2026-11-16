@@ -1,0 +1,541 @@
+{
+  "schema_version": 1,
+  "cards": [
+    {
+      "id": "day3-cross-entropy",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "long",
+      "question": "How does cross-entropy loss work in LLM pretraining and SFT?",
+      "answer": "- **Next-token prediction:** the model produces vocabulary logits for each position; softmax converts these into token probabilities.\n- **Cross-entropy:** compares predicted probabilities with a one-hot target distribution. Only the correct token contributes: $L_t=-\\log p(y_t)$.\n- **Sequence/batch loss:** typically average the negative log probabilities over valid target-token positions, excluding masked/padding positions.\n- **Relationship to KL:** $H(P,Q)=H(P)+D_{KL}(P\\|\\|Q)$; one-hot target entropy is zero.\n- **Gradient with respect to logits:** $\\partial L/\\partial z_i=p_i-y_i$ (before any averaging factor). Gradient descent raises the correct logit relative to others."
+    },
+    {
+      "id": "day3-kl-ce",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "long",
+      "question": "How do entropy, cross-entropy and KL divergence differ?",
+      "answer": "- **Entropy $H(P)$:** uncertainty intrinsic to a distribution; $-\\sum_i P_i\\log P_i$.\n- **Cross-entropy $H(P,Q)$:** cost of predicting $Q$ when the target is $P$; $-\\sum_i P_i\\log Q_i$.\n- **KL divergence:** $D_{KL}(P\\|\\|Q)=\\sum_i P_i\\log(P_i/Q_i)=H(P,Q)-H(P)$; nonnegative and asymmetric.\n- **One-hot targets:** entropy is zero, so cross-entropy equals KL for that target.\n- **Applications:** supervised next-token training uses cross-entropy; distillation matches teacher/student distributions, and RL post-training may constrain drift from a reference policy using KL."
+    },
+    {
+      "id": "day3-numerical-stability",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "long",
+      "question": "Why are numerical stability and logits important when calculating losses?",
+      "answer": "- **Logits:** unnormalised scores; softmax converts them into probabilities.\n- **Stable softmax:** subtract the maximum logit before exponentiation; this does not change the probabilities.\n- **Log-sum-exp:** computes log normalisers without unnecessary overflow/underflow.\n- **CrossEntropyLoss:** pass raw logits and class indices; PyTorch combines log-softmax and NLL stably.\n- **Avoid:** manually applying softmax then log, which can produce numerical issues near zero probabilities."
+    },
+    {
+      "id": "day3-backprop",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "long",
+      "question": "How does backpropagation calculate parameter gradients?",
+      "answer": "- **Objective:** find how a small change in each trainable parameter changes the loss.\n- **Chain rule:** work backwards through the computational graph, multiplying local derivatives; e.g. $dL/dz=(dL/dp)(dp/dz)$.\n- **Linear layers:** gradients propagate both to weights and to the preceding layer, so earlier parameters can learn.\n- **Vector operations:** autograd uses vector–Jacobian products rather than usually materialising full Jacobian matrices.\n- **Optimisation:** the optimiser uses gradients to update parameters in a loss-reducing direction; PyTorch computes gradients with `loss.backward()`."
+    },
+    {
+      "id": "day3-autograd",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "long",
+      "question": "How does PyTorch autograd manage gradients during training?",
+      "answer": "- **Graph construction:** operations on tensors requiring gradients build a computational graph for that forward pass.\n- **Backward:** `loss.backward()` computes gradients and adds them to each parameter’s `.grad` tensor.\n- **Clearing gradients:** call `optimizer.zero_grad()` before a new independent update; do not clear between accumulation micro-batches.\n- **Optimiser:** `optimizer.step()` reads `.grad` and updates parameter values; it does not itself perform backpropagation.\n- **Evaluation:** `torch.no_grad()` or `torch.inference_mode()` avoids recording gradients for inference/validation."
+    },
+    {
+      "id": "day3-gradient-pathologies",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "long",
+      "question": "What causes vanishing and exploding gradients, and how are they addressed?",
+      "answer": "- **Cause:** repeated multiplication of derivatives through deep networks can shrink gradients towards zero or amplify them excessively.\n- **Vanishing:** early layers receive tiny gradients and learn slowly; **exploding:** unstable, excessively large updates.\n- **Residual connections:** provide an additive identity path for gradient flow, helping deep networks train.\n- **Pre-norm:** normalise before attention/MLP sublayers, retaining a direct residual path and often improving deep-transformer optimisation.\n- **Other mitigations:** suitable initialisation, normalisation, learning rates, and global gradient norm clipping for large gradients."
+    },
+    {
+      "id": "day3-sgd",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "long",
+      "question": "How does SGD work, and what is the role of mini-batches?",
+      "answer": "- **SGD:** update parameters using a gradient estimate from sampled training examples: $w\\leftarrow w-\\eta g$.\n- **Mini-batches:** average gradients across a subset of examples to estimate the full-dataset gradient at lower compute/memory cost.\n- **Noise:** smaller batches produce noisier estimates; this can affect optimisation and generalisation.\n- **Batch size vs optimiser:** both SGD and Adam can use mini-batches; gradient accumulation is a separate technique.\n- **Momentum SGD:** optionally uses an exponential moving average of gradients to smooth updates."
+    },
+    {
+      "id": "day3-adam-mechanism",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "long",
+      "question": "How does Adam calculate parameter updates?",
+      "answer": "- **First moment:** exponential moving average of gradients, $m_t=\\beta_1m_{t-1}+(1-\\beta_1)g_t$; tracks direction.\n- **Second moment:** exponential moving average of squared gradients, $v_t=\\beta_2v_{t-1}+(1-\\beta_2)g_t^2$; tracks magnitude.\n- **Bias correction:** adjust both moments early in training because they start at zero.\n- **Adaptive update:** divide the corrected first moment by the square root of the corrected second moment plus $\\epsilon$, giving per-parameter scaling.\n- **Common defaults:** $\\beta_1=0.9$, $\\beta_2=0.999$, $\\epsilon=10^{-8}$; a global learning rate still controls update size."
+    },
+    {
+      "id": "day3-adam-comparison",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "long",
+      "question": "How do SGD, Adam and AdamW differ, and what are the trade-offs?",
+      "answer": "- **SGD:** updates using the current gradient (optionally momentum); simple, relatively low optimiser-state memory.\n- **Adam:** uses first and second moments for adaptive per-parameter updates; often converges faster with less learning-rate tuning.\n- **AdamW:** Adam with weight decay decoupled from the adaptive gradient/moment calculations.\n- **Regularisation distinction:** adding L2 to Adam’s gradient is not equivalent to decoupled weight decay; under ordinary SGD, they can be equivalent with matching coefficients.\n- **Practical trade-off:** Adam/AdamW store two moment tensors per parameter, increasing memory use; AdamW is a common LLM-training default."
+    },
+    {
+      "id": "day3-regularisation",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "long",
+      "question": "What is regularisation, and how do L1 and L2 differ?",
+      "answer": "- **Purpose:** discourage overfitting and improve generalisation by preferring certain solutions over others.\n- **L1:** add $\\lambda\\sum_i|w_i|$ to the loss; encourages sparse weights and exact zeros.\n- **L2:** add a penalty proportional to $\\lambda\\sum_iw_i^2$; discourages large weights more strongly than small ones.\n- **$\\lambda$:** a chosen hyperparameter controlling regularisation strength, not normally learned.\n- **Beyond weight penalties:** dropout, early stopping and data augmentation can also regularise.\n- **LLMs:** decoupled weight decay in AdamW is common; regularisation can also influence stability, but generalisation is its main motivation."
+    },
+    {
+      "id": "day3-weight-decay",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "long",
+      "question": "Why is AdamW weight decay called decoupled regularisation?",
+      "answer": "- **Adam + L2:** adding an L2 penalty makes the gradient include a weight-proportional term; Adam’s moment estimates and adaptive scaling act on it.\n- **AdamW:** directly shrinks parameters separately from the Adam gradient update, conceptually $w\\leftarrow(1-\\eta\\lambda)w-\\mathrm{AdamUpdate}$.\n- **Decoupled:** weight decay does not enter the first- or second-moment estimates.\n- **Why regularisation:** it biases training towards smaller parameter magnitudes even though it is applied by the optimiser rather than added to the loss.\n- **Nuance:** decay is often excluded for bias and normalisation parameters; not every parameter must be decayed."
+    },
+    {
+      "id": "day3-norm-vs-reg",
+      "area": "Losses and Optimisation",
+      "topic": "Training stability",
+      "length": "long",
+      "question": "How do normalisation and regularisation differ in neural networks?",
+      "answer": "- **Normalisation:** typically rescales activations to improve numerical/optimisation stability; transformers commonly use RMSNorm.\n- **Regularisation:** changes the learning problem or training process to discourage overfitting and improve generalisation.\n- **RMSNorm:** controls hidden-state scale; it does not directly constrain all parameter magnitudes or clip gradients.\n- **Weight decay:** directly discourages large parameter magnitudes and can also improve stability.\n- **Overlap:** both can affect stability/generalisation, but their primary mechanisms and motivations differ."
+    },
+    {
+      "id": "day3-accumulation",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "long",
+      "question": "What is gradient accumulation, and why is it used?",
+      "answer": "- **Micro-batch:** examples processed in one forward/backward pass; often limited by GPU memory and throughput.\n- **Accumulation:** run multiple backward passes without clearing `.grad`, then perform one optimiser step.\n- **Effective batch size:** micro-batch size × accumulation steps × number of data-parallel GPUs (for equal-sized batches).\n- **Loss scaling:** divide a mean micro-batch loss by the accumulation count when micro-batches are equally sized, to preserve average gradient magnitude.\n- **Trade-off:** simulates a larger batch with less peak activation memory, but requires multiple sequential passes and may be slower than a single large batch."
+    },
+    {
+      "id": "day3-clipping",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "long",
+      "question": "What is gradient clipping, and when is it applied?",
+      "answer": "- **Purpose:** limit unusually large gradients to reduce unstable optimiser updates; it does not amplify small gradients.\n- **Global norm clipping:** calculate a norm across all parameter gradients; if above a threshold, scale them by one common factor.\n- **Direction:** uniform scaling preserves the combined gradient direction.\n- **Order:** after backward and any gradient accumulation, before `optimizer.step()`; Adam therefore updates its moments using clipped gradients.\n- **Mixed precision:** if using FP16 gradient scaling, unscale gradients before clipping; clipping the gradient norm does not strictly bound Adam’s parameter update."
+    },
+    {
+      "id": "day3-lr-schedule",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "long",
+      "question": "Why use learning-rate warmup and cosine decay?",
+      "answer": "- **Learning rate:** sets the overall size of optimiser steps; too large can destabilise training, too small can slow learning.\n- **Warmup:** gradually increase LR at the start, when activations/gradients and optimiser statistics may be unstable.\n- **Cosine decay:** gradually reduce LR after warmup, allowing smaller updates later in training.\n- **Purpose:** balance early learning speed with later convergence and stability.\n- **Nuance:** not every run needs warmup or cosine decay; short fine-tunes may use simpler schedules."
+    },
+    {
+      "id": "day3-mixed-precision",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "long",
+      "question": "How does mixed-precision training work, and why prefer BF16 to FP16?",
+      "answer": "- **Memory and speed:** use lower-precision arithmetic for suitable matrix operations, reducing memory traffic and improving hardware throughput.\n- **Formats:** FP32 = 32 bits (1 sign/8 exponent/23 fraction); FP16 = 16 bits (1/5/10); BF16 = 16 bits (1/8/7).\n- **Trade-off:** FP16 has more significand precision but much less exponent range; BF16 has roughly FP32’s range, reducing overflow/underflow risk.\n- **Mixed precision:** sensitive reductions and optimiser states may use FP32 while many matmuls use BF16/FP16.\n- **Loss scaling:** often needed with FP16 to prevent small gradients underflowing; generally unnecessary with BF16."
+    },
+    {
+      "id": "day3-training-loop",
+      "area": "Losses and Optimisation",
+      "topic": "PyTorch",
+      "length": "long",
+      "question": "What are the main steps of a PyTorch training and validation loop?",
+      "answer": "- **Setup:** initialise model, data loader, loss function, optimiser (often AdamW), and optional LR scheduler.\n- **Training:** `model.train()`; clear gradients; forward pass; calculate loss; call `loss.backward()`.\n- **Before update:** accumulate micro-batches if required; unscale FP16 gradients if needed; clip gradients after accumulation.\n- **Update:** `optimizer.step()` then advance the scheduler at its intended frequency; clear gradients before the next update.\n- **Validation:** `model.eval()` and `torch.no_grad()`; compute held-out metrics without updating parameters.\n- **Care:** with gradient accumulation, scale loss correctly and call `optimizer.step()` only after the accumulation window."
+    },
+    {
+      "id": "day3-ce-formula",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Cross-entropy with a one-hot target?",
+      "answer": "$L=-\\log p(y)$ for the correct class/token."
+    },
+    {
+      "id": "day3-ce-grad",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Gradient of softmax cross-entropy with respect to logits?",
+      "answer": "$\\partial L/\\partial z_i=p_i-y_i$ (before averaging factors)."
+    },
+    {
+      "id": "day3-ce-target",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Why does only one vocabulary term contribute to one-hot cross-entropy?",
+      "answer": "Every target entry is zero except the correct token, whose target is 1."
+    },
+    {
+      "id": "day3-ce-average",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "What is normally averaged in token-level LLM loss?",
+      "answer": "Negative log probabilities over valid target-token positions across the batch."
+    },
+    {
+      "id": "day3-entropy",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "What is entropy?",
+      "answer": "$H(P)=-\\sum_iP_i\\log P_i$; uncertainty within distribution $P$."
+    },
+    {
+      "id": "day3-kl-formula",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "What is KL divergence?",
+      "answer": "$D_{KL}(P\\|\\|Q)=\\sum_iP_i\\log(P_i/Q_i)$."
+    },
+    {
+      "id": "day3-ce-kl",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "How are cross-entropy and KL related?",
+      "answer": "$H(P,Q)=H(P)+D_{KL}(P\\|\\|Q)$."
+    },
+    {
+      "id": "day3-kl-asym",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Is KL divergence symmetric?",
+      "answer": "No: generally $D_{KL}(P\\|\\|Q)\\ne D_{KL}(Q\\|\\|P)$."
+    },
+    {
+      "id": "day3-distillation",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "What distributions does distillation typically match?",
+      "answer": "A student model’s predicted distribution to a teacher model’s distribution."
+    },
+    {
+      "id": "day3-stable-softmax",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Why subtract the maximum logit before softmax?",
+      "answer": "To avoid overflow in exponentials without changing softmax probabilities."
+    },
+    {
+      "id": "day3-torch-ce",
+      "area": "Losses and Optimisation",
+      "topic": "Losses",
+      "length": "short",
+      "question": "Should PyTorch CrossEntropyLoss receive probabilities or logits?",
+      "answer": "Raw logits; it internally computes a numerically stable log-softmax/NLL."
+    },
+    {
+      "id": "day3-chain-rule",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "What mathematical rule underpins backpropagation?",
+      "answer": "The chain rule, applied backwards through the computational graph."
+    },
+    {
+      "id": "day3-jacobian",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "What is a Jacobian?",
+      "answer": "A matrix of partial derivatives of vector outputs with respect to vector inputs."
+    },
+    {
+      "id": "day3-vjp",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Does autograd normally construct full Jacobian matrices?",
+      "answer": "No; reverse-mode autograd generally uses vector–Jacobian products."
+    },
+    {
+      "id": "day3-grad-storage",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Where are PyTorch parameter gradients stored?",
+      "answer": "In each parameter’s `.grad` tensor."
+    },
+    {
+      "id": "day3-backward",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "What does loss.backward() do?",
+      "answer": "Computes gradients and accumulates them into `.grad` for leaf parameters."
+    },
+    {
+      "id": "day3-zero-grad",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Why call optimizer.zero_grad()?",
+      "answer": "To clear previously accumulated gradients before an independent update."
+    },
+    {
+      "id": "day3-no-grad",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Why use torch.no_grad() in validation?",
+      "answer": "To avoid recording autograd operations when gradients are not needed."
+    },
+    {
+      "id": "day3-residual",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Why do residual connections help gradient flow?",
+      "answer": "They provide an additive identity path that bypasses the sublayer transformation."
+    },
+    {
+      "id": "day3-prenorm",
+      "area": "Losses and Optimisation",
+      "topic": "Backpropagation",
+      "length": "short",
+      "question": "Where is normalisation applied in a pre-norm transformer block?",
+      "answer": "Before the attention/MLP sublayer, inside the residual branch."
+    },
+    {
+      "id": "day3-sgd-update",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Basic SGD parameter update?",
+      "answer": "$w\\leftarrow w-\\eta g$."
+    },
+    {
+      "id": "day3-adam-first",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "What does Adam’s first moment track?",
+      "answer": "An exponential moving average of gradients, estimating update direction."
+    },
+    {
+      "id": "day3-adam-second",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "What does Adam’s second moment track?",
+      "answer": "An exponential moving average of squared gradients, estimating magnitude."
+    },
+    {
+      "id": "day3-adam-beta1",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Typical Adam beta1 value?",
+      "answer": "0.9."
+    },
+    {
+      "id": "day3-adam-beta2",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Typical Adam beta2 value?",
+      "answer": "0.999."
+    },
+    {
+      "id": "day3-adam-eps",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Typical Adam epsilon value?",
+      "answer": "$10^{-8}$ (implementation/configuration dependent)."
+    },
+    {
+      "id": "day3-adam-bias",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Why does Adam use bias correction?",
+      "answer": "Its moment estimates start at zero and are biased towards zero early on."
+    },
+    {
+      "id": "day3-adam-adaptive",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "How does Adam adapt per-parameter update sizes?",
+      "answer": "It scales the corrected first moment by the inverse square root of the corrected second moment."
+    },
+    {
+      "id": "day3-adam-state",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "What extra state does Adam store per parameter?",
+      "answer": "Two moving-average tensors: first and second moments."
+    },
+    {
+      "id": "day3-adamw",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "What does the W in AdamW signify?",
+      "answer": "Decoupled weight decay."
+    },
+    {
+      "id": "day3-adam-l2",
+      "area": "Losses and Optimisation",
+      "topic": "Optimisers",
+      "length": "short",
+      "question": "Why is Adam with L2 penalty different from AdamW?",
+      "answer": "Adam adapts the L2 gradient term; AdamW applies shrinkage separately from its moments."
+    },
+    {
+      "id": "day3-l1",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "short",
+      "question": "What is the L1 weight penalty?",
+      "answer": "$\\lambda\\sum_i|w_i|$; encourages sparsity."
+    },
+    {
+      "id": "day3-l2",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "short",
+      "question": "What is the L2 weight penalty?",
+      "answer": "A term proportional to $\\lambda\\sum_iw_i^2$; discourages large weights."
+    },
+    {
+      "id": "day3-lambda",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "short",
+      "question": "What does lambda control in regularisation?",
+      "answer": "The strength of the penalty or decay."
+    },
+    {
+      "id": "day3-decay",
+      "area": "Losses and Optimisation",
+      "topic": "Regularisation",
+      "length": "short",
+      "question": "Is decoupled weight decay still regularisation?",
+      "answer": "Yes; it biases learning towards smaller parameter magnitudes."
+    },
+    {
+      "id": "day3-effective-batch",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Effective batch size with data-parallel training?",
+      "answer": "Micro-batch size × accumulation steps × number of data-parallel GPUs."
+    },
+    {
+      "id": "day3-accum-grad",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Does optimizer.step() perform gradient accumulation?",
+      "answer": "No; backward calls accumulate into `.grad`, and step updates parameters."
+    },
+    {
+      "id": "day3-loss-scale-acc",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Why divide loss by accumulation steps?",
+      "answer": "To preserve the average gradient magnitude when accumulating equal-sized micro-batches."
+    },
+    {
+      "id": "day3-clip-when",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "When should gradients be clipped?",
+      "answer": "After backward/accumulation, before optimizer.step()."
+    },
+    {
+      "id": "day3-clip-effect",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "What does global norm clipping do below its threshold?",
+      "answer": "Nothing; gradients remain unchanged."
+    },
+    {
+      "id": "day3-clip-direction",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Does global norm clipping change gradient direction?",
+      "answer": "No; it scales all gradients by a common factor."
+    },
+    {
+      "id": "day3-warmup",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Why warm up the learning rate?",
+      "answer": "To limit early updates while training and optimiser statistics stabilise."
+    },
+    {
+      "id": "day3-cosine",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Why use cosine learning-rate decay?",
+      "answer": "To gradually reduce update size as training progresses."
+    },
+    {
+      "id": "day3-fp32",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "How many bytes are FP32 and FP16/BF16?",
+      "answer": "FP32: 4 bytes; FP16 and BF16: 2 bytes each."
+    },
+    {
+      "id": "day3-bf16-range",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Why is BF16 often preferred over FP16 for LLM training?",
+      "answer": "It has a wider exponent range, reducing gradient underflow and value overflow."
+    },
+    {
+      "id": "day3-fp16-scaling",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Why may FP16 training require loss scaling?",
+      "answer": "To prevent small gradients from underflowing to zero."
+    },
+    {
+      "id": "day3-fp32-state",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "What often remains FP32 in mixed-precision training?",
+      "answer": "Sensitive reductions and optimiser state; details depend on the implementation."
+    },
+    {
+      "id": "day3-norm-role",
+      "area": "Losses and Optimisation",
+      "topic": "Training mechanics",
+      "length": "short",
+      "question": "Does RMSNorm directly constrain weight magnitudes?",
+      "answer": "No; it normalises activations and indirectly supports stable optimisation."
+    },
+    {
+      "id": "day3-loop-order",
+      "area": "Losses and Optimisation",
+      "topic": "PyTorch",
+      "length": "short",
+      "question": "Basic PyTorch training update order?",
+      "answer": "Clear grads → forward → loss → backward → optional clip → optimiser step."
+    },
+    {
+      "id": "day3-eval",
+      "area": "Losses and Optimisation",
+      "topic": "PyTorch",
+      "length": "short",
+      "question": "What does model.eval() change?",
+      "answer": "Sets evaluation behaviour for modules such as dropout and batch normalisation."
+    }
+  ]
+}
