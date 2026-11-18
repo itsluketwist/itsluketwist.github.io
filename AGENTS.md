@@ -122,7 +122,8 @@ them locally with `bundle exec jekyll serve --drafts`.
 Add a JSON file to `_data/llmcards/` (e.g. `day_1_flashcards.json`), shaped like
 `{"cards": [...]}`. Each card has `id` (unique across all files), `area`, `topic`,
 `length` (`short` for quick recall, `long` for interview questions), `question` and
-`answer`. Answers support `- ` and `1. ` lists, `**bold**`, `*italic*` and `` `code` ``.
+`answer`. Answers support `- ` and `1. ` lists, `**bold**`, `*italic*`, `` `code` `` and
+`$...$` maths (drawn by KaTeX, so write a literal dollar sign inside `` `code` ``).
 Nothing else needs changing: new days, areas and topics appear in the page's filters
 automatically. The day comes from the file name (`day_3_...` is "Day 3"; a file not named
 `day_<n>_...` shows under its own name). Files load in name order with numbers sorted
@@ -205,7 +206,7 @@ Follow the style of `assets/bibtex/acl-llm-code-bias.txt`:
 The "First-author publications:" line sits in the left-hand sidebar, underneath the
 photo, name and social links (`_layouts/homepage.html`, styled by `.pub-venues` in
 `_sass/`). It is generated automatically from every `main` publication followed by
-every `short` publication, shown at most two venues per line (dot-separated
+every `short` publication, inside a faint box labelled "PhD papers", shown at most two venues per line (dot-separated
 within a line). Lines are filled from the bottom, so the top line holds any odd venue
 out and a new `main` paper only changes the top line. Each venue link shows its `core_rank` as a hover tooltip — do not
 hard-code venues or ranks there.

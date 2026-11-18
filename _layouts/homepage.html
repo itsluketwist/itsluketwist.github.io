@@ -82,9 +82,10 @@
         <!-- shows at most two venues per line, with a dot only between venues on the same line -->
         <!-- lines are filled from the bottom, so only the top line changes when a new paper is added -->
         <!-- each venue gets a hover tooltip showing its icore rank, when one is set -->
+        <!-- the venues sit in a faint box labelled "PhD papers" (every paper so far is from the phd) -->
         <div class="pub-venues">
           <b>First-author publications:</b>
-          <div>
+          <div class="phd-box">
           {%- assign venue_links = site.data.publications.main | concat: site.data.publications.short -%}
           {%- for link in venue_links -%}
           {%- comment -%} the short venue name is the (VENUE 'YY) part at the end of the venue line {%- endcomment -%}
@@ -97,6 +98,7 @@
           {%- endunless -%}
           <a href="{{ paper_url }}" target="_blank"{% if link.core_rank %} class="core-tooltip" data-tooltip="ICORE 2026 rank: {{ link.core_rank }}"{% endif %}><b>{{ venue_short }}</b></a>
           {%- endfor -%}
+          <div class="phd-caption">PhD papers</div>
           </div>
         </div>
         <br>

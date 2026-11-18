@@ -7,7 +7,7 @@
       "topic": "Losses",
       "length": "long",
       "question": "How does cross-entropy loss work in LLM pretraining and SFT?",
-      "answer": "- **Next-token prediction:** the model produces vocabulary logits for each position; softmax converts these into token probabilities.\n- **Cross-entropy:** compares predicted probabilities with a one-hot target distribution. Only the correct token contributes: $L_t=-\\log p(y_t)$.\n- **Sequence/batch loss:** typically average the negative log probabilities over valid target-token positions, excluding masked/padding positions.\n- **Relationship to KL:** $H(P,Q)=H(P)+D_{KL}(P\\|\\|Q)$; one-hot target entropy is zero.\n- **Gradient with respect to logits:** $\\partial L/\\partial z_i=p_i-y_i$ (before any averaging factor). Gradient descent raises the correct logit relative to others."
+      "answer": "- **Next-token prediction:** the model produces vocabulary logits for each position; softmax converts these into token probabilities.\n- **Cross-entropy:** compares predicted probabilities with a one-hot target distribution. Only the correct token contributes: $L_t=-\\log p(y_t)$.\n- **Sequence/batch loss:** typically average the negative log probabilities over valid target-token positions, excluding masked/padding positions.\n- **Relationship to KL:** $H(P,Q)=H(P)+D_{KL}(P\\|Q)$; one-hot target entropy is zero.\n- **Gradient with respect to logits:** $\\partial L/\\partial z_i=p_i-y_i$ (before any averaging factor). Gradient descent raises the correct logit relative to others."
     },
     {
       "id": "day3-kl-ce",
@@ -15,7 +15,7 @@
       "topic": "Losses",
       "length": "long",
       "question": "How do entropy, cross-entropy and KL divergence differ?",
-      "answer": "- **Entropy $H(P)$:** uncertainty intrinsic to a distribution; $-\\sum_i P_i\\log P_i$.\n- **Cross-entropy $H(P,Q)$:** cost of predicting $Q$ when the target is $P$; $-\\sum_i P_i\\log Q_i$.\n- **KL divergence:** $D_{KL}(P\\|\\|Q)=\\sum_i P_i\\log(P_i/Q_i)=H(P,Q)-H(P)$; nonnegative and asymmetric.\n- **One-hot targets:** entropy is zero, so cross-entropy equals KL for that target.\n- **Applications:** supervised next-token training uses cross-entropy; distillation matches teacher/student distributions, and RL post-training may constrain drift from a reference policy using KL."
+      "answer": "- **Entropy $H(P)$:** uncertainty intrinsic to a distribution; $-\\sum_i P_i\\log P_i$.\n- **Cross-entropy $H(P,Q)$:** cost of predicting $Q$ when the target is $P$; $-\\sum_i P_i\\log Q_i$.\n- **KL divergence:** $D_{KL}(P\\|Q)=\\sum_i P_i\\log(P_i/Q_i)=H(P,Q)-H(P)$; nonnegative and asymmetric.\n- **One-hot targets:** entropy is zero, so cross-entropy equals KL for that target.\n- **Applications:** supervised next-token training uses cross-entropy; distillation matches teacher/student distributions, and RL post-training may constrain drift from a reference policy using KL."
     },
     {
       "id": "day3-numerical-stability",
@@ -183,7 +183,7 @@
       "topic": "Losses",
       "length": "short",
       "question": "What is KL divergence?",
-      "answer": "$D_{KL}(P\\|\\|Q)=\\sum_iP_i\\log(P_i/Q_i)$."
+      "answer": "$D_{KL}(P\\|Q)=\\sum_iP_i\\log(P_i/Q_i)$."
     },
     {
       "id": "day3-ce-kl",
@@ -191,7 +191,7 @@
       "topic": "Losses",
       "length": "short",
       "question": "How are cross-entropy and KL related?",
-      "answer": "$H(P,Q)=H(P)+D_{KL}(P\\|\\|Q)$."
+      "answer": "$H(P,Q)=H(P)+D_{KL}(P\\|Q)$."
     },
     {
       "id": "day3-kl-asym",
@@ -199,7 +199,7 @@
       "topic": "Losses",
       "length": "short",
       "question": "Is KL divergence symmetric?",
-      "answer": "No: generally $D_{KL}(P\\|\\|Q)\\ne D_{KL}(Q\\|\\|P)$."
+      "answer": "No: generally $D_{KL}(P\\|Q)\\ne D_{KL}(Q\\|P)$."
     },
     {
       "id": "day3-distillation",

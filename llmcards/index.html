@@ -17,6 +17,10 @@ sitemap: false
   <link rel="stylesheet" href="{{ '/assets/css/font_sans_serif.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style-no-dark-mode.css' | relative_url }}">
 
+  <!-- katex draws the $...$ maths in answers -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+
   <style>
     /* colours taken from the rest of the site */
     :root {
@@ -254,12 +258,20 @@ sitemap: false
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-    // inline markdown: `code`, **bold** and *italic* (odd pieces between backticks are code, left unformatted)
-    const inlineMd = raw => escapeHtml(raw)
+    // maths between $ signs, drawn by katex (shown as plain text if katex failed to load)
+    const maths = tex => window.katex ? katex.renderToString(tex, { throwOnError: false }) : escapeHtml(`$${tex}$`);
+
+    // inline markdown: `code`, $maths$, **bold** and *italic* (odd pieces between backticks are code, left unformatted)
+    const inlineMd = raw => String(raw)
       .split('`')
-      .map((part, i) => i % 2
-        ? `<code>${part}</code>`
-        : part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*]+)\*/g, '<em>$1</em>'))
+      .map((part, i) => {
+        if (i % 2) return `<code>${escapeHtml(part)}</code>`;
+        // maths is swapped for numbered placeholders first, so bold and italic can wrap it without touching the tex
+        const tex = [];
+        return escapeHtml(part.replace(/\$([^$]+)\$/g, (_, t) => `\u0000${tex.push(t) - 1}\u0000`))
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*]+)\*/g, '<em>$1</em>')
+          .replace(/\u0000(\d+)\u0000/g, (_, n) => maths(tex[n]));
+      })
       .join('');
 
     // block markdown: paragraphs, "- " bullet lists and "1. " numbered lists
