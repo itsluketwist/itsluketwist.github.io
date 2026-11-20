@@ -1,0 +1,796 @@
+{
+  "schema_version": 1,
+  "cards": [
+    {
+      "id": "day4-why-position-long",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "long",
+      "question": "Why do Transformers need positional information, and why is a causal mask not enough?",
+      "answer": "- **Self-attention:** Q/K similarity alone does not explicitly encode token positions or distances; without a position mechanism, ordinary unmasked attention is permutation-equivariant.\n- **Causal masking:** Restricts each position to itself and previous positions, providing an ordering constraint, but no explicit distance or absolute-position representation.\n- **Why position matters:** Order and relative distance affect meaning, syntax and which earlier tokens are relevant; distant tokens can still be highly relevant.\n- **Position mechanism:** Introduce absolute or relative positional information, either in hidden representations or directly in attention scores."
+    },
+    {
+      "id": "day4-position-methods-long",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "long",
+      "question": "How do learned absolute embeddings, sinusoidal encodings and RoPE differ?",
+      "answer": "- **Learned absolute embeddings:** Learn a vector for each position and usually add it to the input token embedding; a position table adds approximately $T_{max}D$ parameters.\n- **Limitation:** Positions outside the trained table are not directly represented without extension or interpolation.\n- **Sinusoidal encoding:** Fixed sine/cosine functions at different frequencies, also usually added to input embeddings; no learned position parameters.\n- **Sinusoidal extrapolation:** Values can be generated for new positions, but good performance beyond the training context is not guaranteed.\n- **RoPE:** Rotate projected Q and K within attention layers, so their dot products depend on relative positions; V is not directly rotated.\n- **Trade-off:** RoPE is parameter-free and efficient, but also has long-context extrapolation limits."
+    },
+    {
+      "id": "day4-rope-operation-long",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "long",
+      "question": "How does RoPE rotate queries and keys, and why are values normally left unchanged?",
+      "answer": "- **Projection first:** Calculate the head-specific Q and K vectors, then apply position-dependent rotations to each before attention.\n- **Pairs:** Split an even-sized rotary dimension into 2D pairs, each rotated by $m\\theta_i$ at token position $m$.\n- **Rotation:** $x'_0=x_0\\cos\\phi-x_1\\sin\\phi$ and $x'_1=x_0\\sin\\phi+x_1\\cos\\phi$.\n- **Distinct frequencies:** Different dimension pairs use different $\\theta_i$, letting the score combine positional relationships at multiple scales.\n- **Why Q/K:** Their dot product determines attention weights; V carries the information being aggregated, so its direct rotation is not needed for standard RoPE.\n- **Norm:** A pure rotation preserves the length of each 2D pair and the full vector."
+    },
+    {
+      "id": "day4-rope-relative-long",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "long",
+      "question": "Why does RoPE make attention scores depend on relative positions?",
+      "answer": "- **Position-specific rotations:** A query at $m$ becomes $R_mq$ and a key at $n$ becomes $R_nk$.\n- **Key identity:** $R_m^TR_n=R_{n-m}$, since rotations compose and an inverse rotation negates its angle.\n- **Dot product:** $(R_mq)^T(R_nk)=q^TR_{n-m}k$; the positional part depends on $n-m$, not the two absolute positions separately.\n- **Multiple pairs:** Each block uses $(n-m)\\theta_i$; the score combines sine/cosine contributions with different frequencies and content-dependent coefficients.\n- **Important nuance:** RoPE does not give one monotonic distance penalty. The same relative distance can affect different queries/keys differently."
+    },
+    {
+      "id": "day4-rope-frequency-limits-long",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "long",
+      "question": "How are RoPE frequencies chosen, and what happens when rotations wrap around at long contexts?",
+      "answer": "- **Standard schedule:** $\\theta_i=\\text{base}^{-2i/d}$ for pair $i=0,\\ldots,d/2-1$; the original base was 10000, though models can differ.\n- **Position angle:** $\\phi_{m,i}=m\\theta_i$; the pair index controls rotation speed, while token position controls accumulated angle.\n- **Fast vs slow:** Early dimension pairs rotate quickly; later pairs rotate slowly, representing different positional scales.\n- **Periodicity:** A single 2D pair eventually returns to a similar phase, so one pair cannot uniquely encode arbitrary distances.\n- **Combination:** Multiple frequencies reduce simple ambiguities but do not guarantee performance at unlimited context lengths.\n- **Extensions:** Methods such as YaRN adjust RoPE behaviour for longer contexts, often with additional training or calibration."
+    },
+    {
+      "id": "day4-rope-decoding-long",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "long",
+      "question": "Why must RoPE use the token's actual position rather than its current input sequence length?",
+      "answer": "- **Fresh prefill:** For $T=1024$, the positions may simply be $[0,1,\\ldots,1023]$.\n- **Cached decode:** The next token is processed with $T=1$, but its position may be 1024; its rotation must correspond to position 1024, not 0.\n- **Correct alignment:** The new rotated Q/K must use the same positional coordinate system as previously cached rotated keys.\n- **Different sequences:** Batched sequences may be at different positions, even if the current input has the same shape for each.\n- **Caching:** Standard RoPE caches the already rotated historical K; historical Q is not cached."
+    },
+    {
+      "id": "day4-attention-variants-long",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "long",
+      "question": "How do MHA, MQA and GQA differ, and what is the motivation for sharing KV heads?",
+      "answer": "- **MHA:** Each query head has its own key and value head, typically $H_{kv}=H_q$.\n- **MQA:** All query heads share one key head and one value head, so $H_{kv}=1$.\n- **GQA:** Query heads are divided into groups, each sharing one K/V head; $1<H_{kv}<H_q$.\n- **Group size:** With 32 query heads and 8 KV heads, four query heads share each K/V head.\n- **Motivation:** Reduce cached K/V elements and memory bandwidth during autoregressive decoding, while retaining distinct query heads.\n- **Trade-off:** More KV sharing can reduce representational flexibility; GQA is an intermediate memory/quality compromise."
+    },
+    {
+      "id": "day4-gqa-tensor-shapes-long",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "long",
+      "question": "How do the projection matrices and Q/K/V tensor dimensions change between MHA and GQA?",
+      "answer": "- **Example:** $B=2,T=1024,D=4096,H_q=32,d_h=128$; GQA has $H_{kv}=8$.\n- **Q projection:** $W_q$ is $4096\\times4096$ for both, giving $Q=[2,32,1024,128]$ after head splitting and transposing.\n- **MHA K/V:** Each projection is $4096\\times4096$; K and V are each $[2,32,1024,128]$.\n- **GQA K/V:** Each projection is $4096\\times1024$; K and V are each $[2,8,1024,128]$.\n- **Attention:** Each query still computes its own logits against its group's K; logical logits are $[B,H_q,T_q,T_k]$.\n- **General rule:** $W_k,W_v$ output $H_{kv}d_h$, not necessarily the full model dimension."
+    },
+    {
+      "id": "day4-gqa-implementation-long",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "long",
+      "question": "How do query heads share K and V in GQA, and what are the memory and quality trade-offs?",
+      "answer": "- **Mapping:** Each group of $H_q/H_{kv}$ query heads accesses one K/V head; individual Q heads still produce different scores and outputs.\n- **Logical sharing:** Several query heads use the same K/V vectors when calculating attention, but the cache needs only one copy per KV head.\n- **Cache:** With 32 query heads and 8 KV heads, the KV cache uses 4x less memory than MHA with the same head dimensions.\n- **Projection cost:** K/V projections also have fewer output features, while Q remains head-specific.\n- **Trade-off:** Fewer KV heads save memory and bandwidth, but may affect model quality depending on training and task."
+    },
+    {
+      "id": "day4-cache-mechanics-long",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "long",
+      "question": "How does autoregressive KV caching work when decoding a new token?",
+      "answer": "- **Prefill:** Process the prompt, calculating and storing each layer's historical K and V tensors.\n- **New token:** At each layer, project its current hidden state to Q, K and V; apply positional encoding to Q/K if used.\n- **Append:** Add that token's K/V to the layer's cache; Q is only used for the current attention calculation and is not cached.\n- **Attend:** The new Q attends to all available keys, including the new key, then aggregates the corresponding values.\n- **Continue:** Pass the attention output through the remaining layer operations to the next layer, where different Q/K/V are produced.\n- **Benefit:** Previously processed tokens do not need their K/V recomputed at every decode step."
+    },
+    {
+      "id": "day4-cache-per-layer-long",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "long",
+      "question": "Why does a conventional Transformer need a separate KV cache at every layer, and why do old entries remain valid?",
+      "answer": "- **Different hidden inputs:** Layer $l$ receives representations transformed by preceding layers, not the same input vectors as layer 1.\n- **Different weights:** Each layer also has its own $W_k$ and $W_v$, so the same token has different K/V representations across layers.\n- **Causal invariance:** A previous token can only depend on itself and earlier tokens; appending future tokens does not change its previous hidden states.\n- **Safe reuse:** Previously projected K/V can therefore be reused throughout generation for the same prefix and positions.\n- **Exceptions:** Architectures can deliberately share or compress cache states across layers, but this requires a corresponding attention design.\n- **Memory cost:** In conventional attention, the cache scales linearly with the number of layers."
+    },
+    {
+      "id": "day4-kv-memory-long",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "long",
+      "question": "How do you calculate KV-cache memory, including batch size, layers, heads and precision?",
+      "answer": "- **Formula:** $M_{KV}=2\\,B\\,T\\,H_{kv}\\,d_h\\,L\\,s$ bytes, where the leading 2 accounts for separately cached K and V.\n- **Variables:** $B$ batch size; $T$ cached sequence length; $H_{kv}$ KV heads; $d_h$ head dimension; $L$ layers; $s$ bytes/element.\n- **Example MHA:** $B=2,T=1024,H_{kv}=32,d_h=128,L=32,s=2$ gives $536{,}870{,}912$ bytes = 512 MiB.\n- **Example GQA:** Reducing to eight KV heads gives 128 MiB, a 4x reduction.\n- **Units:** $1\\,\\mathrm{MiB}=1024^2$ bytes; divide by $1024^2$, not 1024.\n- **Scope:** This is KV-cache storage only, excluding model weights, activations, fragmentation and other inference memory."
+    },
+    {
+      "id": "day4-prefill-decode-long",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "long",
+      "question": "How do prefill and decode differ during autoregressive inference?",
+      "answer": "- **Prefill:** Process prompt tokens in parallel under a causal mask, build each layer's K/V cache, and use the final prompt position to predict the first generated token.\n- **Decode:** Feed generated tokens back one at a time; reuse the cache and append only their new K/V tensors.\n- **GQA prefill example:** For $B=2,T=1024,H_q=32,H_{kv}=8,d_h=128$, Q is $[2,32,1024,128]$ and K/V are $[2,8,1024,128]$.\n- **Decode example:** New Q is $[2,32,1,128]$, new K/V are $[2,8,1,128]$, and available K/V become $[2,8,1025,128]$.\n- **Scores:** Logical prefill attention scores are $[2,32,1024,1024]$; one decode step gives $[2,32,1,1025]$.\n- **Sequential dependency:** You cannot choose the next generated token until the previous token's forward pass has produced its logits."
+    },
+    {
+      "id": "day4-attention-complexity-long",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "long",
+      "question": "How do the computation and attention-memory requirements differ between prefill and decode?",
+      "answer": "- **Prefill attention:** Full self-attention requires approximately $O(T^2H_qd_h)$ arithmetic, because each token attends to its causal prefix.\n- **Decode attention:** One query attends to $T$ cached keys, requiring approximately $O(TH_qd_h)$ arithmetic for one new token.\n- **Other layers:** Dense projections/FFNs still run during decode, but only for the new token rather than the whole prompt.\n- **Score shape:** Naive prefill would materialise $[B,H_q,T,T]$ scores; decoding a token needs a $[B,H_q,1,T]$ logical score tensor.\n- **FlashAttention:** Uses tiling and online softmax to avoid storing the whole quadratic score matrix in high-bandwidth memory, without changing the exact attention result.\n- **Caveat:** Less stored attention data does not eliminate the growing KV cache or the sequential nature of generation."
+    },
+    {
+      "id": "day4-memory-compute-bound-long",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "long",
+      "question": "Why is prefill often compute-bound while low-batch decoding is often memory-bandwidth-bound?",
+      "answer": "- **Compute-bound:** Performance is limited mainly by how quickly the GPU performs arithmetic; **memory-bound:** by how quickly data reaches the compute units.\n- **Arithmetic intensity:** FLOPs divided by bytes transferred; higher intensity makes better use of available compute throughput.\n- **Prefill:** Large matrix multiplications reuse the same weights across many tokens, so there are many operations per weight read.\n- **Decode:** With one token per sequence, large weight matrices are read for comparatively little computation; repeated weight transfers can dominate.\n- **KV traffic:** Decode also reads cached K/V for previous tokens; this grows with context length and can become a major bottleneck.\n- **Batching:** More concurrent sequences increase weight reuse; sufficiently large batches can shift decode toward compute-bound behaviour."
+    },
+    {
+      "id": "day4-mla-compression-long",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "long",
+      "question": "How does multi-head latent attention compress the KV cache while retaining head-specific attention?",
+      "answer": "- **Shared bottleneck:** Project hidden state $h_t\\in\\mathbb{R}^{D}$ down to one compressed latent $c_t^{KV}\\in\\mathbb{R}^{d_c}$ using $W^{DKV}$.\n- **Separate expansions:** Learned $W^{UK}$ and $W^{UV}$ map the shared latent into head-specific content K and V representations.\n- **Example:** For $D=4096,d_c=512,H=32,d_C=d_V=128$, down-projection is $4096\\times512$ and each collective up-projection is $512\\times4096$.\n- **Per head:** Each up-projection can be viewed as 32 matrices of size $512\\times128$, all applied to the same latent.\n- **Cache:** Store the latent rather than expanded keys and values for all heads; a small positional key may also be cached.\n- **Trade-off:** Compression reduces cache bandwidth but adds projection structure and may constrain representational capacity."
+    },
+    {
+      "id": "day4-mla-absorption-long",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "long",
+      "question": "What is weight absorption in MLA, and why does it avoid reconstructing all historical K and V during decode?",
+      "answer": "- **Naive approach:** Up-project every cached latent into a full historical K and V, trading much of the saved memory traffic for extra computation.\n- **Key identity:** $q^T(W^{UK}c)=((W^{UK})^Tq)^Tc$; transform the current query once and compare directly with compressed cached keys.\n- **Value identity:** $\\sum_j a_j(W^{UV}c_j)=W^{UV}(\\sum_j a_jc_j)$; aggregate compressed values first, then up-project the result.\n- **Why valid:** Matrix multiplication and weighted sums can be reassociated because the up-projections are linear.\n- **Outcome:** Attention can operate over compact historical latents without explicitly expanding every historical K/V.\n- **Limitation:** Position-dependent rotations inside the K expansion prevent simple fixed absorption, motivating decoupled RoPE."
+    },
+    {
+      "id": "day4-mla-rope-long",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "long",
+      "question": "Why does ordinary RoPE interfere with MLA weight absorption, and how does decoupled RoPE fix it?",
+      "answer": "- **Problem:** If expanded key is rotated at position $j$, the score includes $q^TR_jW^{UK}c_j$; $R_j$ differs for every cached token, so one fixed absorbed query projection no longer works.\n- **Separate content path:** Keep the head-specific compressed-content score free of RoPE, allowing weight absorption.\n- **Separate positional path:** Create a small rotary query for each attention head and one rotated key per token shared across heads.\n- **Combined score:** Add the content dot product and positional dot product before scaling, masking and softmax.\n- **Cache:** Store $c_j^{KV}$ plus the one shared rotated positional key $k_j^R$, not a rotary key for every head.\n- **Important:** The positional vector is shared across heads for a given token, not across all token positions."
+    },
+    {
+      "id": "day4-mla-shapes-scale-long",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "long",
+      "question": "What are the typical MLA projection dimensions, and how are content and positional attention scores scaled?",
+      "answer": "- **Illustrative setup:** $D=4096,H=32,d_C=d_V=128,d_R=64,d_c=512$, with a direct (non-compressed) Q projection.\n- **KV path:** Down-projection $4096\\times512$; content K and V expansions each $512\\times4096$; independent rotary-key projection $4096\\times64$.\n- **Query path:** $W_q$ can be $4096\\times[32(128+64)]=4096\\times6144$, giving each head 128 content and 64 rotary dimensions; some models compress Q too.\n- **Absorption shape:** Each head's content query of 128 dimensions becomes 512 after absorption to match the cached latent.\n- **Score:** $s_{t,j,i}=((\\tilde q^C_{t,i})^Tc_j^{KV}+(q^R_{t,i})^Tk_j^R)/\\sqrt{128+64}$.\n- **Why 192:** Scale by the original content-plus-rotary head width, not by the 512-dimensional cache latent; specialised long-context schemes can modify this scale."
+    },
+    {
+      "id": "day4-mla-memory-long",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "long",
+      "question": "How do you calculate MLA cache memory and compare it to MHA and GQA?",
+      "answer": "- **MLA formula:** $M_{MLA}=B\\,T\\,(d_c+d_R)\\,L\\,s$ bytes, because the shared latent replaces separate cached K and V and the rotary key is stored once per token.\n- **Example:** $B=2,T=1024,L=1,s=2,H_q=64,H_{kv}^{GQA}=8,d_h=128,d_c=512,d_R=64$.\n- **MHA:** $2BT(64)(128)s=67{,}108{,}864$ bytes = 64 MiB per layer.\n- **GQA:** $2BT(8)(128)s=8{,}388{,}608$ bytes = 8 MiB per layer.\n- **MLA:** $BT(512+64)s=2{,}359{,}296$ bytes = 2.25 MiB per layer.\n- **Ratios:** MLA uses about 28.4x less cache than this MHA and 3.56x less than this GQA; memory reduction is not the same as inference speedup."
+    },
+    {
+      "id": "day4-efficiency-tradeoffs-long",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "long",
+      "question": "How should you compare MHA, GQA, MLA and other attention optimisations in terms of memory, compute, quality and throughput?",
+      "answer": "- **MHA:** Independent K/V per query head offers flexibility but the largest cache and bandwidth requirements of these dense variants.\n- **GQA/MQA:** Fewer shared K/V heads reduce projection size, cache memory and decode bandwidth; aggressive sharing can affect model quality.\n- **MLA:** Shared low-dimensional KV latent and a small positional key dramatically reduce cache reads, at the cost of extra projections and more complex kernels.\n- **Weight absorption:** Avoids reconstructing historical full keys/values, making compact MLA caches useful during decoding.\n- **FlashAttention:** Reduces attention memory traffic during computation but does not itself shrink the persistent KV cache.\n- **Other choices:** Sliding-window, sparse or cross-layer-sharing attention can reduce work or storage further, but change what information is available and require careful architectural design.\n- **Evaluation:** Compare latency, throughput, batch/context scaling, memory usage and quality; a cache reduction factor is not automatically a speedup factor."
+    },
+    {
+      "id": "day4-position-short",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "short",
+      "question": "Why is causal masking alone insufficient for positional encoding?",
+      "answer": "It restricts attention to earlier positions but does not explicitly encode distances or absolute positions."
+    },
+    {
+      "id": "day4-absolute-short",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "short",
+      "question": "How are learned absolute positional embeddings usually applied?",
+      "answer": "A learned vector for each position is added to that token's input embedding."
+    },
+    {
+      "id": "day4-absolute-params-short",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "short",
+      "question": "How many parameters does an absolute positional embedding table add?",
+      "answer": "Approximately $T_{max}\\times D$, for maximum supported position count $T_{max}$ and embedding width $D$."
+    },
+    {
+      "id": "day4-sinusoidal-short",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "short",
+      "question": "Is sinusoidal positional encoding learned?",
+      "answer": "No. It uses fixed sine/cosine functions of position with different frequencies."
+    },
+    {
+      "id": "day4-position-injection-short",
+      "area": "Attention Efficiency",
+      "topic": "Positional Encoding",
+      "length": "short",
+      "question": "Where is positional information added in classic sinusoidal encoding versus RoPE?",
+      "answer": "Sinusoidal encodings are usually added to input token embeddings; RoPE rotates projected Q and K within attention."
+    },
+    {
+      "id": "day4-rope-which-vectors-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "Which attention vectors does standard RoPE rotate?",
+      "answer": "Queries and keys, not values."
+    },
+    {
+      "id": "day4-rope-pairs-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "How many independent 2D rotations are used for a 64-dimensional fully rotary head?",
+      "answer": "32, one for each pair of dimensions."
+    },
+    {
+      "id": "day4-rope-matrix-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "What is the standard 2D rotation matrix?",
+      "answer": "$R(\\phi)=\\begin{bmatrix}\\cos\\phi&-\\sin\\phi\\\\\\sin\\phi&\\cos\\phi\\end{bmatrix}$."
+    },
+    {
+      "id": "day4-rope-theta-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "What is the original RoPE frequency schedule?",
+      "answer": "$\\theta_i=10000^{-2i/d}$ for dimension-pair index $i$; models can choose different bases or scaling."
+    },
+    {
+      "id": "day4-rope-angle-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "What determines a pair's RoPE rotation angle?",
+      "answer": "Token position $m$ times the frequency of that dimension pair: $\\phi_{m,i}=m\\theta_i$."
+    },
+    {
+      "id": "day4-rope-frequency-index-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "Do earlier token positions or earlier dimension pairs rotate faster under RoPE?",
+      "answer": "Earlier dimension pairs rotate faster; frequency depends on dimension-pair index, not token position."
+    },
+    {
+      "id": "day4-rope-relative-identity-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "What rotation identity makes RoPE relative-position-aware?",
+      "answer": "$R_m^TR_n=R_{n-m}$, giving $(R_mq)^T(R_nk)=q^TR_{n-m}k$."
+    },
+    {
+      "id": "day4-rope-score-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "Does RoPE force attention scores to decrease with token distance?",
+      "answer": "No. Relative distance affects the score through multiple sine/cosine terms and the content of Q/K; it is not a monotonic penalty."
+    },
+    {
+      "id": "day4-rope-periodicity-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "Why can RoPE face ambiguity or degradation at very long contexts?",
+      "answer": "Each dimension pair rotates periodically, and combinations of phases or distances beyond training may not generalise reliably."
+    },
+    {
+      "id": "day4-yarn-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "What is YaRN used for?",
+      "answer": "Extending the usable context length of RoPE-based models by adjusting positional frequency/scaling behaviour, often with further training."
+    },
+    {
+      "id": "day4-rope-output-shape-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "For Q/K shaped $[B,H,T,D]$, how many rotary pairs and positional angles does RoPE use?",
+      "answer": "With fully rotary, even $D$, there are $D/2$ coordinate pairs per head; each of the $T$ positions has $D/2$ angles, and the rotated Q/K keep shape $[B,H,T,D]$."
+    },
+    {
+      "id": "day4-rope-absolute-position-short",
+      "area": "Attention Efficiency",
+      "topic": "RoPE",
+      "length": "short",
+      "question": "If decoding token position 1024 with sequence length $T=1$, what position must RoPE receive?",
+      "answer": "A one-element position tensor containing 1024, not zero."
+    },
+    {
+      "id": "day4-mha-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "How many KV heads does MHA use relative to query heads?",
+      "answer": "Typically one K head and one V head per Q head, so $H_{kv}=H_q$."
+    },
+    {
+      "id": "day4-mqa-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "What is multi-query attention?",
+      "answer": "Many query heads share a single K head and a single V head: $H_{kv}=1$."
+    },
+    {
+      "id": "day4-gqa-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "What is grouped-query attention?",
+      "answer": "Query heads are grouped so that each group shares one K/V head, with fewer KV heads than query heads."
+    },
+    {
+      "id": "day4-gqa-group-size-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "With 32 Q heads and eight KV heads, how many query heads share each KV head?",
+      "answer": "Four: $32/8=4$ query heads per KV head."
+    },
+    {
+      "id": "day4-gqa-projections-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "What are $W_q$, $W_k$ and $W_v$ shapes for $D=4096$, 32 Q heads, eight KV heads and $d_h=128$?",
+      "answer": "$W_q:4096\\times4096$; $W_k,W_v:4096\\times1024$."
+    },
+    {
+      "id": "day4-gqa-head-shapes-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "What are Q and K shapes after head splitting for GQA with $B=2,T=1024,H_q=32,H_{kv}=8,d_h=128$?",
+      "answer": "$Q=[2,32,1024,128]$ and $K=[2,8,1024,128]$; V matches K."
+    },
+    {
+      "id": "day4-gqa-repeat-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "Does GQA need a separate cached K/V vector for every query head?",
+      "answer": "No. Each group of query heads attends using the same K/V head, so only $H_{kv}$ heads' values are stored, even though all $H_q$ query heads calculate separate scores."
+    },
+    {
+      "id": "day4-gqa-reduction-short",
+      "area": "Attention Efficiency",
+      "topic": "Attention Variants",
+      "length": "short",
+      "question": "How much does going from 32 MHA KV heads to eight GQA KV heads reduce persistent KV storage?",
+      "answer": "By 4x, or 75%, assuming all other dimensions and precision remain the same."
+    },
+    {
+      "id": "day4-cache-what-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "What does a conventional KV cache store?",
+      "answer": "Past projected K and V tensors for every relevant attention layer; with RoPE, K is usually stored after rotation."
+    },
+    {
+      "id": "day4-cache-no-q-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "Why are historical queries not normally stored in the KV cache?",
+      "answer": "Only the current query is needed to attend over cached keys and values; historical queries are not reused during causal decoding."
+    },
+    {
+      "id": "day4-cache-causal-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "Why can historical K/V remain valid after appending a new token?",
+      "answer": "Strict causal masking means a past token's representations cannot depend on future tokens."
+    },
+    {
+      "id": "day4-cache-layer-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "Why does a conventional Transformer have a separate cache for each layer?",
+      "answer": "Each layer has different hidden states and its own K/V projection weights, producing different cached vectors."
+    },
+    {
+      "id": "day4-cache-formula-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "What is the conventional KV-cache memory formula in bytes?",
+      "answer": "$2BTH_{kv}d_hLs$, with 2 for K and V, $s$ bytes/element, and $L$ layers."
+    },
+    {
+      "id": "day4-mib-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "How many bytes are in one MiB?",
+      "answer": "$1024^2=1{,}048{,}576$ bytes."
+    },
+    {
+      "id": "day4-cache-numeric-short",
+      "area": "Attention Efficiency",
+      "topic": "KV Caching",
+      "length": "short",
+      "question": "What are the total MHA and GQA KV-cache sizes for $B=2,T=1024,d_h=128,L=32$, BF16, and 32 vs eight KV heads?",
+      "answer": "MHA = 512 MiB; GQA = 128 MiB, excluding model weights and other memory."
+    },
+    {
+      "id": "day4-prefill-short",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "short",
+      "question": "What is prefill?",
+      "answer": "Parallel processing of the prompt to populate KV caches and predict the first generated token."
+    },
+    {
+      "id": "day4-decode-short",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "short",
+      "question": "What is decode?",
+      "answer": "Autoregressive processing of new tokens one at a time, reusing previous K/V and appending the current token's K/V."
+    },
+    {
+      "id": "day4-decode-shapes-short",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "short",
+      "question": "For one GQA decode step after 1024 cached tokens, what are the Q and available K shapes with $B=2,H_q=32,H_{kv}=8,d_h=128$?",
+      "answer": "$Q=[2,32,1,128]$ and available $K=[2,8,1025,128]$ after appending the new token."
+    },
+    {
+      "id": "day4-attn-complexity-short",
+      "area": "Attention Efficiency",
+      "topic": "Prefill and Decode",
+      "length": "short",
+      "question": "How does attention complexity scale in full prefill versus one cached decode step?",
+      "answer": "Prefill is quadratic in prompt length, $O(T^2)$; one decode step is linear in cached length, $O(T)$, for fixed head dimensions."
+    },
+    {
+      "id": "day4-flash-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "What is the main memory benefit of FlashAttention?",
+      "answer": "It computes exact attention in tiles without materialising the full quadratic attention-score matrix in GPU HBM."
+    },
+    {
+      "id": "day4-arithmetic-intensity-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "What is arithmetic intensity?",
+      "answer": "FLOPs performed per byte transferred between memory and compute units."
+    },
+    {
+      "id": "day4-prefill-bound-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "Why is prefill often compute-bound?",
+      "answer": "Large matrix multiplications reuse weights over many tokens, doing substantial arithmetic per byte of weights read."
+    },
+    {
+      "id": "day4-decode-bound-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "Why is small-batch decode often memory-bandwidth-bound?",
+      "answer": "It repeatedly reads large model weights and growing K/V caches while performing relatively little work per read."
+    },
+    {
+      "id": "day4-batching-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "How can larger inference batches change decoding's bottleneck?",
+      "answer": "They reuse the same weights across more simultaneous sequences, increasing arithmetic intensity and potentially shifting toward compute-bound execution."
+    },
+    {
+      "id": "day4-mla-latent-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "What is the shared KV latent in MLA?",
+      "answer": "A low-dimensional vector $c_t^{KV}=W^{DKV}h_t$ from which head-specific content keys and values can be derived."
+    },
+    {
+      "id": "day4-mla-up-projections-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "Do MLA's content K and V use the same up-projection weights?",
+      "answer": "No. They share the compressed input latent but use separate learned K and V up-projections."
+    },
+    {
+      "id": "day4-mla-up-shape-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "For a 512-dimensional latent, 32 heads and 128 content dimensions/head, what is the collective key up-projection shape?",
+      "answer": "$512\\times4096$, equivalently 32 head-specific $512\\times128$ projections."
+    },
+    {
+      "id": "day4-mla-key-absorb-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "What matrix identity enables key weight absorption?",
+      "answer": "$q^T(W^{UK}c)=((W^{UK})^Tq)^Tc$, allowing comparison directly against compressed cached latents."
+    },
+    {
+      "id": "day4-mla-value-absorb-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "How does value weight absorption avoid expanding every historical value?",
+      "answer": "Aggregate latents first: $\\sum_j a_jW^{UV}c_j=W^{UV}\\sum_j a_jc_j$."
+    },
+    {
+      "id": "day4-mla-rope-problem-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "Why can't ordinary RoPE be absorbed into one fixed MLA query projection?",
+      "answer": "Historical keys require different position-dependent rotation matrices, so the key expansion cannot be moved across them as one fixed transform."
+    },
+    {
+      "id": "day4-mla-rope-shared-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "In decoupled RoPE, which positional vectors are shared across MLA heads?",
+      "answer": "Each query head has its own rotary query; all heads share one rotary key per token position."
+    },
+    {
+      "id": "day4-mla-score-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "How are content and positional scores combined in MLA?",
+      "answer": "Add the two dot products into one attention logit, then scale, mask and apply softmax."
+    },
+    {
+      "id": "day4-mla-scaling-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "For 128 content and 64 RoPE dimensions per MLA head, is the attention denominator $\\sqrt{192}$ or $\\sqrt{576}$?",
+      "answer": "$\\sqrt{192}$, based on original content-plus-positional head width, not compressed cache length."
+    },
+    {
+      "id": "day4-mla-cache-formula-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "What is the per-layer MLA KV-cache memory formula with a shared latent and shared rotary key?",
+      "answer": "$BT(d_c+d_R)s$ bytes; multiply by $L$ for independent attention layers."
+    },
+    {
+      "id": "day4-mla-numeric-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "How much BF16 cache memory does MLA use for $B=2,T=1024,d_c=512,d_R=64$, one layer?",
+      "answer": "2.25 MiB: $2\\times1024\\times(512+64)\\times2$ bytes."
+    },
+    {
+      "id": "day4-mla-speed-short",
+      "area": "Attention Efficiency",
+      "topic": "MLA",
+      "length": "short",
+      "question": "Does a 28x KV-cache reduction guarantee 28x faster decoding?",
+      "answer": "No. Overall speed also depends on model-weight traffic, computation, kernel efficiency, batching and other bottlenecks."
+    },
+    {
+      "id": "day4-cross-layer-short",
+      "area": "Attention Efficiency",
+      "topic": "Inference Performance",
+      "length": "short",
+      "question": "Can a modern architecture avoid maintaining fully independent KV caches for every layer?",
+      "answer": "Yes, if it deliberately uses cross-layer cache sharing or another compatible attention design; conventional layers cannot simply share different K/V tensors."
+    },
+    {
+      "id": "day4-linear-attention-long",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "long",
+      "question": "How does linear attention replace conventional softmax attention with a fixed-size recurrent state, and what are the trade-offs?",
+      "answer": "- **Conventional attention:** Calculates query–key scores against previous tokens; the attention work is quadratic in sequence length during full prefill and grows with context during decoding.\n- **Linear attention:** Uses a different attention formulation that can accumulate key–value associations into a recurrent state, rather than keeping every token's K and V.\n- **State update:** $S_t=S_{t-1}+k_tv_t^T$, where $S_t$ has shape $[d_k,d_v]$ per head; the output is $o_t=S_t^Tq_t$, shape $[d_v]$.\n- **Memory/compute:** State size and per-token attention work are independent of context length; with fixed head dimensions, processing a sequence takes linear attention work in $T$.\n- **Trade-off:** This is not equivalent to softmax attention. A fixed-size state can mix or overwrite associations, making exact retrieval of particular old tokens harder."
+    },
+    {
+      "id": "day4-lightning-attention-long",
+      "area": "Attention Efficiency",
+      "topic": "Lightning Attention",
+      "length": "long",
+      "question": "How does MiniMax's Lightning Attention process sequences efficiently, and does it still need a KV cache?",
+      "answer": "- **Mechanism:** Lightning Attention is an I/O-aware, blockwise implementation of linear attention, aimed at making causal attention efficient on GPUs.\n- **Within a block:** Temporarily load its Q/K/V and calculate causally masked attention among tokens in that block.\n- **Across blocks:** Use the fixed-size state from earlier blocks: $O_{inter}=Q_{block}S_{previous}$, with state update $S_{next}=S_{previous}+K_{block}^TV_{block}$ (using the row-vector convention).\n- **Caching:** The current block's K/V are needed temporarily during block processing, but do not need to remain in a growing persistent cache; single-token decoding can update the recurrent state directly.\n- **Trade-off:** Efficient at long contexts, but pure linear attention can struggle with precise retrieval, motivating occasional full softmax-attention layers."
+    },
+    {
+      "id": "day4-hybrid-linear-attention-long",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "long",
+      "question": "Why do recent models combine recurrent linear attention with full attention, and how do MiniMax and Kimi Linear differ?",
+      "answer": "- **Motivation:** Recurrent layers use fixed-size memory and reduce long-context cost; full attention layers retain direct access to individual previous tokens for precise retrieval.\n- **MiniMax-Text-01/M1:** Use a hybrid with seven Lightning Attention layers followed by one softmax-attention layer.\n- **Kimi Linear:** Uses three Kimi Delta Attention (KDA) layers followed by one full MLA layer.\n- **KDA distinction:** Builds on the delta rule, correcting key-to-value associations using prediction errors, with fine-grained learned forgetting gates; detailed KDA maths is a Day 7 follow-up.\n- **Important complexity nuance:** Hybrid models still have growing KV caches and potentially quadratic prefill work in their full-attention layers; they reduce how often this cost is paid."
+    },
+    {
+      "id": "day4-dsa-mechanism-long",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "long",
+      "question": "How does DeepSeek Sparse Attention (DSA) work, and how is it different from sliding-window attention and MLA?",
+      "answer": "- **DSA:** A lightweight learned indexer scores previous token positions for each query and selects the top-$k$ candidates; the main attention mechanism operates on those selected tokens.\n- **Unlike SWA:** Selection depends on learned relevance, not a fixed recent-token window, so distant tokens can still be retrieved.\n- **Unlike MLA:** DSA reduces how many previous tokens receive full attention; MLA reduces the size of the per-token KV representation. They can be combined.\n- **Cost:** Sparse core attention involves $k$ selected tokens instead of all $T$, but indexer scoring/selection still incurs additional work and typically needs access to previous-token representations.\n- **Mistral Large 4:** Combines DSA with MLA and uses top-2,048 selection; some layers calculate their own selection while others reuse an earlier layer's selection."
+    },
+    {
+      "id": "day4-dsa-training-long",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "long",
+      "question": "How were learned sparse-attention indexers introduced and trained in Mistral Large 4?",
+      "answer": "- **Starting point:** Mistral trained an existing model, performed architecture surgery to permit full-context attention, and continued training before introducing DSA.\n- **Indexer warm-up:** Keep the main model frozen and use full attention; train indexers to match the model's attention distributions via an auxiliary KL-divergence distillation loss (about 15.1B tokens).\n- **Joint adaptation:** Switch to sparse attention and train the main model plus indexers for another 198B tokens.\n- **Separate objectives:** Main model uses the language-modeling loss; indexers continue using KL supervision on the selected attention distribution.\n- **Why stage it:** A random indexer would initially select poor tokens and disrupt a trained model. Warm-up gives sensible token selection before the model has to operate sparsely."
+    },
+    {
+      "id": "day4-linear-state-dim-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "What is the recurrent-state shape in simple linear attention, and does it grow with context length?",
+      "answer": "$S_t$ has shape $[d_k,d_v]$ per head (or $[d_k,d_k]$ if dimensions match); it is fixed-size regardless of the number of tokens."
+    },
+    {
+      "id": "day4-linear-update-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "What are the simple linear-attention state update and query output equations?",
+      "answer": "$S_t=S_{t-1}+k_tv_t^T$ and $o_t=S_t^Tq_t$. The query interacts with a fixed-size state, rather than individually attending to all cached keys."
+    },
+    {
+      "id": "day4-linear-softmax-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "Is linear attention just an exact reordering of softmax attention?",
+      "answer": "No. The standard softmax over pairwise $QK^T$ scores cannot simply be reassociated as $Q(K^TV)$; linear attention uses a different kernel/normalization and can lose precise retrieval."
+    },
+    {
+      "id": "day4-lightning-block-short",
+      "area": "Attention Efficiency",
+      "topic": "Lightning Attention",
+      "length": "short",
+      "question": "What are Lightning Attention's two sources of output within each prefill block?",
+      "answer": "Causally masked attention within the current block, plus a query against the accumulated recurrent state from all previous blocks."
+    },
+    {
+      "id": "day4-lightning-cache-short",
+      "area": "Attention Efficiency",
+      "topic": "Lightning Attention",
+      "length": "short",
+      "question": "Does a Lightning Attention layer need to keep every previous token's K and V during decoding?",
+      "answer": "No. Block Q/K/V may be held temporarily during prefill, but recurrent decoding can update a fixed-size state one token at a time."
+    },
+    {
+      "id": "day4-hybrid-ratios-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "How do MiniMax-Text-01 and Kimi Linear mix linear and full attention?",
+      "answer": "MiniMax uses roughly 7 Lightning Attention layers per full softmax layer; Kimi Linear uses 3 KDA layers per full MLA layer."
+    },
+    {
+      "id": "day4-hybrid-retrieval-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "Why keep some full-attention layers in a mostly recurrent model?",
+      "answer": "Fixed-size recurrent memory can lose precise historical associations; full attention layers preserve direct token-level retrieval, at the cost of some growing caches and attention work."
+    },
+    {
+      "id": "day4-kda-concept-short",
+      "area": "Attention Efficiency",
+      "topic": "Linear Attention",
+      "length": "short",
+      "question": "What is the high-level idea behind Kimi Delta Attention (KDA)?",
+      "answer": "It updates recurrent key–value associations using prediction errors (the delta rule) and learned fine-grained gates that control forgetting; revisit the detailed equations on Day 7."
+    },
+    {
+      "id": "day4-dsa-swa-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "How does DSA choose previous tokens differently from sliding-window attention?",
+      "answer": "SWA uses a fixed nearby window; DSA uses a learned relevance indexer to select top-$k$ previous tokens, including distant ones."
+    },
+    {
+      "id": "day4-dsa-mla-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "Are DSA and MLA alternatives, or can they be combined?",
+      "answer": "They can be combined: MLA compresses the KV representation of each token, while DSA selects which tokens receive full attention."
+    },
+    {
+      "id": "day4-dsa-indexers-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "Is DSA's indexer learned, and does every layer share one indexer?",
+      "answer": "The indexer is learned. DeepSeek-V3.2 uses per-layer indexers; Mistral Large 4 has some layers that reuse another layer's selected token positions."
+    },
+    {
+      "id": "day4-dsa-warmup-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "Why did Mistral Large 4 warm up its DSA indexers before enabling sparse attention?",
+      "answer": "The main model was frozen while indexers learned to approximate its full-attention distributions via KL distillation, avoiding initially arbitrary token selection."
+    },
+    {
+      "id": "day4-dsa-joint-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "What happened after indexer warm-up in Mistral Large 4?",
+      "answer": "Mistral enabled top-2,048 sparse attention and jointly trained the main model (language-modeling loss) and indexers (auxiliary KL loss) for another 198B tokens."
+    },
+    {
+      "id": "day4-dsa-selection-cost-short",
+      "area": "Attention Efficiency",
+      "topic": "DeepSeek Sparse Attention",
+      "length": "short",
+      "question": "Does DSA eliminate the cost of looking through the previous context?",
+      "answer": "No. The lightweight indexer still scores candidate positions, but the expensive main attention runs on only the selected top-$k$ tokens."
+    },
+    {
+      "id": "day4-sparse-attention-long",
+      "area": "Attention Efficiency",
+      "topic": "Sparse Attention",
+      "length": "long",
+      "question": "What is sparse attention, and what are the main ways it differs from full attention?",
+      "answer": "- **Definition:** Sparse attention restricts each query to a subset of possible key positions, instead of calculating the main attention operation over all previous tokens.\n- **Patterns:** Subsets can be fixed (sliding windows, blocks, strided/dilated positions, global tokens) or dynamically selected using learned relevance scores (e.g. DSA).\n- **Benefit:** If each query attends to $w$ positions rather than all $T$, the core attention work scales as $O(Tw)$ instead of $O(T^2)$ in prefill, treating head dimensions as fixed.\n- **Trade-offs:** The restriction may miss useful distant tokens; learned selection adds indexer overhead, and cache savings depend on whether old tokens can actually be discarded.\n- **Terminology:** Ordinary causal attention is usually called dense causal attention, even though half its attention matrix is masked; the allowed comparisons still grow quadratically."
+    },
+    {
+      "id": "day4-swa-long",
+      "area": "Attention Efficiency",
+      "topic": "Sliding-Window Attention",
+      "length": "long",
+      "question": "How does sliding-window attention (SWA) work, and what are its memory, compute and quality trade-offs?",
+      "answer": "- **Mechanism:** Each query can directly attend only to itself and a fixed number of recent tokens, with a causal local-attention mask.\n- **Dimensions:** For a window of $w$ tokens, the effective attention scores involve at most $w$ keys per query, rather than all $T$ earlier keys.\n- **Compute:** Attention work is $O(Tw)$ during prefill and $O(w)$ per new token during decoding, for fixed head dimensions.\n- **KV cache:** In a layer using only SWA, tokens older than the window can be evicted, so persistent cache length is bounded by $w$, unlike full attention.\n- **Limitation:** A token outside the window cannot be retrieved directly; information can move across multiple layers, and models often mix SWA with global attention for longer-range access.\n- **Compared with DSA:** SWA chooses nearby tokens by fixed position, whereas DSA learns which previous positions are relevant, including distant ones."
+    },
+    {
+      "id": "day4-sparse-definition-short",
+      "area": "Attention Efficiency",
+      "topic": "Sparse Attention",
+      "length": "short",
+      "question": "What does sparse attention mean, and what are two examples?",
+      "answer": "Each query computes main attention over only a subset of earlier keys; examples are fixed-pattern sliding-window attention (SWA) and learned top-$k$ selection in DSA."
+    },
+    {
+      "id": "day4-swa-cache-short",
+      "area": "Attention Efficiency",
+      "topic": "Sliding-Window Attention",
+      "length": "short",
+      "question": "How do SWA's attention work and KV-cache size scale with context length?",
+      "answer": "With fixed window size $w$, prefill attention work is $O(Tw)$; per-token decode attention and the retained per-layer KV cache are bounded by $w$ rather than growing with $T$."
+    }
+  ],
+  "study_notes": [
+    {
+      "day": 7,
+      "topic": "Kimi Delta Attention (KDA; referred to as KQA in the request)",
+      "note": "Return to the more detailed KDA delta-rule and fine-grained gating equations, their chunkwise implementation, and how KDA interacts with full MLA layers. Confirm whether KQA was intended to mean KDA."
+    }
+  ]
+}
